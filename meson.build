@@ -63,7 +63,6 @@ game_source_files = files(
     src_dir / 'i_joystick.c',
     src_dir / 'i_musicpack.c',
     src_dir / 'i_oplmusic.c',
-    src_dir / 'i_pcsound.c',
     src_dir / 'i_sdlmusic.c',
     src_dir / 'i_sdlsound.c',
     src_dir / 'i_sound.c',
@@ -233,21 +232,8 @@ opl_source_files = files(
     opl_source_dir / 'opl_win32.c',
 )
 
-# Source files for the PC sound emulation library
-pcsound_source_dir= 'pcsound'
-pcsound_source_files = files(
-    pcsound_source_dir / 'pcsound_bsd.c',
-    pcsound_source_dir / 'pcsound.c',
-    pcsound_source_dir / 'pcsound.h',
-    pcsound_source_dir / 'pcsound_internal.h',
-    pcsound_source_dir / 'pcsound_linux.c',
-    pcsound_source_dir / 'pcsound_sdl.c',
-    pcsound_source_dir / 'pcsound_win32.c',
-)
-
 textscreen = library('textscreen', textscreen_source_files, include_directories: include_directories(src_dir), dependencies: deps)
 opl = library('opl', opl_source_files, dependencies: deps)
-pcsound = library('pcsound', pcsound_source_files, dependencies: deps)
 
 # Build the game binary
 executable('zendoom', 
@@ -258,13 +244,11 @@ executable('zendoom',
     link_with: [
         textscreen, 
         opl,
-        pcsound
     ], 
     include_directories: [
         include_directories('src'),
         include_directories(textscreen_source_dir),
         include_directories(opl_source_dir), 
-        include_directories(pcsound_source_dir), 
     ],
     dependencies: deps
 )
