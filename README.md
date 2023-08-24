@@ -3,19 +3,21 @@
 Zendoom is a hyper-minimalist fork of Chocolate Doom that aims to:
 - Have the smallest, easiest to understand version of the Doom codebase, by throwing backwards compatibility to the wind (if necessary).
     - Doom v1.9 only. No Doom II, FreeDoom, Strife, Hexen, Heretic, etc.
-    - No DeHackEd
-    - No total conversion support (WAD merging/DeuTex
-    - No emulation of OPL, GUS, MIDI, and PC speaker sound engines
+    - No DeHackEd.
+    - No total conversion support (WAD merging/DeuTex stuff).
+    - No emulation of OPL, PAS, GUS, MIDI, and PC speaker sound engines. We have _SDL_ and `.ogg` files.
     - No CMake and Autotools support, just a single Meson `meson.build` file.
-    - No `setup` application
-    - No terminal/console emulation via `textscreen`
-- Make exploring the core principles of the Doom engine as zen-like as possible
+    - No `setup` application.
+    - No terminal/console emulation via `textscreen`.
+- Make exploring the core principles of the Doom engine as zen-like as possible.
 - Integrate an embedded scripting language (such as Lua or Guile) to allow experimentation with the engine in a higher-level language.
+
+One could argue that this completely guts and kills the soul of DOOM. And you probably wouldn't even be wrong, but this is for science and John Carmack released Doom under the GPL.
 
 ## Motivation
 
 ### Zen in the build system
-Build systems for C can be awfully yucky and not very Zen. Zendoom supports one build system: Meson. There aren't a dozen nested `CMakeLists.txt` and `Makefile.am` files. There is one build file, 99% of which is just listing the source files to be compiled. It's _great_.
+Build systems for C can be awfully yucky and not very Zen. Zendoom supports one build system: Meson. There aren't a dozen nested `CMakeLists.txt` and `Makefile.am` files. There is one build file, 99% of which is just listing the source files to be compiled. It's _great_. This means:
 
 - [x] Add Nix shell for Zen-like, project dependency management and an isolated development environment. _Your system package manager is not Zen._
 - [x] Add Meson build 
@@ -45,8 +47,7 @@ The only features it _adds_ are to change the default controls to utilize the `W
 git clone https://github.com/zendoom/doom
 cd doom
 meson build
-cd build
-ninja build
+ninja -C build
 ```
 
 ### Dependencies
