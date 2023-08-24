@@ -1,7 +1,7 @@
 # zendoom
 
-Zendoom is a hyper-minimalist fork of Chocolate Doom that aims to:
-- Have the smallest, easiest to understand version of the Doom codebase, by throwing backwards compatibility to the wind (if necessary).
+Zendoom is the [MINIX](https://en.wikipedia.org/wiki/Minix) of Doom ports. It's a hyper-minimalist fork of Chocolate Doom that aims to:
+- Have the smallest, easiest to study version of the Doom codebase, by throwing backwards compatibility to the wind (if necessary). That means:
     - Doom v1.9 only. No Doom II, FreeDoom, Strife, Hexen, Heretic, etc.
     - No DeHackEd.
     - No total conversion support (WAD merging/DeuTex stuff).
@@ -31,7 +31,7 @@ Build systems for C can be awfully yucky and not very Zen. Zendoom supports one 
 
 It's a project built around exploration of the codebase - build the code yourself. 
 
-## Zen in features and legacy support
+### Zen in features and legacy support
 A vast majority of the wonderful features added to source ports are extraneous to our goal of understanding the Doom engine. To that end, an awful lot has been removed:
 
 - [ ] Remove DOOM II, Strife, Heretic, and Hexen support - we're talking about _Doom_ and _Doom_ only. And _only Doom v1.9_. 
@@ -40,6 +40,30 @@ A vast majority of the wonderful features added to source ports are extraneous t
 - [ ] Remove support for reading 'in-WAD' music (part of MUS support). Music playback is done only through SDL, and only via [music packs](https://www.chocolate-doom.org/wiki/index.php/Digital_music_packs). But I'm not even fussy about that. We should go a step further than the music packs and use straight `.ogg` files.
 
 The only features it _adds_ are to change the default controls to utilize the `WASD` key cluster, with `E` for interaction. Because anything else would not be Zen.
+
+### Zen statistics
+
+Lines of code aren't a metric of code quality, but they are a metric of code quantity.
+
+| Chocolate Doom     | files | blank | comment | code   | Zen Doom | files | blank | comment | code  |
+|--------------------|-------|-------|---------|--------|----------|-------|-------|---------|-------|
+| C                  | 329   | 37986 | 40769   | 198641 |          | 180   | 18883 | 14428   | 73739 |
+| C/C++ Header       | 223   | 5647  | 7973    | 24521  |          | 155   | 3040  | 4903    | 9641  |
+| Markdown           | 13    | 499   | 9       | 2485   |          | 4     | 157   | 0       | 733   |
+| Meson              |       |       |         |        |          | 1     | 14    | 8       | 253   |
+| make               | 19    | 258   | 14      | 1072   |          |       |       |         |       |
+| CMake              | 16    | 98    | 258     | 858    |          |       |       |         |       |
+| Objective-C        | 5     | 303   | 196     | 789    |          |       |       |         |       |
+| Python             | 5     | 276   | 228     | 709    |          | 1     | 15    | 32      | 57    |
+| Nix                |       |       |         |        |          |       |       |         |       |
+| XML                | 2     | 3     | 2       | 614    |          |       |       |         |       |
+| YAML               | 4     | 28    | 3       | 296    |          |       |       |         |       |
+| m4                 | 1     | 40    | 4       | 246    |          |       |       |         |       |
+| Bourne Again Shell | 4     | 3     | 3       | 32     |          |       |       |         |       |
+| Dockerfile         | 1     | 11    | 8       | 20     |          |       |       |         |       |
+| TNSDL              | 1     | 1     | 0       | 11     |          |       |       |         |       |
+| Sum                | 626   | 45186 | 49487   | 230396 |          | 345   | 22111 | 19372   | 84671 |
+
 
 ## Building
 
