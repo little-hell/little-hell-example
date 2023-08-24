@@ -1,7 +1,6 @@
 { pkgs ? import <nixpkgs> { } }:
 pkgs.mkShell {
   nativeBuildInputs = with pkgs.buildPackages; [
-    cmake
     jack2
     meson
     ninja
