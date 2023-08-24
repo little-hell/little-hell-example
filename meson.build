@@ -54,7 +54,6 @@ game_source_files = files(
     src_dir / 'deh_str.c',
     src_dir / 'deh_text.c',
     src_dir / 'deh_mapping.c',
-    src_dir / 'gusconf.c',
     src_dir / 'i_cdmus.c',
     src_dir / 'i_endoom.c',
     src_dir / 'i_flmusic.c',

@@ -268,7 +268,6 @@ extern int opl_io_port;
 // For native music module:
 
 extern char *music_pack_path;
-extern char *timidity_cfg_path;
 #ifdef _WIN32
 extern char *winmm_midi_device;
 extern int winmm_complevel;
