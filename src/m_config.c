@@ -190,38 +190,6 @@ static default_t	doom_defaults_list[] =
     CONFIG_VARIABLE_KEY(key_straferight),
 
     //!
-    // @game hexen
-    //
-    // Keyboard key to jump.
-    //
-
-    CONFIG_VARIABLE_KEY(key_jump),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to fly upward.
-    //
-
-    CONFIG_VARIABLE_KEY(key_flyup),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to fly downwards.
-    //
-
-    CONFIG_VARIABLE_KEY(key_flydown),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to center flying.
-    //
-
-    CONFIG_VARIABLE_KEY(key_flycenter),
-
-    //!
     // @game heretic hexen
     //
     // Keyboard key to look up.
@@ -244,30 +212,6 @@ static default_t	doom_defaults_list[] =
     //
 
     CONFIG_VARIABLE_KEY(key_lookcenter),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to scroll left in the inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invleft),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to scroll right in the inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invright),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to use the current item in the inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_useartifact),
 
     //!
     // @game strife
@@ -1084,14 +1028,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(mouseb_invright),
 
     //!
-    // @game heretic hexen
-    //
-    // Mouse button to use artifact.
-    //
-
-    CONFIG_VARIABLE_INT(mouseb_useartifact),
-
-    //!
     // If non-zero, double-clicking a mouse button acts like pressing
     // the "use" key to use an object in-game, eg. a door or switch.
     //
@@ -1678,70 +1614,6 @@ static default_t extra_defaults_list[] =
     //
 
     CONFIG_VARIABLE_KEY(key_arti_morph),
-
-    //!
-    // @game hexen
-    //
-    // Key to use one of each artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_all),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "quartz flask" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_health),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "flechette" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_poisonbag),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "disc of repulsion" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_blastradius),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "chaos device" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_teleport),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "banishment device" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_teleportother),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "porkalator" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_egg),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "icon of the defender" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_invulnerability),
 
     //!
     // Key to re-display last message.
