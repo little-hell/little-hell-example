@@ -1,10 +1,11 @@
 # mindoom
 
-Mindoom is the [MINIX](https://en.wikipedia.org/wiki/Minix) of Doom ports. It's more fun to experiment on as a science project than it is to play as a video game. It's a hyper-minimalist fork of Chocolate Doom that aims to:
+Mindoom is the [MINIX](https://en.wikipedia.org/wiki/Minix) of Doom ports. It's a hyper-minimalist fork of Chocolate Doom that is probably more fun to experiment with than to play as a video game. Mindoom aims to:
 - Have the smallest, easiest to study version of the Doom codebase, by throwing backwards compatibility to the wind (if necessary).
 - Peel back 30+ years of source port additions and scope creep until we can finally study what's happening under the hood (the bug fixes along the way are ok though!)
 - Make exploring the core principles of the Doom engine as zen-like as possible.
 - Integrate an embedded scripting language (such as Lua or Guile) to allow experimentation with the engine in a higher-level language.
+- **Flagrantly lack support for Windows**, a platform antithetic to the spirit of open-source software and the goals of this project. "But DOOM can run on anything!" Mindoom is defiant and supports UNIX-esque operating systems only. The smaller and easier to understand codebase means you can still quite easily port it to a bespoke operating system or console, however.
 
 One could argue that this completely guts and kills the soul of DOOM. And you probably wouldn't even be wrong, but this is for science and John Carmack released Doom under the GPL.
 
@@ -19,7 +20,9 @@ One could argue that this completely guts and kills the soul of DOOM. And you pr
 - [Development](#development)
     - [Contributing](#contributing)
     - [Building](#building)
-        - [Dependencies](#dependencies)
+        - [Building on Linux or macOS with Nix (recommended)](#building-on-linux-or-macos-with-nix-recommended)
+        - [Building without Nix (Linux, macOS, OpenBSD, FreeBSD, etc)](#)
+        - [Building on Windows(#)
 - [Release Roadmap](#release-roadmap)
 - [TODO](#todo)
 - [Compability Overview](#compatability-overview)
@@ -36,11 +39,11 @@ Build systems for C can be awfully yucky and not very Zen. Mindoom supports one 
 - [x] Remove GNU autotools build
 
 ### Minimalism in platform support, packaging and distribution
-`mindoom` simply does not care about packaging and distribution. This means: 
-- [x] Removal of packaging support for Win32 and macOS.
-- [x] No Linux packages either. No `.rpm` or `.deb` files. 
+`mindoom` simply does not care about Windows. We're killing it. We also don't care about packaging and distribution. The project is about exploring the code, binary distributions are useless to us. This means: 
+- [x] Removal of packages for Win32 and macOS.
+- [x] Removal of Linux packages as well. No `.rpm` or `.deb` files. 
 
-It's a project built around exploration of the codebase - build the code yourself. 
+It's a project built around exploration of an _open-source_ codebase - build the code yourself on an _open-source_ platform.
 
 ### Minimalism in sound emulation support
 - [x] Remove GUS emulation
@@ -86,6 +89,8 @@ Lines of code aren't a metric of code quality, but they sure are a metric of cod
 
 ## Development
 
+
+
 ### Contributing
 
 Contributions are _absolutely_ appreciated and will be received with open arms so long as they mesh with the goals of the project.
@@ -93,6 +98,15 @@ If your PR involves cleaning something up, it probably aligns with the goals of 
 See [HACKING.MD](https://github.com/ranguli/mindoom/blob/master/HACKING.md) for coding conventions and what not.
 
 ### Building
+
+While you're free to build `mindoom` however you like, the 'mindoom way' is to use the Meson build system inside a
+Nix shell environment when you're on macOS or Linux. This takes all of the pain out of trying to wrangle 
+dependencies header files. It's _really_ great and I recommend you try it. 
+
+
+#### Building on Linux or macOS with Nix (recommended)
+
+The only dependency _you_ need is `git`, and Nix. All the dependencies that _Doom_ needs are taken care of. 
 
 ```bash
 git clone https://github.com/zendoom/doom
@@ -102,10 +116,30 @@ meson build
 ninja -C build
 ```
 
-#### Dependencies
+#### Building without Nix (Linux, macOS, OpenBSD, FreeBSD, etc)
+Nix doesn't support our other BSD friends. That's a shame, but no worries, it's a big world out there. 
+You may also just not want to use Nix, which is fine too.
 
-The only dependency _you_ need is `git`, and Nix. All the dependencies that _Doom_ needs are taken care of. 
+You'll just need to source the following from your package manager:
+- `meson` (which needs `python`)
+- `SDL2`
+- `SDL2_net`
+- `SDL2_mixer`
 
+On a Debian-based system (Ubuntu, PopOS, Mint, etc) that might look something like:
+```
+sudo apt install git python3 meson libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev
+```
+
+Or on Arch-based system:
+```
+sudo pacman -S sdl2 sdl2_net sdl2_mixer
+```
+
+Then your build steps are exactly the same as the steps above, minux the `nix` command.
+
+#### Building on Windows
+Don't.
 
 ## Release Roadmap
 - [v0.0.1](https://github.com/ranguli/mindoom/releases/tag/v0.0.1):
