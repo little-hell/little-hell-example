@@ -90,9 +90,6 @@ static const sound_module_t *sound_modules[] =
 
 static const music_module_t *music_modules[] =
 {
-#ifndef DISABLE_SDL2MIXER
-    &music_sdl_module,
-#endif // DISABLE_SDL2MIXER
     &music_opl_module,
     NULL,
 };
