@@ -1,7 +1,8 @@
 # mindoom
 
-Mindoom is the [MINIX](https://en.wikipedia.org/wiki/Minix) of Doom ports. It's a hyper-minimalist fork of Chocolate Doom that aims to:
+Mindoom is the [MINIX](https://en.wikipedia.org/wiki/Minix) of Doom ports. It's more fun to experiment on as a science project than it is to play as a video game. It's a hyper-minimalist fork of Chocolate Doom that aims to:
 - Have the smallest, easiest to study version of the Doom codebase, by throwing backwards compatibility to the wind (if necessary).
+- Peel back 30+ years of source port additions and scope creep until we can finally study what's happening under the hood (the bug fixes along the way are ok though!)
 - Make exploring the core principles of the Doom engine as zen-like as possible.
 - Integrate an embedded scripting language (such as Lua or Guile) to allow experimentation with the engine in a higher-level language.
 
