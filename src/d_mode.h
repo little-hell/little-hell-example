@@ -28,12 +28,9 @@ typedef enum
 {
     doom,            // Doom 1
     doom2,           // Doom 2
-    pack_tnt,        // Final Doom: TNT: Evilution
     heretic,         // Heretic
     hexen,           // Hexen
     strife,          // Strife
-    doom2f,          // Doom 2: L'Enfer sur Terre
-
     none
 } GameMission_t;
 

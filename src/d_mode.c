@@ -32,7 +32,7 @@ static struct
 } valid_modes[] = {
     {doom, shareware, 1, 9},
     {doom, registered, 3, 9},       {doom, retail, 4, 9},
-    {doom2, commercial, 1, 32},     {pack_tnt, commercial, 1, 32},
+    {doom2, commercial, 1, 32},
     {heretic, shareware, 1, 9},     {heretic, registered, 3, 9},
     {heretic, retail, 5, 9},        {hexen, commercial, 1, 60},
     {strife, commercial, 1, 34},
@@ -128,7 +128,7 @@ boolean D_ValidGameVersion(GameMission_t mission, GameVersion_t version)
 
     // All Doom variants can use the Doom versions.
 
-    if (mission == doom2 || mission == pack_tnt)
+    if (mission == doom2)
     {
         mission = doom;
     }
@@ -158,7 +158,6 @@ boolean D_IsEpisodeMap(GameMission_t mission)
         case none:
         case hexen:
         case doom2:
-        case pack_tnt:
         case strife:
         default:
             return false;
@@ -176,8 +175,6 @@ const char *D_GameMissionString(GameMission_t mission)
             return "doom";
         case doom2:
             return "doom2";
-        case pack_tnt:
-            return "tnt";
         case heretic:
             return "heretic";
         case hexen:

@@ -671,11 +671,7 @@ static const char *banners[] =
     // doom.wad (Ultimate DOOM)
     "                         "
     "The Ultimate DOOM Startup v%i.%i"
-    "                        ",
-    // tnt.wad
-    "                     "
-    "DOOM 2: TNT - Evilution v%i.%i"
-    "                           ",
+    "                        "
 };
 
 //
@@ -739,8 +735,7 @@ static void SetMissionForPackName(const char *pack_name)
         const char *name;
         int mission;
     } packs[] = {
-        { "doom2",    doom2 },
-        { "tnt",      pack_tnt }
+        { "doom2",    doom2 }
     };
 
     for (i = 0; i < arrlen(packs); ++i)
@@ -1021,8 +1016,7 @@ static void InitGameVersion(void)
 
     // EXEs prior to the Final Doom exes do not support Final Doom.
 
-    if (gameversion < exe_final && gamemode == commercial
-     && (gamemission == pack_tnt || gamemission == pack_plut))
+    if (gameversion < exe_final && gamemode == commercial)
     {
         gamemission = doom2;
     }

@@ -21,9 +21,7 @@
 
 #include "d_mode.h"
 
-#define IWAD_MASK_DOOM    ((1 << doom)           \
-                         | (1 << doom2)          \
-                         | (1 << pack_tnt)       \
+#define IWAD_MASK_DOOM    ((1 << doom) | (1 << doom2))
 #define IWAD_MASK_HERETIC (1 << heretic)
 #define IWAD_MASK_HEXEN   (1 << hexen)
 #define IWAD_MASK_STRIFE  (1 << strife)

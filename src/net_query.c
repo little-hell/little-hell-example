@@ -716,8 +716,6 @@ static const char *GameDescription(GameMode_t mode, GameMission_t mission)
                 return "doom";
         case doom2:
             return "doom2";
-        case pack_tnt:
-            return "tnt";
         case heretic:
             return "heretic";
         case hexen:

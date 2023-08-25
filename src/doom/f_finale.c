@@ -78,13 +78,6 @@ static textscreen_t textscreens[] = {
     {doom2, 1, 30, "RROCK17", C4TEXT},
     {doom2, 1, 15, "RROCK13", C5TEXT},
     {doom2, 1, 31, "RROCK19", C6TEXT},
-
-    {pack_tnt, 1, 6, "SLIME16", T1TEXT},
-    {pack_tnt, 1, 11, "RROCK14", T2TEXT},
-    {pack_tnt, 1, 20, "RROCK07", T3TEXT},
-    {pack_tnt, 1, 30, "RROCK17", T4TEXT},
-    {pack_tnt, 1, 15, "RROCK13", T5TEXT},
-    {pack_tnt, 1, 31, "RROCK19", T6TEXT},
 };
 
 const char *finaletext;
