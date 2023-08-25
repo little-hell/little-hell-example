@@ -23,7 +23,7 @@
 
 // Game Mode - identify IWAD as shareware, retail etc.
 GameMode_t gamemode;
-GameMission_t	gamemission;
-GameVersion_t   gameversion;
+GameMission_t gamemission;
+GameVersion_t gameversion;
 
 boolean modifiedgame;

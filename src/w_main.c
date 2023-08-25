@@ -42,25 +42,25 @@ boolean W_ParseCommandLine(void)
     // Load the specified PWAD files.
     //
 
-    p = M_CheckParmWithArgs ("-file", 1);
+    p = M_CheckParmWithArgs("-file", 1);
     if (p)
     {
-	// the parms after p are wadfile/lump names,
-	// until end of parms or another - preceded parm
-	modifiedgame = true;            // homebrew levels
-	while (++p != myargc && myargv[p][0] != '-')
+        // the parms after p are wadfile/lump names,
+        // until end of parms or another - preceded parm
+        modifiedgame = true; // homebrew levels
+        while (++p != myargc && myargv[p][0] != '-')
         {
             char *filename;
 
             filename = D_TryFindWADByName(myargv[p]);
 
             printf(" adding %s\n", filename);
-	    W_AddFile(filename);
+            W_AddFile(filename);
             free(filename);
         }
     }
 
-//    W_PrintDirectory();
+    //    W_PrintDirectory();
 
     return modifiedgame;
 }
@@ -71,8 +71,8 @@ void W_AutoLoadWADs(const char *path)
     glob_t *glob;
     const char *filename;
 
-    glob = I_StartMultiGlob(path, GLOB_FLAG_NOCASE|GLOB_FLAG_SORTED,
-                            "*.wad", "*.lmp", NULL);
+    glob = I_StartMultiGlob(path, GLOB_FLAG_NOCASE | GLOB_FLAG_SORTED, "*.wad",
+                            "*.lmp", NULL);
     for (;;)
     {
         filename = I_NextGlob(glob);
@@ -95,10 +95,10 @@ static const struct
     GameMission_t mission;
     const char *lumpname;
 } unique_lumps[] = {
-    { doom,    "POSSA1" },
-    { heretic, "IMPXA1" },
-    { hexen,   "ETTNA1" },
-    { strife,  "AGRDA1" },
+    {doom, "POSSA1"},
+    {heretic, "IMPXA1"},
+    {hexen, "ETTNA1"},
+    {strife, "AGRDA1"},
 };
 
 void W_CheckCorrectIWAD(GameMission_t mission)
@@ -119,4 +119,3 @@ void W_CheckCorrectIWAD(GameMission_t mission)
         }
     }
 }
-

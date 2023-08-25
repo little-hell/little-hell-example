@@ -1326,7 +1326,7 @@ void G_DoCompleted(void)
     wminfo.maxitems = totalitems;
     wminfo.maxsecret = totalsecret;
     wminfo.maxfrags = 0;
-    wminfo.partime = TICRATE*pars[gameepisode][gamemap];
+    wminfo.partime = TICRATE * pars[gameepisode][gamemap];
     wminfo.pnum = consoleplayer;
 
     for (i = 0; i < MAXPLAYERS; i++)
@@ -1818,7 +1818,7 @@ void G_RecordDemo(const char *name)
     demorecording = true;
 }
 
-// TODO: refactor and remove 
+// TODO: refactor and remove
 int G_VanillaVersionCode(void)
 {
     return 109;

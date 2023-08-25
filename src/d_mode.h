@@ -26,10 +26,10 @@
 
 typedef enum
 {
-    doom,            // Doom 1
-    heretic,         // Heretic
-    hexen,           // Hexen
-    strife,          // Strife
+    doom,    // Doom 1
+    heretic, // Heretic
+    hexen,   // Hexen
+    strife,  // Strife
     none
 } GameMission_t;
 
@@ -39,25 +39,25 @@ typedef enum
 
 typedef enum
 {
-    shareware,       // Doom/Heretic shareware
-    registered,      // Doom/Heretic registered
-    commercial,      // Doom II/Hexen
-    retail,          // Ultimate Doom
-    indetermined     // Unknown.
+    shareware,   // Doom/Heretic shareware
+    registered,  // Doom/Heretic registered
+    commercial,  // Doom II/Hexen
+    retail,      // Ultimate Doom
+    indetermined // Unknown.
 } GameMode_t;
 
 // What version are we emulating?
 
 typedef enum
 {
-    exe_doom_1_9,    // Doom 1.9: "
+    exe_doom_1_9, // Doom 1.9: "
 } GameVersion_t;
 
 
 // Skill level.
 typedef enum
 {
-    sk_noitems = -1,        // the "-skill 0" hack
+    sk_noitems = -1, // the "-skill 0" hack
     sk_baby = 0,
     sk_easy,
     sk_medium,
@@ -67,10 +67,9 @@ typedef enum
 
 boolean D_ValidGameMode(GameMission_t mission, GameMode_t mode);
 boolean D_ValidGameVersion(GameMission_t mission, GameVersion_t version);
-boolean D_ValidEpisodeMap(GameMission_t mission, GameMode_t mode,
-                          int episode, int map);
+boolean D_ValidEpisodeMap(GameMission_t mission, GameMode_t mode, int episode,
+                          int map);
 boolean D_IsEpisodeMap(GameMission_t mission);
 const char *D_GameModeString(GameMode_t mode);
 
 #endif /* #ifndef __D_MODE__ */
-

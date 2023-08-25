@@ -66,7 +66,7 @@ typedef enum
 
 typedef struct net_reliable_packet_s net_reliable_packet_t;
 
-typedef struct 
+typedef struct
 {
     net_connstate_t state;
     net_disconnect_reason_t disconnect_reason;
@@ -102,4 +102,3 @@ void NET_Log(const char *fmt, ...);
 void NET_LogPacket(net_packet_t *packet);
 
 #endif /* #ifndef NET_COMMON_H */
-

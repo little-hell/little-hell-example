@@ -244,10 +244,11 @@ enum
     ep_end
 } episodes_e;
 
-menuitem_t EpisodeMenu[] = {{1, "M_EPI1", M_Episode, 'k'},
-                            {1, "M_EPI2", M_Episode, 't'},
-                            {1, "M_EPI3", M_Episode, 'i'},
-                            };
+menuitem_t EpisodeMenu[] = {
+    {1, "M_EPI1", M_Episode, 'k'},
+    {1, "M_EPI2", M_Episode, 't'},
+    {1, "M_EPI3", M_Episode, 'i'},
+};
 
 menu_t EpiDef = {
     ep_end,        // # of menu items
@@ -691,7 +692,7 @@ void M_DrawReadThis2(void)
 {
     inhelpscreens = true;
 
-    // We only ever draw the second page if this if 
+    // We only ever draw the second page if this if
     // we're on Doom v1.9 Registered
 
     V_DrawPatchDirect(0, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
