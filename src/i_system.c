@@ -20,15 +20,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
 #include <stdarg.h>
-
-#ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
-#else
 #include <unistd.h>
-#endif
 
 #include "SDL.h"
 
@@ -204,31 +197,8 @@ void I_PrintStartupBanner(const char *gamedescription)
 
 boolean I_ConsoleStdout(void)
 {
-#ifdef _WIN32
-    // SDL "helpfully" always redirects stdout to a file.
-    return false;
-#else
     return isatty(fileno(stdout));
-#endif
 }
-
-//
-// I_Init
-//
-/*
-void I_Init (void)
-{
-    I_CheckIsScreensaver();
-    I_InitTimer();
-    I_InitJoystick();
-}
-void I_BindVariables(void)
-{
-    I_BindVideoVariables();
-    I_BindJoystickVariables();
-    I_BindSoundVariables();
-}
-*/
 
 //
 // I_Quit

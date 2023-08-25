@@ -24,16 +24,9 @@
 #include "m_misc.h"
 #include "config.h"
 
-#if defined(_MSC_VER)
-// For Visual C++, we need to include the win_opendir module.
-#include <win_opendir.h>
-#define S_ISDIR(m)      (((m)& S_IFMT) == S_IFDIR)
-#elif defined(HAVE_DIRENT_H)
+#if defined(HAVE_DIRENT_H)
 #include <dirent.h>
 #include <sys/stat.h>
-#elif defined(__WATCOMC__)
-// Watcom has the same API in a different header.
-#include <direct.h>
 #else
 #define NO_DIRENT_IMPLEMENTATION
 #endif

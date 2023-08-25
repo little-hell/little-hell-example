@@ -1,9 +1,11 @@
 CMDLINE
 INSTALL
 TAGS
-config.h
 tags
 \#*\#
+
+# Doom save games
+.dsg
 
 # CMake-specific ignores
 /.vs
