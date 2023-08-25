@@ -126,8 +126,11 @@ The only dependency _you_ need is `git`, and Nix. All the dependencies that _Doo
     - [ ] Remove all references to non-DOOM v1.9 in the code.
 - v0.0.4:
     - [ ] Remove DeHackEd
-    - [ ] Remove WAD merging (a la DeuTex)
 - v0.0.5:
+    - [ ] Remove WAD merging (a la DeuTex)
+- v0.0.6:
+    - [ ] Remove `textscreen` and endoom.
+- v0.0.7:
     - [ ] Refactor the remaining sound subsystems post v0.0.2    
 
 ## TODO:
