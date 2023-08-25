@@ -809,47 +809,7 @@ void D_IdentifyVersion(void)
 
     if (logical_gamemission == doom)
     {
-        // Doom 1.  But which version?
-
-        if (W_CheckNumForName("E4M1") > 0)
-        {
-            // Ultimate Doom
-
-            gamemode = retail;
-        } 
-        else if (W_CheckNumForName("E3M1") > 0)
-        {
-            gamemode = registered;
-        }
-        else
-        {
-            gamemode = shareware;
-        }
-    }
-    else
-    {
-        int p;
-
-        // Doom 2 of some kind.
-        gamemode = commercial;
-
-        // We can manually override the gamemission that we got from the
-        // IWAD detection code. This allows us to eg. play Plutonia 2
-        // with Freedoom and get the right level names.
-
-        //!
-        // @category compat
-        // @arg <pack>
-        //
-        // Explicitly specify a Doom II "mission pack" to run as, instead of
-        // detecting it based on the filename. Valid values are: "doom2",
-        // "tnt" and "plutonia".
-        //
-        p = M_CheckParmWithArgs("-pack", 1);
-        if (p > 0)
-        {
-            SetMissionForPackName(myargv[p + 1]);
-        }
+        gamemode = registered;
     }
 }
 
@@ -857,59 +817,8 @@ void D_IdentifyVersion(void)
 
 static void D_SetGameDescription(void)
 {
-    if (logical_gamemission == doom)
-    {
-        // Doom 1.  But which version?
-
-        if (gamevariant == freedoom)
-        {
-            gamedescription = GetGameName("Freedoom: Phase 1");
-        }
-        else if (gamemode == retail)
-        {
-            // Ultimate Doom
-
-            gamedescription = GetGameName("The Ultimate DOOM");
-        }
-        else if (gamemode == registered)
-        {
-            gamedescription = GetGameName("DOOM Registered");
-        }
-        else if (gamemode == shareware)
-        {
-            gamedescription = GetGameName("DOOM Shareware");
-        }
-    }
-    else
-    {
-        // Doom 2 of some kind.  But which mission?
-
-        if (gamevariant == freedm)
-        {
-            gamedescription = GetGameName("FreeDM");
-        }
-        else if (gamevariant == freedoom)
-        {
-            gamedescription = GetGameName("Freedoom: Phase 2");
-        }
-        else if (logical_gamemission == doom2)
-        {
-            gamedescription = GetGameName("DOOM 2: Hell on Earth");
-        }
-        else if (logical_gamemission == pack_plut)
-        {
-            gamedescription = GetGameName("DOOM 2: Plutonia Experiment"); 
-        }
-        else if (logical_gamemission == pack_tnt)
-        {
-            gamedescription = GetGameName("DOOM 2: TNT - Evilution");
-        }
-    }
-
-    if (gamedescription == NULL)
-    {
-        gamedescription = M_StringDuplicate("Unknown");
-    }
+    
+    gamedescription = GetGameName("DOOM Registered");
 }
 
 //      print title for every printed line
@@ -990,7 +899,6 @@ static struct
     {"Ultimate Doom",        "ultimate",   exe_ultimate},
     {"Final Doom",           "final",      exe_final},
     {"Final Doom (alt)",     "final2",     exe_final2},
-    {"Chex Quest",           "chex",       exe_chex},
     { NULL,                  NULL,         0},
 };
 
@@ -1010,8 +918,8 @@ static void InitGameVersion(void)
     // @category compat
     //
     // Emulate a specific version of Doom.  Valid values are "1.2", 
-    // "1.666", "1.7", "1.8", "1.9", "ultimate", "final", "final2",
-    // "hacx" and "chex".
+    // "1.666", "1.7", "1.8", "1.9", "ultimate", "final", "final2", and
+    // "hacx"
     //
 
     p = M_CheckParmWithArgs("-gameversion", 1);
@@ -1042,15 +950,7 @@ static void InitGameVersion(void)
     }
     else
     {
-        // Determine automatically
-
-        if (gamemission == pack_chex)
-        {
-            // chex.exe - identified by iwad filename
-
-            gameversion = exe_chex;
-        }
-        else if (gamemission == pack_hacx)
+        if (gamemission == pack_hacx)
         {
             // hacx.exe: identified by iwad filename
 
@@ -1205,42 +1105,6 @@ static void LoadIwadDeh(void)
         {
             I_Error("DEHACKED lump not found.  Please check that this is the "
                     "Hacx v1.2 IWAD.");
-        }
-    }
-
-    // Chex Quest needs a separate Dehacked patch which must be downloaded
-    // and installed next to the IWAD.
-    if (gameversion == exe_chex)
-    {
-        char *chex_deh = NULL;
-        char *dirname;
-
-        // Look for chex.deh in the same directory as the IWAD file.
-        dirname = M_DirName(iwadfile);
-        chex_deh = M_StringJoin(dirname, DIR_SEPARATOR_S, "chex.deh", NULL);
-        free(dirname);
-
-        // If the dehacked patch isn't found, try searching the WAD
-        // search path instead.  We might find it...
-        if (!M_FileExists(chex_deh))
-        {
-            free(chex_deh);
-            chex_deh = D_FindWADByName("chex.deh");
-        }
-
-        // Still not found?
-        if (chex_deh == NULL)
-        {
-            I_Error("Unable to find Chex Quest dehacked file (chex.deh).\n"
-                    "The dehacked file is required in order to emulate\n"
-                    "chex.exe correctly.  It can be found in your nearest\n"
-                    "/idgames repository mirror at:\n\n"
-                    "   utils/exe_edit/patches/chexdeh.zip");
-        }
-
-        if (!DEH_LoadFile(chex_deh))
-        {
-            I_Error("Failed to load chex.deh needed for emulating chex.exe.");
         }
     }
 
@@ -1566,21 +1430,18 @@ void D_DoomMain (void)
     //
     // Disable auto-loading of .wad and .deh files.
     //
-    if (!M_ParmExists("-noautoload") && gamemode != shareware)
+    if (!M_ParmExists("-noautoload"))
     {
         char *autoload_dir;
 
         // common auto-loaded files for all Doom flavors
 
-        if (gamemission < pack_chex)
+        autoload_dir = M_GetAutoloadDir("doom-all");
+        if (autoload_dir != NULL)
         {
-            autoload_dir = M_GetAutoloadDir("doom-all");
-            if (autoload_dir != NULL)
-            {
-                DEH_AutoLoadPatches(autoload_dir);
-                W_AutoLoadWADs(autoload_dir);
-                free(autoload_dir);
-            }
+            DEH_AutoLoadPatches(autoload_dir);
+            W_AutoLoadWADs(autoload_dir);
+            free(autoload_dir);
         }
 
         // auto-loaded files per IWAD
@@ -1715,10 +1576,6 @@ void D_DoomMain (void)
 	};
 	int i;
 	
-	if ( gamemode == shareware)
-	    I_Error(DEH_String("\nYou cannot -file with the shareware "
-			       "version. Register!"));
-
 	// Check for fake IWAD with right name,
 	// but w/o all the lumps of the registered version. 
 	if (gamemode == registered)
@@ -1836,20 +1693,15 @@ void D_DoomMain (void)
 
     if (p)
     {
-        if (gamemode == commercial)
-            startmap = atoi (myargv[p+1]);
+        startepisode = myargv[p+1][0]-'0';
+
+        if (p + 2 < myargc)
+        {
+            startmap = myargv[p+2][0]-'0';
+        }
         else
         {
-            startepisode = myargv[p+1][0]-'0';
-
-            if (p + 2 < myargc)
-            {
-                startmap = myargv[p+2][0]-'0';
-            }
-            else
-            {
-                startmap = 1;
-            }
+            startmap = 1;
         }
         autostart = true;
     }
@@ -1913,13 +1765,6 @@ void D_DoomMain (void)
 
     DEH_printf("ST_Init: Init status bar.\n");
     ST_Init ();
-
-    // If Doom II without a MAP01 lump, this is a store demo.
-    // Moved this here so that MAP01 isn't constantly looked up
-    // in the main loop.
-
-    if (gamemode == commercial && W_CheckNumForName("map01") < 0)
-        storedemo = true;
 
     if (M_CheckParmWithArgs("-statdump", 1))
     {

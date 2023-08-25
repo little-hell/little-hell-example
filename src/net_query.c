@@ -720,8 +720,6 @@ static const char *GameDescription(GameMode_t mode, GameMission_t mission)
             return "tnt";
         case pack_plut:
             return "plutonia";
-        case pack_chex:
-            return "chex";
         case pack_hacx:
             return "hacx";
         case heretic:

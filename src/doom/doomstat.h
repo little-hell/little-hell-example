@@ -62,10 +62,8 @@ extern GameVariant_t gamevariant;
 // just modified versions of doom and doom2, and should be interpreted
 // as the same most of the time.
 
-#define logical_gamemission                                                    \
-    (gamemission == pack_chex   ? doom                                         \
-     : gamemission == pack_hacx ? doom2                                        \
-                                : gamemission)
+// TODO: remove with further refacotring
+#define logical_gamemission doom
 
 // Set if homebrew PWAD stuff has been added.
 extern boolean modifiedgame;

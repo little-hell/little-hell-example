@@ -30,7 +30,7 @@ static struct
     int episode;
     int map;
 } valid_modes[] = {
-    {pack_chex, retail, 1, 5},      {doom, shareware, 1, 9},
+    {doom, shareware, 1, 9},
     {doom, registered, 3, 9},       {doom, retail, 4, 9},
     {doom2, commercial, 1, 32},     {pack_tnt, commercial, 1, 32},
     {pack_plut, commercial, 1, 32}, {pack_hacx, commercial, 1, 32},
@@ -118,7 +118,7 @@ static struct
     {doom, exe_doom_1_7},       {doom, exe_doom_1_8},
     {doom, exe_doom_1_9},       {doom, exe_hacx},
     {doom, exe_ultimate},       {doom, exe_final},
-    {doom, exe_final2},         {doom, exe_chex},
+    {doom, exe_final2},         
     {heretic, exe_heretic_1_3}, {hexen, exe_hexen_1_1},
     {strife, exe_strife_1_2},   {strife, exe_strife_1_31},
 };
@@ -130,7 +130,7 @@ boolean D_ValidGameVersion(GameMission_t mission, GameVersion_t version)
     // All Doom variants can use the Doom versions.
 
     if (mission == doom2 || mission == pack_plut || mission == pack_tnt ||
-        mission == pack_hacx || mission == pack_chex)
+        mission == pack_hacx)
     {
         mission = doom;
     }
@@ -155,7 +155,6 @@ boolean D_IsEpisodeMap(GameMission_t mission)
     {
         case doom:
         case heretic:
-        case pack_chex:
             return true;
 
         case none:
@@ -187,8 +186,6 @@ const char *D_GameMissionString(GameMission_t mission)
             return "plutonia";
         case pack_hacx:
             return "hacx";
-        case pack_chex:
-            return "chex";
         case heretic:
             return "heretic";
         case hexen:
