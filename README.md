@@ -227,7 +227,13 @@ Over the years a lot of configuration options have been added to various source 
     - [x] Remove fluidsynth music playback
     - [x] Remove timidity support
     - [x] Only support/emulation of OPL3 / Soundblaster.
-        - [ ] No support for real OPL hardware (just the emulation)      
+        - [ ] No support for real OPL hardware (just the emulation)
+    - [ ] Refactor the remaining sound subsystems       
+- v0.0.3:
+    - [ ] Remove all references to non-DOOM v1.9 in the code.
+- v0.0.4:
+    - [ ] Remove DeHackEd
+    - [ ] Remove WAD merging (a la DeuTex) 
 
 ## TODO:
 
