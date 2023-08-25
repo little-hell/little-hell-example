@@ -21,12 +21,7 @@
 
 #include "d_mode.h"
 
-#define IWAD_MASK_DOOM    ((1 << doom)           \
-                         | (1 << doom2)          \
-                         | (1 << pack_tnt)       \
-                         | (1 << pack_plut)      \
-                         | (1 << pack_chex)      \
-                         | (1 << pack_hacx))
+#define IWAD_MASK_DOOM    ((1 << doom))
 #define IWAD_MASK_HERETIC (1 << heretic)
 #define IWAD_MASK_HEXEN   (1 << hexen)
 #define IWAD_MASK_STRIFE  (1 << strife)
@@ -44,10 +39,8 @@ char *D_FindWADByName(const char *filename);
 char *D_TryFindWADByName(const char *filename);
 char *D_FindIWAD(int mask, GameMission_t *mission);
 const iwad_t **D_FindAllIWADs(int mask);
-const char *D_SaveGameIWADName(GameMission_t gamemission, GameVariant_t gamevariant);
 const char *D_SuggestIWADName(GameMission_t mission, GameMode_t mode);
 const char *D_SuggestGameName(GameMission_t mission, GameMode_t mode);
 void D_CheckCorrectIWAD(GameMission_t mission);
 
 #endif
-
