@@ -136,7 +136,7 @@ Or on Arch-based system:
 sudo pacman -S sdl2 sdl2_net sdl2_mixer
 ```
 
-Then your build steps are exactly the same as the steps above, minux the `nix` command.
+Then your build steps are exactly the same as the steps above, minus the `nix` command.
 
 #### Building on Windows
 Don't.
@@ -155,17 +155,20 @@ Don't.
     - [x] Remove fluidsynth music playback
     - [x] Remove timidity support
     - [x] Only support/emulation of OPL3 / Soundblaster.
-        - [ ] No support for real OPL hardware (just the emulation)   
 - v0.0.3:
-    - [ ] Remove all references to non-DOOM v1.9 in the code.
+    - [ ] Remove Windows-specific code
+    - [ ] No support for real OPL hardware (just the emulation)   
+    - [ ]
 - v0.0.4:
-    - [ ] Remove DeHackEd
+    - [ ] Remove all references to non-DOOM v1.9 in the code.
 - v0.0.5:
-    - [ ] Remove WAD merging (a la DeuTex)
+    - [ ] Remove DeHackEd
 - v0.0.6:
-    - [ ] Remove `textscreen` and endoom.
+    - [ ] Remove WAD merging (a la DeuTex)
 - v0.0.7:
-    - [ ] Refactor the remaining sound subsystems post v0.0.2    
+    - [ ] Remove `textscreen` and endoom.
+- v0.0.8:
+    - [ ] The _refactor release_. Start doing static analysis and get to cleaning. This will span multiple releases. 
 
 ## TODO:
 
