@@ -89,9 +89,6 @@ static const sound_module_t *sound_modules[] =
 
 static const music_module_t *music_modules[] =
 {
-#ifdef _WIN32
-    &music_win_module,
-#endif
 #ifndef DISABLE_SDL2MIXER
     &music_sdl_module,
 #endif // DISABLE_SDL2MIXER
@@ -476,12 +473,6 @@ void I_BindSoundVariables(void)
     M_BindIntVariable("snd_pitchshift",          &snd_pitchshift);
 
     M_BindStringVariable("music_pack_path",      &music_pack_path);
-#ifdef _WIN32
-    M_BindStringVariable("winmm_midi_device",    &winmm_midi_device);
-    M_BindIntVariable("winmm_complevel",         &winmm_complevel);
-    M_BindIntVariable("winmm_reset_type",        &winmm_reset_type);
-    M_BindIntVariable("winmm_reset_delay",       &winmm_reset_delay);
-#endif
 
     M_BindIntVariable("use_libsamplerate",       &use_libsamplerate);
     M_BindFloatVariable("libsamplerate_scale",   &libsamplerate_scale);
