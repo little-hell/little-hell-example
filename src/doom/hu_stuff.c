@@ -104,31 +104,8 @@ const char *mapnames[] = // DOOM shareware/registered/retail (Ultimate) names.
         HUSTR_E3M1, HUSTR_E3M2, HUSTR_E3M3, HUSTR_E3M4, HUSTR_E3M5,
         HUSTR_E3M6, HUSTR_E3M7, HUSTR_E3M8, HUSTR_E3M9,
 
-        HUSTR_E4M1, HUSTR_E4M2, HUSTR_E4M3, HUSTR_E4M4, HUSTR_E4M5,
-        HUSTR_E4M6, HUSTR_E4M7, HUSTR_E4M8, HUSTR_E4M9,
-
         "NEWLEVEL", "NEWLEVEL", "NEWLEVEL", "NEWLEVEL", "NEWLEVEL",
         "NEWLEVEL", "NEWLEVEL", "NEWLEVEL", "NEWLEVEL"};
-
-// List of names for levels in commercial IWADs
-// (doom2.wad, plutonia.wad, tnt.wad).  These are stored in a
-// single large array; WADs like pl2.wad have a MAP33, and rely on
-// the layout in the Vanilla executable, where it is possible to
-// overflow the end of one array into the next.
-
-const char *mapnames_commercial[] = {
-    // DOOM 2 map names.
-
-    HUSTR_1, HUSTR_2, HUSTR_3, HUSTR_4, HUSTR_5, HUSTR_6, HUSTR_7, HUSTR_8,
-    HUSTR_9, HUSTR_10, HUSTR_11,
-
-    HUSTR_12, HUSTR_13, HUSTR_14, HUSTR_15, HUSTR_16, HUSTR_17, HUSTR_18,
-    HUSTR_19, HUSTR_20,
-
-    HUSTR_21, HUSTR_22, HUSTR_23, HUSTR_24, HUSTR_25, HUSTR_26, HUSTR_27,
-    HUSTR_28, HUSTR_29, HUSTR_30, HUSTR_31, HUSTR_32,
-
-};
 
 void HU_Init(void)
 {
@@ -173,23 +150,7 @@ void HU_Start(void)
     // create the map title widget
     HUlib_initTextLine(&w_title, HU_TITLEX, HU_TITLEY, hu_font, HU_FONTSTART);
 
-    switch (logical_gamemission)
-    {
-        case doom:
-            s = HU_TITLE;
-            break;
-        case doom2:
-            s = HU_TITLE2;
-            // Pre-Final Doom compatibility: map33-map35 names don't spill over
-            if (gameversion <= exe_doom_1_9 && gamemap >= 33)
-            {
-                s = "";
-            }
-            break;
-        default:
-            s = "Unknown level";
-            break;
-    }
+    s = HU_TITLE;
 
     // dehacked substitution to get modified level name
 

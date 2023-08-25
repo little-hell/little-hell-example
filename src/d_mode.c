@@ -30,12 +30,10 @@ static struct
     int episode;
     int map;
 } valid_modes[] = {
-    {doom, shareware, 1, 9},
-    {doom, registered, 3, 9},       {doom, retail, 4, 9},
-    {doom2, commercial, 1, 32},
-    {heretic, shareware, 1, 9},     {heretic, registered, 3, 9},
-    {heretic, retail, 5, 9},        {hexen, commercial, 1, 60},
-    {strife, commercial, 1, 34},
+    {doom, shareware, 1, 9},     {doom, registered, 3, 9},
+    {doom, retail, 4, 9},        {heretic, shareware, 1, 9},
+    {heretic, registered, 3, 9}, {heretic, retail, 5, 9},
+    {hexen, commercial, 1, 60},  {strife, commercial, 1, 34},
 };
 
 // Check that a gamemode+gamemission received over the network is valid.
@@ -115,9 +113,8 @@ static struct
 } valid_versions[] = {
     {doom, exe_doom_1_2},       {doom, exe_doom_1_666},
     {doom, exe_doom_1_7},       {doom, exe_doom_1_8},
-    {doom, exe_doom_1_9},       
-    {doom, exe_ultimate},       {doom, exe_final},
-    {doom, exe_final2},         
+    {doom, exe_doom_1_9},       {doom, exe_ultimate},
+    {doom, exe_final},          {doom, exe_final2},
     {heretic, exe_heretic_1_3}, {hexen, exe_hexen_1_1},
     {strife, exe_strife_1_2},   {strife, exe_strife_1_31},
 };
@@ -125,13 +122,6 @@ static struct
 boolean D_ValidGameVersion(GameMission_t mission, GameVersion_t version)
 {
     int i;
-
-    // All Doom variants can use the Doom versions.
-
-    if (mission == doom2)
-    {
-        mission = doom;
-    }
 
     for (i = 0; i < arrlen(valid_versions); ++i)
     {
@@ -157,7 +147,6 @@ boolean D_IsEpisodeMap(GameMission_t mission)
 
         case none:
         case hexen:
-        case doom2:
         case strife:
         default:
             return false;
@@ -173,8 +162,6 @@ const char *D_GameMissionString(GameMission_t mission)
             return "none";
         case doom:
             return "doom";
-        case doom2:
-            return "doom2";
         case heretic:
             return "heretic";
         case hexen:
