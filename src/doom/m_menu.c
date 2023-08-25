@@ -970,7 +970,7 @@ void M_QuitResponse(int key)
 
 
 static const char *M_SelectEndMessage(void)
-// TODO: refactor out this function entirely 
+// TODO: refactor out this function entirely
 {
     const char **endmsg;
 

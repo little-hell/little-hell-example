@@ -31,14 +31,13 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
-static const iwad_t iwads[] =
-{
-    { "doom.wad",     doom,      retail,     "Doom" },
-    { "doom1.wad",    doom,      shareware,  "Doom Shareware" },
-    { "heretic.wad",  heretic,   retail,     "Heretic" },
-    { "heretic1.wad", heretic,   shareware,  "Heretic Shareware" },
-    { "hexen.wad",    hexen,     commercial, "Hexen" },
-    { "strife1.wad",  strife,    commercial, "Strife" },
+static const iwad_t iwads[] = {
+    {"doom.wad", doom, retail, "Doom"},
+    {"doom1.wad", doom, shareware, "Doom Shareware"},
+    {"heretic.wad", heretic, retail, "Heretic"},
+    {"heretic1.wad", heretic, shareware, "Heretic Shareware"},
+    {"hexen.wad", hexen, commercial, "Hexen"},
+    {"strife1.wad", strife, commercial, "Strife"},
 };
 
 boolean D_IsIWADName(const char *name)
@@ -80,8 +79,8 @@ static void AddIWADDir(const char *dir)
 
 static boolean DirIsFile(const char *path, const char *filename)
 {
-    return strchr(path, DIR_SEPARATOR) != NULL
-        && !strcasecmp(M_BaseName(path), filename);
+    return strchr(path, DIR_SEPARATOR) != NULL &&
+           !strcasecmp(M_BaseName(path), filename);
 }
 
 // Check if the specified directory contains the specified IWAD
@@ -90,7 +89,7 @@ static boolean DirIsFile(const char *path, const char *filename)
 
 static char *CheckDirectoryHasIWAD(const char *dir, const char *iwadname)
 {
-    char *filename; 
+    char *filename;
     char *probe;
 
     // As a special case, the "directory" may refer directly to an
@@ -128,12 +127,13 @@ static char *CheckDirectoryHasIWAD(const char *dir, const char *iwadname)
 // Search a directory to try to find an IWAD
 // Returns the location of the IWAD if found, otherwise NULL.
 
-static char *SearchDirectoryForIWAD(const char *dir, int mask, GameMission_t *mission)
+static char *SearchDirectoryForIWAD(const char *dir, int mask,
+                                    GameMission_t *mission)
 {
     char *filename;
     size_t i;
 
-    for (i=0; i<arrlen(iwads); ++i) 
+    for (i = 0; i < arrlen(iwads); ++i)
     {
         if (((1 << iwads[i].mission) & mask) == 0)
         {
@@ -164,7 +164,7 @@ static GameMission_t IdentifyIWADByName(const char *name, int mask)
     name = M_BaseName(name);
     mission = none;
 
-    for (i=0; i<arrlen(iwads); ++i)
+    for (i = 0; i < arrlen(iwads); ++i)
     {
         // Check if the filename is this IWAD name.
 
@@ -360,14 +360,14 @@ static void BuildIWADDirList(void)
 
 //
 // Searches WAD search paths for an WAD with a specific filename.
-// 
+//
 
 char *D_FindWADByName(const char *name)
 {
     char *path;
     char *probe;
     int i;
-    
+
     // Absolute path?
 
     probe = M_FileCaseExists(name);
@@ -380,7 +380,7 @@ char *D_FindWADByName(const char *name)
 
     // Search through all IWAD paths for a file with the given name.
 
-    for (i=0; i<num_iwad_dirs; ++i)
+    for (i = 0; i < num_iwad_dirs; ++i)
     {
         // As a special case, if this is in DOOMWADDIR or DOOMWADPATH,
         // the "directory" may actually refer directly to an IWAD
@@ -470,7 +470,7 @@ char *D_FindIWAD(int mask, GameMission_t *mission)
         {
             I_Error("IWAD file '%s' not found!", iwadfile);
         }
-        
+
         *mission = IdentifyIWADByName(result, mask);
     }
     else
@@ -480,8 +480,8 @@ char *D_FindIWAD(int mask, GameMission_t *mission)
         result = NULL;
 
         BuildIWADDirList();
-    
-        for (i=0; result == NULL && i<num_iwad_dirs; ++i)
+
+        for (i = 0; result == NULL && i < num_iwad_dirs; ++i)
         {
             result = SearchDirectoryForIWAD(iwad_dirs[i], mask, mission);
         }
@@ -504,7 +504,7 @@ const iwad_t **D_FindAllIWADs(int mask)
 
     // Try to find all IWADs
 
-    for (i=0; i<arrlen(iwads); ++i)
+    for (i = 0; i < arrlen(iwads); ++i)
     {
         if (((1 << iwads[i].mission) & mask) == 0)
         {
@@ -531,7 +531,8 @@ const iwad_t **D_FindAllIWADs(int mask)
 // Get the IWAD name used for savegames.
 //
 
-const char *D_SaveGameIWADName(GameMission_t gamemission, GameVariant_t gamevariant)
+const char *D_SaveGameIWADName(GameMission_t gamemission,
+                               GameVariant_t gamevariant)
 {
     size_t i;
 
@@ -542,7 +543,7 @@ const char *D_SaveGameIWADName(GameMission_t gamemission, GameVariant_t gamevari
     // This ensures that doom1.wad and doom.wad saves are stored
     // in the same place.
 
-    for (i=0; i<arrlen(iwads); ++i)
+    for (i = 0; i < arrlen(iwads); ++i)
     {
         if (gamemission == iwads[i].mission)
         {
@@ -576,8 +577,8 @@ const char *D_SuggestGameName(GameMission_t mission, GameMode_t mode)
 
     for (i = 0; i < arrlen(iwads); ++i)
     {
-        if (iwads[i].mission == mission
-         && (mode == indetermined || iwads[i].mode == mode))
+        if (iwads[i].mission == mission &&
+            (mode == indetermined || iwads[i].mode == mode))
         {
             return iwads[i].description;
         }
@@ -585,4 +586,3 @@ const char *D_SuggestGameName(GameMission_t mission, GameMode_t mode)
 
     return "Unknown game?";
 }
-

@@ -30,11 +30,10 @@ static struct
     int episode;
     int map;
 } valid_modes[] = {
-    {doom, shareware, 1, 9},
-    {doom, registered, 3, 9},       {doom, retail, 4, 9},
-    {heretic, shareware, 1, 9},     {heretic, registered, 3, 9},
-    {heretic, retail, 5, 9},        {hexen, commercial, 1, 60},
-    {strife, commercial, 1, 34},
+    {doom, shareware, 1, 9},     {doom, registered, 3, 9},
+    {doom, retail, 4, 9},        {heretic, shareware, 1, 9},
+    {heretic, registered, 3, 9}, {heretic, retail, 5, 9},
+    {hexen, commercial, 1, 60},  {strife, commercial, 1, 34},
 };
 
 // Check that a gamemode+gamemission received over the network is valid.
@@ -114,9 +113,8 @@ static struct
 } valid_versions[] = {
     {doom, exe_doom_1_2},       {doom, exe_doom_1_666},
     {doom, exe_doom_1_7},       {doom, exe_doom_1_8},
-    {doom, exe_doom_1_9},       
-    {doom, exe_ultimate},       {doom, exe_final},
-    {doom, exe_final2},         
+    {doom, exe_doom_1_9},       {doom, exe_ultimate},
+    {doom, exe_final},          {doom, exe_final2},
     {heretic, exe_heretic_1_3}, {hexen, exe_hexen_1_1},
     {strife, exe_strife_1_2},   {strife, exe_strife_1_31},
 };

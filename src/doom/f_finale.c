@@ -66,12 +66,10 @@ typedef struct
     const char *text;
 } textscreen_t;
 
-static textscreen_t textscreens[] = {
-    {doom, 1, 8, "FLOOR4_8", E1TEXT},
-    {doom, 2, 8, "SFLR6_1", E2TEXT},
-    {doom, 3, 8, "MFLR8_4", E3TEXT},
-    {doom, 4, 8, "MFLR8_3", E4TEXT}
-};
+static textscreen_t textscreens[] = {{doom, 1, 8, "FLOOR4_8", E1TEXT},
+                                     {doom, 2, 8, "SFLR6_1", E2TEXT},
+                                     {doom, 3, 8, "MFLR8_4", E3TEXT},
+                                     {doom, 4, 8, "MFLR8_3", E4TEXT}};
 
 const char *finaletext;
 const char *finaleflat;
