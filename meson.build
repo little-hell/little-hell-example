@@ -1,5 +1,6 @@
 project('zendoom', 'c',
        default_options: 'default_library=static')
+add_project_arguments('-DDISABLE_SDL_MIXER', language: 'c')
 
 sdl2 = dependency('SDL2')
 sdl2_net = dependency('SDL2_net')
@@ -53,14 +54,12 @@ game_source_files = files(
     src_dir / 'deh_str.c',
     src_dir / 'deh_text.c',
     src_dir / 'deh_mapping.c',
-    src_dir / 'i_cdmus.c',
     src_dir / 'i_endoom.c',
     src_dir / 'i_glob.c',
     src_dir / 'i_input.c',
     src_dir / 'i_joystick.c',
     src_dir / 'i_musicpack.c',
     src_dir / 'i_oplmusic.c',
-    src_dir / 'i_sdlmusic.c',
     src_dir / 'i_sdlsound.c',
     src_dir / 'i_sound.c',
     src_dir / 'i_timer.c',

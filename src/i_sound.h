@@ -92,11 +92,6 @@ typedef enum
     SNDDEVICE_NONE = 0,
     SNDDEVICE_ADLIB = 2,
     SNDDEVICE_SB = 3,
-    SNDDEVICE_PAS = 4,
-    SNDDEVICE_WAVEBLASTER = 6,
-    SNDDEVICE_SOUNDCANVAS = 7,
-    SNDDEVICE_GENMIDI = 8,
-    SNDDEVICE_AWE32 = 9,
 } snddevice_t;
 
 // Interface for sound modules
@@ -250,7 +245,6 @@ void I_OPL_DevMessages(char *, size_t);
 // Sound modules
 
 extern const sound_module_t sound_sdl_module;
-extern const music_module_t music_sdl_module;
 extern const music_module_t music_opl_module;
 extern const music_module_t music_pack_module;
 
