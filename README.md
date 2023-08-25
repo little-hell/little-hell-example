@@ -9,7 +9,7 @@ Mindoom is the [MINIX](https://en.wikipedia.org/wiki/Minix) of Doom ports. It's 
 One could argue that this completely guts and kills the soul of DOOM. And you probably wouldn't even be wrong, but this is for science and John Carmack released Doom under the GPL.
 
 
-
+## Contents
 - [Motivation](#motivation)
     - [Minimalism in the build system](#minimalism-in-the-build-system)
     - [Minimalism in platform support, packing, and distribution](#minimalism-in-platform-support-packaging-and-distribution)
