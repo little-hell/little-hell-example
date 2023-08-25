@@ -43,7 +43,7 @@ int snd_cachesize = 64 * 1024 * 1024;
 int snd_maxslicetime_ms = 28;
 
 // External command to invoke to play back music.
-
+// TODO: remove, music should be handled internally
 char *snd_musiccmd = "";
 
 // Whether to vary the pitch of sound effects
@@ -66,6 +66,7 @@ static boolean music_packs_active = false;
 static const music_module_t *active_music_module;
 
 
+//TODO: remove, we don't care about DOS :-)
 // DOS-specific options: These are unused but should be maintained
 // so that the config file can be shared between chocolate
 // doom and doom.exe
