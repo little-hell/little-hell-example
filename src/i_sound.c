@@ -42,10 +42,6 @@ int snd_cachesize = 64 * 1024 * 1024;
 
 int snd_maxslicetime_ms = 28;
 
-// External command to invoke to play back music.
-// TODO: remove, music should be handled internally
-char *snd_musiccmd = "";
-
 // Whether to vary the pitch of sound effects
 // Each game will set the default differently
 
@@ -399,11 +395,8 @@ void I_BindSoundVariables(void)
     M_BindIntVariable("snd_musicdevice",         &snd_musicdevice);
     M_BindIntVariable("snd_sfxdevice",           &snd_sfxdevice);
     M_BindIntVariable("snd_maxslicetime_ms",     &snd_maxslicetime_ms);
-    M_BindStringVariable("snd_musiccmd",         &snd_musiccmd);
-    M_BindStringVariable("snd_dmxoption",        &snd_dmxoption);
     M_BindIntVariable("snd_samplerate",          &snd_samplerate);
     M_BindIntVariable("snd_cachesize",           &snd_cachesize);
-    M_BindIntVariable("opl_io_port",             &opl_io_port);
     M_BindIntVariable("snd_pitchshift",          &snd_pitchshift);
 
     M_BindIntVariable("use_libsamplerate",       &use_libsamplerate);
