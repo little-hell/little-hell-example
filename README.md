@@ -1,14 +1,7 @@
 # zendoom
 
 Zendoom is the [MINIX](https://en.wikipedia.org/wiki/Minix) of Doom ports. It's a hyper-minimalist fork of Chocolate Doom that aims to:
-- Have the smallest, easiest to study version of the Doom codebase, by throwing backwards compatibility to the wind (if necessary). That means:
-    - Doom v1.9 only. No Doom II, FreeDoom, Strife, Hexen, Heretic, etc.
-    - No DeHackEd.
-    - No total conversion support (WAD merging/DeuTex stuff).
-    - No emulation of OPL, PAS, GUS, MIDI, and PC speaker sound engines. We have _SDL_ and `.ogg` files.
-    - No CMake and Autotools support, just a single Meson `meson.build` file.
-    - No `setup` application.
-    - No terminal/console emulation via `textscreen`.
+- Have the smallest, easiest to study version of the Doom codebase, by throwing backwards compatibility to the wind (if necessary).
 - Make exploring the core principles of the Doom engine as zen-like as possible.
 - Integrate an embedded scripting language (such as Lua or Guile) to allow experimentation with the engine in a higher-level language.
 
@@ -31,13 +24,22 @@ Build systems for C can be awfully yucky and not very Zen. Zendoom supports one 
 
 It's a project built around exploration of the codebase - build the code yourself. 
 
+### Zen in sound support and emulation
+- [x] Remove GUS emulation
+- [x] Remove PC speaker emulation
+- [x] Remove PAS 
+- [x] Remove MIDI music via Fluidsynth, Timidity, and SDL.
+- [x] Remove music packs
+
+All we use is the OPL emulation. And we drop the hardware support for using a real OPL chip.
+
 ### Zen in features and legacy support
 A vast majority of the wonderful features added to source ports are extraneous to our goal of understanding the Doom engine. To that end, an awful lot has been removed:
 
-- [ ] Remove DOOM II, Strife, Heretic, and Hexen support - we're talking about _Doom_ and _Doom_ only. And _only Doom v1.9_. 
+- [x] Remove DOOM II, Strife, Heretic, and Hexen support - we're talking about _Doom_ and _Doom_ only.
+- [x] Remove emulation and handling of various DOOM 1 minor version releases - we do Doom v1.9 only. 
+- [x] No hacks. No DeHackEd, no wad-merging like DeuTex. Just the vanilla stuff.
 - [x] Remove the `setup` application. Edit the `.cfg` by hand. Minimalism, baby.
-- [ ] Remove support for MUS and MIDI as well as emulation support for PC speaker, OPL, PAS and GUS. Do you even know what some of those acronyms mean? I don't. We're using SDL like a sane person.
-- [ ] Remove support for reading 'in-WAD' music (part of MUS support). Music playback is done only through SDL, and only via [music packs](https://www.chocolate-doom.org/wiki/index.php/Digital_music_packs). But I'm not even fussy about that. We should go a step further than the music packs and use straight `.ogg` files.
 
 The only features it _adds_ are to change the default controls to utilize the `WASD` key cluster, with `E` for interaction. Because anything else would not be Zen.
 
@@ -105,15 +107,15 @@ Over the years a lot of configuration options have been added to various source 
 | snd_cachesize              |             |
 | snd_maxslicetime_ms        |             |
 | snd_pitchshift             |             |
-| snd_musiccmd               |             |
-| snd_dmxoption              |             |
-| opl_io_port                |Yes          |
+| snd_musiccmd               |Removed      |
+| snd_dmxoption              |Removed      |
+| opl_io_port                |Removed      |
 | use_libsamplerate          |             |
 | libsamplerate_scale        |             |
-| music_pack_path            |             |
-| timidity_cfg_path          |Yes          |
-| gus_patch_path             |Yes          |
-| gus_ram_kb                 |Yes          |
+| music_pack_path            |Removed      |
+| timidity_cfg_path          |Removed      |
+| gus_patch_path             |Removed      |
+| gus_ram_kb                 |Removed      |
 | vanilla_savegame_limit     |             |
 | vanilla_demo_limit         |             |
 | vanilla_keyboard_mapping   |             |
@@ -211,6 +213,21 @@ Over the years a lot of configuration options have been added to various source 
 | key_multi_msgplayer3       |             |
 | key_multi_msgplayer4       |             |
 
+## Roadmap
+- v0.0.1:
+    - [x] Remove CMake build system
+    - [x] Remove Autotools build system
+    - [x] Remove codebases for Strife, Hexen, and Heretic
+    - [x] Remove packaging and distribution code
+    - [x] Misc. repository cleanup
+- v0.0.2:
+    - [x] Remove GUS emulation
+    - [x] Remove music packs
+    - [x] Remove native MIDI playback
+    - [x] Remove fluidsynth music playback
+    - [x] Remove timidity support
+    - [x] Only support/emulation of OPL3 / Soundblaster.
+        - [ ] No support for real OPL hardware (just the emulation)      
 
 ## TODO:
 
