@@ -90,17 +90,7 @@ typedef struct
 typedef enum 
 {
     SNDDEVICE_NONE = 0,
-    SNDDEVICE_PCSPEAKER = 1,
-    SNDDEVICE_ADLIB = 2,
     SNDDEVICE_SB = 3,
-    SNDDEVICE_PAS = 4,
-    SNDDEVICE_GUS = 5,
-    SNDDEVICE_WAVEBLASTER = 6,
-    SNDDEVICE_SOUNDCANVAS = 7,
-    SNDDEVICE_GENMIDI = 8,
-    SNDDEVICE_AWE32 = 9,
-    SNDDEVICE_CD = 10,
-    SNDDEVICE_FSYNTH = 11,
 } snddevice_t;
 
 // Interface for sound modules
@@ -253,46 +243,11 @@ void I_OPL_DevMessages(char *, size_t);
 
 // Sound modules
 
-void I_InitTimidityConfig(void);
 extern const sound_module_t sound_sdl_module;
-extern const sound_module_t sound_pcsound_module;
-extern const music_module_t music_sdl_module;
 extern const music_module_t music_opl_module;
-extern const music_module_t music_pack_module;
-extern const music_module_t music_win_module;
-extern const music_module_t music_fl_module;
 
 // For OPL module:
 
 extern int opl_io_port;
-
-// For native music module:
-
-extern char *music_pack_path;
-extern char *timidity_cfg_path;
-#ifdef _WIN32
-extern char *winmm_midi_device;
-extern int winmm_complevel;
-extern int winmm_reset_type;
-extern int winmm_reset_delay;
-#endif
-
-// For FluidSynth module:
-
-#ifdef HAVE_FLUIDSYNTH
-extern char *fsynth_sf_path;
-extern int fsynth_chorus_active;
-extern float fsynth_chorus_depth;
-extern float fsynth_chorus_level;
-extern int fsynth_chorus_nr;
-extern float fsynth_chorus_speed;
-extern char *fsynth_midibankselect;
-extern int fsynth_polyphony;
-extern int fsynth_reverb_active;
-extern float fsynth_reverb_damp;
-extern float fsynth_reverb_level;
-extern float fsynth_reverb_roomsize;
-extern float fsynth_reverb_width;
-#endif // HAVE_FLUIDSYNTH
 
 #endif

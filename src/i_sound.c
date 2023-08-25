@@ -23,7 +23,6 @@
 #include "config.h"
 #include "doomtype.h"
 
-#include "gusconf.h"
 #include "i_sound.h"
 #include "i_video.h"
 #include "m_argv.h"
@@ -44,7 +43,7 @@ int snd_cachesize = 64 * 1024 * 1024;
 int snd_maxslicetime_ms = 28;
 
 // External command to invoke to play back music.
-
+// TODO: remove, music should be handled internally
 char *snd_musiccmd = "";
 
 // Whether to vary the pitch of sound effects
@@ -59,31 +58,15 @@ int snd_sfxdevice = SNDDEVICE_SB;
 static const sound_module_t *sound_module;
 static const music_module_t *music_module;
 
-// If true, the music pack module was successfully initialized.
-static boolean music_packs_active = false;
-
-// This is either equal to music_module or &music_pack_module,
+// This is either equal to music_module or some other hypothetical module. 
 // depending on whether the current track is substituted.
 static const music_module_t *active_music_module;
-
-
-// DOS-specific options: These are unused but should be maintained
-// so that the config file can be shared between chocolate
-// doom and doom.exe
-
-static int snd_sbport = 0;
-static int snd_sbirq = 0;
-static int snd_sbdma = 0;
-static int snd_mport = 0;
 
 // Compiled-in sound modules:
 
 static const sound_module_t *sound_modules[] =
 {
-#ifndef DISABLE_SDL2MIXER
     &sound_sdl_module,
-#endif // DISABLE_SDL2MIXER
-    &sound_pcsound_module,
     NULL,
 };
 
@@ -91,15 +74,6 @@ static const sound_module_t *sound_modules[] =
 
 static const music_module_t *music_modules[] =
 {
-#ifdef _WIN32
-    &music_win_module,
-#endif
-#ifdef HAVE_FLUIDSYNTH
-    &music_fl_module,
-#endif // HAVE_FLUIDSYNTH
-#ifndef DISABLE_SDL2MIXER
-    &music_sdl_module,
-#endif // DISABLE_SDL2MIXER
     &music_opl_module,
     NULL,
 };
@@ -168,16 +142,6 @@ static void InitMusicModule(void)
                             music_modules[i]->sound_devices,
                             music_modules[i]->num_sound_devices))
         {
-        #ifdef _WIN32
-            // Skip the native Windows MIDI module if using Timidity.
-
-            if (strcmp(timidity_cfg_path, "") &&
-                music_modules[i] == &music_win_module)
-            {
-                continue;
-            }
-        #endif
-
             // Initialize the module
 
             if (music_modules[i]->Init())
@@ -197,7 +161,7 @@ static void InitMusicModule(void)
 
 void I_InitSound(boolean use_sfx_prefix)
 {
-    boolean nosound, nosfx, nomusic, nomusicpacks;
+    boolean nosound, nosfx, nomusic;
 
     //!
     // @vanilla
@@ -223,31 +187,10 @@ void I_InitSound(boolean use_sfx_prefix)
 
     nomusic = M_CheckParm("-nomusic") > 0;
 
-    //!
-    //
-    // Disable substitution music packs.
-    //
-
-    nomusicpacks = M_ParmExists("-nomusicpacks");
-
-    // Auto configure the music pack directory.
-    M_SetMusicPackDir();
-
     // Initialize the sound and music subsystems.
 
     if (!nosound && !screensaver_mode)
     {
-        // This is kind of a hack. If native MIDI is enabled, set up
-        // the TIMIDITY_CFG environment variable here before SDL_mixer
-        // is opened.
-
-        if (!nomusic
-         && (snd_musicdevice == SNDDEVICE_GENMIDI
-          || snd_musicdevice == SNDDEVICE_GUS))
-        {
-            I_InitTimidityConfig();
-        }
-
         if (!nosfx)
         {
             InitSfxModule(use_sfx_prefix);
@@ -258,12 +201,6 @@ void I_InitSound(boolean use_sfx_prefix)
             InitMusicModule();
             active_music_module = music_module;
         }
-
-        // We may also have substitute MIDIs we can load.
-        if (!nomusicpacks && music_module != NULL)
-        {
-            music_packs_active = music_pack_module.Init();
-        }
     }
 }
 
@@ -272,11 +209,6 @@ void I_ShutdownSound(void)
     if (sound_module != NULL)
     {
         sound_module->Shutdown();
-    }
-
-    if (music_packs_active)
-    {
-        music_pack_module.Shutdown();
     }
 
     if (music_module != NULL)
@@ -395,11 +327,6 @@ void I_SetMusicVolume(int volume)
     if (music_module != NULL)
     {
         music_module->SetMusicVolume(volume);
-
-        if (music_packs_active && music_module != &music_pack_module)
-        {
-            music_pack_module.SetMusicVolume(volume);
-        }
     }
 }
 
@@ -421,24 +348,6 @@ void I_ResumeSong(void)
 
 void *I_RegisterSong(void *data, int len)
 {
-    // If the music pack module is active, check to see if there is a
-    // valid substitution for this track. If there is, we set the
-    // active_music_module pointer to the music pack module for the
-    // duration of this particular track.
-    if (music_packs_active)
-    {
-        void *handle;
-
-        handle = music_pack_module.RegisterSong(data, len);
-        if (handle != NULL)
-        {
-            active_music_module = &music_pack_module;
-            return handle;
-        }
-    }
-
-    // No substitution for this track, so use the main module.
-    active_music_module = music_module;
     if (active_music_module != NULL)
     {
         return active_music_module->RegisterSong(data, len);
@@ -489,10 +398,6 @@ void I_BindSoundVariables(void)
 {
     M_BindIntVariable("snd_musicdevice",         &snd_musicdevice);
     M_BindIntVariable("snd_sfxdevice",           &snd_sfxdevice);
-    M_BindIntVariable("snd_sbport",              &snd_sbport);
-    M_BindIntVariable("snd_sbirq",               &snd_sbirq);
-    M_BindIntVariable("snd_sbdma",               &snd_sbdma);
-    M_BindIntVariable("snd_mport",               &snd_mport);
     M_BindIntVariable("snd_maxslicetime_ms",     &snd_maxslicetime_ms);
     M_BindStringVariable("snd_musiccmd",         &snd_musiccmd);
     M_BindStringVariable("snd_dmxoption",        &snd_dmxoption);
@@ -500,33 +405,6 @@ void I_BindSoundVariables(void)
     M_BindIntVariable("snd_cachesize",           &snd_cachesize);
     M_BindIntVariable("opl_io_port",             &opl_io_port);
     M_BindIntVariable("snd_pitchshift",          &snd_pitchshift);
-
-    M_BindStringVariable("music_pack_path",      &music_pack_path);
-    M_BindStringVariable("timidity_cfg_path",    &timidity_cfg_path);
-    M_BindStringVariable("gus_patch_path",       &gus_patch_path);
-    M_BindIntVariable("gus_ram_kb",              &gus_ram_kb);
-#ifdef _WIN32
-    M_BindStringVariable("winmm_midi_device",    &winmm_midi_device);
-    M_BindIntVariable("winmm_complevel",         &winmm_complevel);
-    M_BindIntVariable("winmm_reset_type",        &winmm_reset_type);
-    M_BindIntVariable("winmm_reset_delay",       &winmm_reset_delay);
-#endif
-
-#ifdef HAVE_FLUIDSYNTH
-    M_BindIntVariable("fsynth_chorus_active",       &fsynth_chorus_active);
-    M_BindFloatVariable("fsynth_chorus_depth",      &fsynth_chorus_depth);
-    M_BindFloatVariable("fsynth_chorus_level",      &fsynth_chorus_level);
-    M_BindIntVariable("fsynth_chorus_nr",           &fsynth_chorus_nr);
-    M_BindFloatVariable("fsynth_chorus_speed",      &fsynth_chorus_speed);
-    M_BindStringVariable("fsynth_midibankselect",   &fsynth_midibankselect);
-    M_BindIntVariable("fsynth_polyphony",           &fsynth_polyphony);
-    M_BindIntVariable("fsynth_reverb_active",       &fsynth_reverb_active);
-    M_BindFloatVariable("fsynth_reverb_damp",       &fsynth_reverb_damp);
-    M_BindFloatVariable("fsynth_reverb_level",      &fsynth_reverb_level);
-    M_BindFloatVariable("fsynth_reverb_roomsize",   &fsynth_reverb_roomsize);
-    M_BindFloatVariable("fsynth_reverb_width",      &fsynth_reverb_width);
-    M_BindStringVariable("fsynth_sf_path",          &fsynth_sf_path);
-#endif // HAVE_FLUIDSYNTH
 
     M_BindIntVariable("use_libsamplerate",       &use_libsamplerate);
     M_BindFloatVariable("libsamplerate_scale",   &libsamplerate_scale);

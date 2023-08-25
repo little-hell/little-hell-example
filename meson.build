@@ -1,12 +1,12 @@
 project('zendoom', 'c',
        default_options: 'default_library=static')
+add_project_arguments('-DDISABLE_SDL_MIXER', language: 'c')
 
 sdl2 = dependency('SDL2')
 sdl2_net = dependency('SDL2_net')
 sdl2_mixer = dependency('SDL2_mixer')
-fluidsynth = dependency('fluidsynth')
 
-deps = [sdl2, sdl2_net, sdl2_mixer, fluidsynth]
+deps = [sdl2, sdl2_net, sdl2_mixer]
 
 # Source files used by both the client binary and the server binary
 src_dir = 'src'
@@ -54,24 +54,16 @@ game_source_files = files(
     src_dir / 'deh_str.c',
     src_dir / 'deh_text.c',
     src_dir / 'deh_mapping.c',
-    src_dir / 'gusconf.c',
-    src_dir / 'i_cdmus.c',
     src_dir / 'i_endoom.c',
-    src_dir / 'i_flmusic.c',
     src_dir / 'i_glob.c',
     src_dir / 'i_input.c',
     src_dir / 'i_joystick.c',
-    src_dir / 'i_musicpack.c',
     src_dir / 'i_oplmusic.c',
-    src_dir / 'i_pcsound.c',
-    src_dir / 'i_sdlmusic.c',
     src_dir / 'i_sdlsound.c',
     src_dir / 'i_sound.c',
     src_dir / 'i_timer.c',
     src_dir / 'i_video.c',
     src_dir / 'i_videohr.c',
-    src_dir / 'i_winmusic.c',
-    src_dir / 'midifallback.c',
     src_dir / 'midifile.c',
     src_dir / 'mus2mid.c',
     src_dir / 'm_bbox.c',
@@ -233,21 +225,8 @@ opl_source_files = files(
     opl_source_dir / 'opl_win32.c',
 )
 
-# Source files for the PC sound emulation library
-pcsound_source_dir= 'pcsound'
-pcsound_source_files = files(
-    pcsound_source_dir / 'pcsound_bsd.c',
-    pcsound_source_dir / 'pcsound.c',
-    pcsound_source_dir / 'pcsound.h',
-    pcsound_source_dir / 'pcsound_internal.h',
-    pcsound_source_dir / 'pcsound_linux.c',
-    pcsound_source_dir / 'pcsound_sdl.c',
-    pcsound_source_dir / 'pcsound_win32.c',
-)
-
 textscreen = library('textscreen', textscreen_source_files, include_directories: include_directories(src_dir), dependencies: deps)
 opl = library('opl', opl_source_files, dependencies: deps)
-pcsound = library('pcsound', pcsound_source_files, dependencies: deps)
 
 # Build the game binary
 executable('zendoom', 
@@ -258,13 +237,11 @@ executable('zendoom',
     link_with: [
         textscreen, 
         opl,
-        pcsound
     ], 
     include_directories: [
         include_directories('src'),
         include_directories(textscreen_source_dir),
         include_directories(opl_source_dir), 
-        include_directories(pcsound_source_dir), 
     ],
     dependencies: deps
 )
