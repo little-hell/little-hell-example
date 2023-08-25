@@ -1,6 +1,6 @@
 # Coding style guidelines
 
-The coding style guidelines for Chocolate Doom are designed to keep the
+The coding style guidelines for Mindoom are designed to keep the
 style of the original source code.  This maintains consistency throughout
 the program, and does not require the original code to be changed. Some
 of these guidelines are stricter than what was done in the original
@@ -142,7 +142,7 @@ Or, if you use Emacs, put this in your `.emacs`:
 ```lisp
 (add-hook 'c-mode-hook (lambda ()
   (when (and buffer-file-name
-             (string-match "chocolate-doom" buffer-file-name))
+             (string-match "mindoom" buffer-file-name))
     (c-set-style "bsd")
     (setq indent-tabs-mode nil)
     (setq tab-width 8)
@@ -152,7 +152,7 @@ Or, if you use Emacs, put this in your `.emacs`:
 ## Security
 
 The C standard library has a number of unsafe functions that should be
-avoided when writing code for Chocolate Doom. These are:
+avoided when writing code for Mindoom. These are:
 
 Unsafe function   |   Safer alternative
 ------------------|------------------------
@@ -189,7 +189,7 @@ the arguments securely.
 
 ## Portability
 
-Chocolate Doom is designed to be cross-platform and work on different
+Mindoom is designed to be cross-platform and work on different
 Operating Systems and processors.  Bear this in mind when writing code.
 
 Do not use the `long` type (its size differs across platforms; use

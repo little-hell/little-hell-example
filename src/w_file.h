@@ -42,10 +42,6 @@ typedef struct
 
 extern wad_file_class_t stdc_wad_file;
 
-#ifdef _WIN32
-extern wad_file_class_t win32_wad_file;
-#endif
-
 #ifdef HAVE_MMAP
 extern wad_file_class_t posix_wad_file;
 #endif

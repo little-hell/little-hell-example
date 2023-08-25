@@ -31,18 +31,7 @@
 
 static opl_driver_t *drivers[] =
 {
-#if (defined(__i386__) || defined(__x86_64__)) && defined(HAVE_IOPERM)
-    &opl_linux_driver,
-#endif
-#if defined(HAVE_LIBI386) || defined(HAVE_LIBAMD64)
-    &opl_openbsd_driver,
-#endif
-#ifdef _WIN32
-    &opl_win32_driver,
-#endif
-#ifndef DISABLE_SDL2MIXER
     &opl_sdl_driver,
-#endif // DISABLE_SDL2MIXER
     NULL
 };
 

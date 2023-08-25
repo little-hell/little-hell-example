@@ -349,14 +349,7 @@ static unsigned int last_perc_count;
 // Configuration file variable, containing the port number for the
 // adlib chip.
 
-char *snd_dmxoption = "";
 int opl_io_port = 0x388;
-
-// If true, OPL sound channels are reversed to their correct arrangement
-// (as intended by the MIDI standard) rather than the backwards one
-// used by DMX due to a bug.
-
-static boolean opl_stereo_correct = false;
 
 // Load instrument table from GENMIDI lump:
 
@@ -589,17 +582,6 @@ static void SetVoiceVolume(opl_voice_t *voice, unsigned int volume)
             }
         }
     }
-}
-
-static void SetVoicePan(opl_voice_t *voice, unsigned int pan)
-{
-    genmidi_voice_t *opl_voice;
-
-    voice->reg_pan = pan;
-    opl_voice = &voice->current_instr->voices[voice->current_instr_voice];;
-
-    OPL_WriteRegister((OPL_REGS_FEEDBACK + voice->index) | voice->array,
-                      opl_voice->feedback | pan);
 }
 
 // Initialize the voice table and freelist
@@ -1117,49 +1099,6 @@ static void SetChannelVolume(opl_channel_data_t *channel, unsigned int volume,
     }
 }
 
-static void SetChannelPan(opl_channel_data_t *channel, unsigned int pan)
-{
-    unsigned int reg_pan;
-    unsigned int i;
-
-    // The DMX library has the stereo channels backwards, maybe because
-    // Paul Radek had a Soundblaster card with the channels reversed, or
-    // perhaps it was just a bug in the OPL3 support that was never
-    // finished. By default we preserve this bug, but we also provide a
-    // secret DMXOPTION to fix it.
-    if (opl_stereo_correct)
-    {
-        pan = 144 - pan;
-    }
-
-    if (opl_opl3mode)
-    {
-        if (pan >= 96)
-        {
-            reg_pan = 0x10;
-        }
-        else if (pan <= 48)
-        {
-            reg_pan = 0x20;
-        }
-        else
-        {
-            reg_pan = 0x30;
-        }
-        if (channel->pan != reg_pan)
-        {
-            channel->pan = reg_pan;
-            for (i = 0; i < num_opl_voices; i++)
-            {
-                if (voices[i].channel == channel)
-                {
-                    SetVoicePan(&voices[i], reg_pan);
-                }
-            }
-        }
-    }
-}
-
 // Handler for the MIDI_CONTROLLER_ALL_NOTES_OFF channel event.
 static void AllNotesOff(opl_channel_data_t *channel, unsigned int param)
 {
@@ -1199,10 +1138,6 @@ static void ControllerEvent(opl_track_data_t *track, midi_event_t *event)
     {
         case MIDI_CONTROLLER_VOLUME_MSB:
             SetChannelVolume(channel, param, true);
-            break;
-
-        case MIDI_CONTROLLER_PAN:
-            SetChannelPan(channel, param);
             break;
 
         case MIDI_CONTROLLER_ALL_NOTES_OFF:
@@ -1715,7 +1650,6 @@ static void I_OPL_ShutdownMusic(void)
 
 static boolean I_OPL_InitMusic(void)
 {
-    const char *dmxoption;
     opl_init_result_t chip_type;
 
     OPL_SetSampleRate(snd_samplerate);
@@ -1727,35 +1661,13 @@ static boolean I_OPL_InitMusic(void)
         return false;
     }
 
-    // The DMXOPTION variable must be set to enable OPL3 support.
-    // As an extension, we also allow it to be set from the config file.
-    dmxoption = getenv("DMXOPTION");
-    if (dmxoption == NULL)
-    {
-        dmxoption = snd_dmxoption != NULL ? snd_dmxoption : "";
-    }
-
-    if (chip_type == OPL_INIT_OPL3 && strstr(dmxoption, "-opl3") != NULL)
-    {
-        opl_opl3mode = 1;
-        num_opl_voices = OPL_NUM_VOICES * 2;
-    }
-    else
-    {
-        opl_opl3mode = 0;
-        num_opl_voices = OPL_NUM_VOICES;
-    }
-
-    // Secret, undocumented DMXOPTION that reverses the stereo channels
-    // into their correct orientation.
-    opl_stereo_correct = strstr(dmxoption, "-reverse") != NULL;
+    opl_opl3mode = 0;
+    num_opl_voices = OPL_NUM_VOICES;
 
     // Initialize all registers.
-
     OPL_InitRegisters(opl_opl3mode);
 
     // Load instruments from GENMIDI lump:
-
     if (!LoadInstrumentTable())
     {
         OPL_Shutdown();

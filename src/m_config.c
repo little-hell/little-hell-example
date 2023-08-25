@@ -684,30 +684,6 @@ static default_t extra_defaults_list[] =
     CONFIG_VARIABLE_INT(snd_pitchshift),
 
     //!
-    // External command to invoke to perform MIDI playback. If set to
-    // the empty string, SDL_mixer's internal MIDI playback is used.
-    // This only has any effect when snd_musicdevice is set to General
-    // MIDI output.
-    //
-
-    CONFIG_VARIABLE_STRING(snd_musiccmd),
-
-    //!
-    // Value to set for the DMXOPTION environment variable. If this contains
-    // "-opl3", output for an OPL3 chip is generated when in OPL MIDI
-    // playback mode.
-    //
-
-    CONFIG_VARIABLE_STRING(snd_dmxoption),
-
-    //!
-    // The I/O port to use to access the OPL chip.  Only relevant when
-    // using native OPL music playback.
-    //
-
-    CONFIG_VARIABLE_INT_HEX(opl_io_port),
-
-    //!
     // Controls whether libsamplerate support is used for performing
     // sample rate conversions of sound effects.  Support for this
     // must be compiled into the program.
@@ -2096,24 +2072,6 @@ float M_GetFloatVariable(const char *name)
 
 static char *GetDefaultConfigDir(void)
 {
-#if !defined(_WIN32) || defined(_WIN32_WCE)
-
-    // Configuration settings are stored in an OS-appropriate path
-    // determined by SDL.  On typical Unix systems, this might be
-    // ~/.local/share/chocolate-doom.  On Windows, we behave like
-    // Vanilla Doom and save in the current directory.
-
-    char *result;
-    char *copy;
-
-    result = SDL_GetPrefPath("", PACKAGE_TARNAME);
-    if (result != NULL)
-    {
-        copy = M_StringDuplicate(result);
-        SDL_free(result);
-        return copy;
-    }
-#endif /* #ifndef _WIN32 */
     return M_StringDuplicate(exedir);
 }
 
@@ -2121,7 +2079,7 @@ static char *GetDefaultConfigDir(void)
 // SetConfigDir:
 //
 // Sets the location of the configuration directory, where configuration
-// files are stored - default.cfg, chocolate-doom.cfg, savegames, etc.
+// files are stored - default.cfg, minddoom.cfg, savegames, etc.
 //
 
 void M_SetConfigDir(const char *dir)
@@ -2223,15 +2181,6 @@ char *M_GetSaveGameDir(const char *iwadname)
 
         printf("Save directory changed to %s.\n", savegamedir);
     }
-#ifdef _WIN32
-    // In -cdrom mode, we write savegames to a specific directory
-    // in addition to configs.
-
-    else if (M_ParmExists("-cdrom"))
-    {
-        savegamedir = M_StringDuplicate(configdir);
-    }
-#endif
     // If not "doing" a configuration directory (Windows), don't "do"
     // a savegame directory, either.
     else if (!strcmp(configdir, exedir))
@@ -2240,12 +2189,12 @@ char *M_GetSaveGameDir(const char *iwadname)
     }
     else
     {
-        // ~/.local/share/chocolate-doom/savegames
+        // ~/.local/share/mindoom/savegames
 
         topdir = M_StringJoin(configdir, "savegames", NULL);
         M_MakeDirectory(topdir);
 
-        // eg. ~/.local/share/chocolate-doom/savegames/doom2.wad/
+        // eg. ~/.local/share/mindoom/savegames/doom2.wad/
 
         savegamedir = M_StringJoin(topdir, DIR_SEPARATOR_S, iwadname,
                                    DIR_SEPARATOR_S, NULL);

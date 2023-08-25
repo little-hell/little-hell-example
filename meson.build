@@ -1,4 +1,4 @@
-project('zendoom', 'c',
+project('mindoom', 'c',
        default_options: 'default_library=static')
 add_project_arguments('-DDISABLE_SDL_MIXER', language: 'c')
 
@@ -95,7 +95,6 @@ game_source_files = files(
     src_dir / 'w_file.c',
     src_dir / 'w_file_stdc.c',
     src_dir / 'w_file_posix.c',
-    src_dir / 'w_file_win32.c',
     src_dir / 'w_merge.c',
     src_dir / 'z_zone.c',
 
@@ -214,22 +213,18 @@ textscreen_source_files = files(
 # Source files for the OPL emulation library
 opl_source_dir= 'opl'
 opl_source_files = files(
-    opl_source_dir / 'ioperm_sys.c',
     opl_source_dir / 'opl3.c',
     opl_source_dir / 'opl.c',
-    opl_source_dir / 'opl_linux.c',
-    opl_source_dir / 'opl_obsd.c',
     opl_source_dir / 'opl_queue.c',
     opl_source_dir / 'opl_sdl.c',
     opl_source_dir / 'opl_timer.c',
-    opl_source_dir / 'opl_win32.c',
 )
 
 textscreen = library('textscreen', textscreen_source_files, include_directories: include_directories(src_dir), dependencies: deps)
 opl = library('opl', opl_source_files, dependencies: deps)
 
 # Build the game binary
-executable('zendoom', 
+executable('mindoom', 
     sources: [
         common_source_files, 
         game_source_files,
@@ -247,6 +242,6 @@ executable('zendoom',
 )
 
 # Build the server binary
-executable('zendoom-server', common_source_files, dedicated_server_source_files, dependencies:
+executable('mindoom-server', common_source_files, dedicated_server_source_files, dependencies:
   deps)
 
