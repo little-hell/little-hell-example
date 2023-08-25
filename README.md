@@ -142,8 +142,10 @@ Then your build steps are exactly the same as the steps above, minus the `nix` c
 Don't.
 
 ## Release Roadmap
-- v0.0.5:
-   - [ ] The _refactor release_. Start doing static analysis and get to cleaning. This will span multiple releases.
+- v0.0.5: The refactor, comment, and log release
+   - [ ] Start doing static analysis and get to cleaning. This will be a huge undertaking, likely spanning multiple releases.
+   - [ ] Add comments and documentation to whatever we refactor.
+   - [ ] Add debug logging to whatever we refactor.
 - v0.0.4:
    - [ ] Remove all references to non-DOOM v1.9 in the code.
    - [ ] Remove DeHackEd
