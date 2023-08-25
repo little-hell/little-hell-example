@@ -214,7 +214,6 @@ textscreen_source_files = files(
 # Source files for the OPL emulation library
 opl_source_dir= 'opl'
 opl_source_files = files(
-    opl_source_dir / 'ioperm_sys.c',
     opl_source_dir / 'opl3.c',
     opl_source_dir / 'opl.c',
     opl_source_dir / 'opl_linux.c',
@@ -222,7 +221,6 @@ opl_source_files = files(
     opl_source_dir / 'opl_queue.c',
     opl_source_dir / 'opl_sdl.c',
     opl_source_dir / 'opl_timer.c',
-    opl_source_dir / 'opl_win32.c',
 )
 
 textscreen = library('textscreen', textscreen_source_files, include_directories: include_directories(src_dir), dependencies: deps)
