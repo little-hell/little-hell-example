@@ -1,4 +1,4 @@
-project('zendoom', 'c',
+project('mindoom', 'c',
        default_options: 'default_library=static')
 add_project_arguments('-DDISABLE_SDL_MIXER', language: 'c')
 
@@ -229,7 +229,7 @@ textscreen = library('textscreen', textscreen_source_files, include_directories:
 opl = library('opl', opl_source_files, dependencies: deps)
 
 # Build the game binary
-executable('zendoom', 
+executable('mindoom', 
     sources: [
         common_source_files, 
         game_source_files,
@@ -247,6 +247,6 @@ executable('zendoom',
 )
 
 # Build the server binary
-executable('zendoom-server', common_source_files, dedicated_server_source_files, dependencies:
+executable('mindoom-server', common_source_files, dedicated_server_source_files, dependencies:
   deps)
 
