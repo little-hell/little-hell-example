@@ -58,7 +58,6 @@ game_source_files = files(
     src_dir / 'i_glob.c',
     src_dir / 'i_input.c',
     src_dir / 'i_joystick.c',
-    src_dir / 'i_musicpack.c',
     src_dir / 'i_oplmusic.c',
     src_dir / 'i_sdlsound.c',
     src_dir / 'i_sound.c',

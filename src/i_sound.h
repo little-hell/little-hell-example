@@ -90,7 +90,6 @@ typedef struct
 typedef enum 
 {
     SNDDEVICE_NONE = 0,
-    SNDDEVICE_ADLIB = 2,
     SNDDEVICE_SB = 3,
 } snddevice_t;
 
@@ -246,14 +245,9 @@ void I_OPL_DevMessages(char *, size_t);
 
 extern const sound_module_t sound_sdl_module;
 extern const music_module_t music_opl_module;
-extern const music_module_t music_pack_module;
 
 // For OPL module:
 
 extern int opl_io_port;
-
-// For native music module:
-
-extern char *music_pack_path;
 
 #endif
