@@ -1069,15 +1069,6 @@ boolean IsFrenchIWAD(void)
 // Load dehacked patches needed for certain IWADs.
 static void LoadIwadDeh(void)
 {
-    // The Freedoom IWADs have DEHACKED lumps that must be loaded.
-    if (gamevariant == freedoom || gamevariant == freedm)
-    {
-        // Old versions of Freedoom (before 2014-09) did not have technically
-        // valid DEHACKED lumps, so ignore errors and just continue if this
-        // is an old IWAD.
-        DEH_LoadLumpByName("DEHACKED", false, true);
-    }
-
     if (IsFrenchIWAD())
     {
         char *french_deh = NULL;
@@ -1326,18 +1317,7 @@ void D_DoomMain (void)
 
     // Check which IWAD variant we are using.
 
-    if (W_CheckNumForName("FREEDOOM") >= 0)
-    {
-        if (W_CheckNumForName("FREEDM") >= 0)
-        {
-            gamevariant = freedm;
-        }
-        else
-        {
-            gamevariant = freedoom;
-        }
-    }
-    else if (W_CheckNumForName("DMENUPIC") >= 0)
+    if (W_CheckNumForName("DMENUPIC") >= 0)
     {
         gamevariant = bfgedition;
     }
@@ -1534,7 +1514,7 @@ void D_DoomMain (void)
     savegamedir = M_GetSaveGameDir(D_SaveGameIWADName(gamemission, gamevariant));
 
     // Check for -file in shareware
-    if (modifiedgame && (gamevariant != freedoom))
+    if (modifiedgame)
     {
 	// These are the lumps that will be checked in IWAD,
 	// if any one is not present, execution will be aborted.

@@ -36,9 +36,6 @@ static const iwad_t iwads[] =
     { "doom2.wad",    doom2,     commercial, "Doom II" },
     { "doom.wad",     doom,      retail,     "Doom" },
     { "doom1.wad",    doom,      shareware,  "Doom Shareware" },
-    { "freedoom2.wad", doom2,    commercial, "Freedoom: Phase 2" },
-    { "freedoom1.wad", doom,     retail,     "Freedoom: Phase 1" },
-    { "freedm.wad",   doom2,     commercial, "FreeDM" },
     { "heretic.wad",  heretic,   retail,     "Heretic" },
     { "heretic1.wad", heretic,   shareware,  "Heretic Shareware" },
     { "hexen.wad",    hexen,     commercial, "Hexen" },
@@ -548,22 +545,6 @@ const char *D_SaveGameIWADName(GameMission_t gamemission, GameVariant_t gamevari
     // Note that we match on gamemission rather than on IWAD name.
     // This ensures that doom1.wad and doom.wad saves are stored
     // in the same place.
-
-    if (gamevariant == freedoom)
-    {
-        if (gamemission == doom)
-        {
-            return "freedoom1.wad";
-        }
-        else if (gamemission == doom2)
-        {
-            return "freedoom2.wad";
-        }
-    }
-    else if (gamevariant == freedm && gamemission == doom2)
-    {
-        return "freedm.wad";
-    }
 
     for (i=0; i<arrlen(iwads); ++i)
     {
