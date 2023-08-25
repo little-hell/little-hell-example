@@ -447,15 +447,6 @@ void D_RunFrame()
 //
 void D_DoomLoop(void)
 {
-    if (gamevariant == bfgedition &&
-        (demorecording || (gameaction == ga_playdemo) || netgame))
-    {
-        printf(" WARNING: You are playing using one of the Doom Classic\n"
-               " IWAD files shipped with the Doom 3: BFG Edition. These are\n"
-               " known to be incompatible with the regular IWAD files and\n"
-               " may cause demos and network games to get out of sync.\n");
-    }
-
     if (demorecording)
         G_BeginRecording();
 
@@ -602,14 +593,6 @@ void D_DoAdvanceDemo(void)
             G_DeferedPlayDemo(DEH_String("demo4"));
             break;
     }
-
-    // The Doom 3: BFG Edition version of doom2.wad does not have a
-    // TITLETPIC lump. Use INTERPIC instead as a workaround.
-    if (gamevariant == bfgedition && !strcasecmp(pagename, "TITLEPIC") &&
-        W_CheckNumForName("titlepic") < 0)
-    {
-        pagename = DEH_String("INTERPIC");
-    }
 }
 
 
@@ -707,16 +690,8 @@ static char *GetGameName(const char *gamename)
 void D_IdentifyVersion(void)
 // TODO: remove function entirely
 {
-    if (gamemission == none)
-    {
-        gamemission = doom;
-    }
-
-    // Make sure gamemode is set up correctly
-    if (logical_gamemission == doom)
-    {
-        gamemode = registered;
-    }
+    gamemission = doom;
+    gamemode = registered;
 }
 
 // Set the gamedescription string
@@ -1183,13 +1158,6 @@ void D_DoomMain(void)
     D_IdentifyVersion();
     InitGameVersion();
 
-    // Check which IWAD variant we are using.
-
-    if (W_CheckNumForName("DMENUPIC") >= 0)
-    {
-        gamevariant = bfgedition;
-    }
-
     // Doom 3: BFG Edition includes modified versions of the classic
     // IWADs which can be identified by an additional DMENUPIC lump.
     // Furthermore, the M_GDHIGH lumps have been modified in a way that
@@ -1197,68 +1165,6 @@ void D_DoomMain(void)
     // of doom2.wad is missing the TITLEPIC lump.
     // We specifically check for DMENUPIC here, before PWADs have been
     // loaded which could probably include a lump of that name.
-
-    if (gamevariant == bfgedition)
-    {
-        printf("BFG Edition: Using workarounds as needed.\n");
-
-        // BFG Edition changes the names of the secret levels to
-        // censor the Wolfenstein references. It also has an extra
-        // secret level (MAP33). In Vanilla Doom (meaning the DOS
-        // version), MAP33 overflows into the Plutonia level names
-        // array, so HUSTR_33 is actually PHUSTR_1.
-        DEH_AddStringReplacement(HUSTR_31, "level 31: idkfa");
-        DEH_AddStringReplacement(HUSTR_32, "level 32: keen");
-        DEH_AddStringReplacement(PHUSTR_1, "level 33: betray");
-
-        // The BFG edition doesn't have the "low detail" menu option (fair
-        // enough). But bizarrely, it reuses the M_GDHIGH patch as a label
-        // for the options menu (says "Fullscreen:"). Why the perpetrators
-        // couldn't just add a new graphic lump and had to reuse this one,
-        // I don't know.
-        //
-        // The end result is that M_GDHIGH is too wide and causes the game
-        // to crash. As a workaround to get a minimum level of support for
-        // the BFG edition IWADs, use the "ON"/"OFF" graphics instead.
-        DEH_AddStringReplacement("M_GDHIGH", "M_MSGON");
-        DEH_AddStringReplacement("M_GDLOW", "M_MSGOFF");
-
-        // The BFG edition's "Screen Size:" graphic has also been changed
-        // to say "Gamepad:". Fortunately, it (along with the original
-        // Doom IWADs) has an unused graphic that says "Display". So we
-        // can swap this in instead, and it kind of makes sense.
-        DEH_AddStringReplacement("M_SCRNSZ", "M_DISP");
-    }
-
-    //!
-    // @category mod
-    //
-    // Disable auto-loading of .wad and .deh files.
-    //
-    if (!M_ParmExists("-noautoload"))
-    {
-        char *autoload_dir;
-
-        // common auto-loaded files for all Doom flavors
-
-        autoload_dir = M_GetAutoloadDir("doom-all");
-        if (autoload_dir != NULL)
-        {
-            DEH_AutoLoadPatches(autoload_dir);
-            W_AutoLoadWADs(autoload_dir);
-            free(autoload_dir);
-        }
-
-        // auto-loaded files per IWAD
-        autoload_dir =
-            M_GetAutoloadDir(D_SaveGameIWADName(gamemission, gamevariant));
-        if (autoload_dir != NULL)
-        {
-            DEH_AutoLoadPatches(autoload_dir);
-            W_AutoLoadWADs(autoload_dir);
-            free(autoload_dir);
-        }
-    }
 
     // Load Dehacked patches specified on the command line with -deh.
     // Note that there's a very careful and deliberate ordering to how
@@ -1366,8 +1272,7 @@ void D_DoomMain(void)
     // we've finished loading Dehacked patches.
     D_SetGameDescription();
 
-    savegamedir =
-        M_GetSaveGameDir(D_SaveGameIWADName(gamemission, gamevariant));
+    savegamedir = M_GetSaveGameDir();
 
     // Check for -file in shareware
     if (modifiedgame)

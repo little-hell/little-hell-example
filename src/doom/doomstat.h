@@ -55,7 +55,6 @@ extern boolean devparm; // DEBUG: launched with -devparm
 extern GameMode_t gamemode;       // TODO: deprecate
 extern GameMission_t gamemission; // TODO: deprecate
 extern GameVersion_t gameversion; // TODO: deprecate
-extern GameVariant_t gamevariant; // TODO: deprecate
 
 // Convenience macro.
 // 'gamemission' can be equal to pack_chex or pack_hacx, but these are

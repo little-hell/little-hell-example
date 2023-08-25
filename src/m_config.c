@@ -412,14 +412,6 @@ static default_t doom_defaults_list[] = {
     //!
     // @game hexen
     //
-    // Directory in which to store savegames.
-    //
-
-    CONFIG_VARIABLE_STRING(savedir),
-
-    //!
-    // @game hexen
-    //
     // Controls whether messages are displayed in the heads-up display.
     // If this has a non-zero value, messages are displayed.
     //
@@ -2259,56 +2251,21 @@ void M_SetMusicPackDir(void)
 // Creates the directory as necessary.
 //
 
-char *M_GetSaveGameDir(const char *iwadname)
+char *M_GetSaveGameDir()
 {
     char *savegamedir;
-    char *topdir;
-    int p;
+    char *topdir = M_StringJoin(configdir, "savegames", NULL);
+    M_MakeDirectory(topdir);
 
-    //!
-    // @arg <directory>
-    //
-    // Specify a path from which to load and save games. If the directory
-    // does not exist then it will automatically be created.
-    //
+    // eg. ~/.local/share/mindoom/savegames/
 
-    p = M_CheckParmWithArgs("-savedir", 1);
-    if (p)
-    {
-        savegamedir = myargv[p + 1];
-        if (!M_FileExists(savegamedir))
-        {
-            M_MakeDirectory(savegamedir);
-        }
+    savegamedir = M_StringJoin(topdir, DIR_SEPARATOR_S, NULL);
 
-        // add separator at end just in case
-        savegamedir = M_StringJoin(savegamedir, DIR_SEPARATOR_S, NULL);
+    printf("%s", savegamedir);
 
-        printf("Save directory changed to %s.\n", savegamedir);
-    }
-    // If not "doing" a configuration directory (Windows), don't "do"
-    // a savegame directory, either.
-    else if (!strcmp(configdir, exedir))
-    {
-        savegamedir = M_StringDuplicate("");
-    }
-    else
-    {
-        // ~/.local/share/mindoom/savegames
+    M_MakeDirectory(savegamedir);
 
-        topdir = M_StringJoin(configdir, "savegames", NULL);
-        M_MakeDirectory(topdir);
-
-        // eg. ~/.local/share/mindoom/savegames/doom.wad/
-
-        savegamedir = M_StringJoin(topdir, DIR_SEPARATOR_S, iwadname,
-                                   DIR_SEPARATOR_S, NULL);
-
-        M_MakeDirectory(savegamedir);
-
-        free(topdir);
-    }
-
+    free(topdir);
     return savegamedir;
 }
 
