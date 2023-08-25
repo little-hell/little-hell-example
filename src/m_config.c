@@ -2100,7 +2100,7 @@ static char *GetDefaultConfigDir(void)
 
     // Configuration settings are stored in an OS-appropriate path
     // determined by SDL.  On typical Unix systems, this might be
-    // ~/.local/share/chocolate-doom.  On Windows, we behave like
+    // ~/.local/share/mindoom.  On Windows, we behave like
     // Vanilla Doom and save in the current directory.
 
     char *result;
@@ -2121,7 +2121,7 @@ static char *GetDefaultConfigDir(void)
 // SetConfigDir:
 //
 // Sets the location of the configuration directory, where configuration
-// files are stored - default.cfg, chocolate-doom.cfg, savegames, etc.
+// files are stored - default.cfg, minddoom.cfg, savegames, etc.
 //
 
 void M_SetConfigDir(const char *dir)
@@ -2240,12 +2240,12 @@ char *M_GetSaveGameDir(const char *iwadname)
     }
     else
     {
-        // ~/.local/share/chocolate-doom/savegames
+        // ~/.local/share/mindoom/savegames
 
         topdir = M_StringJoin(configdir, "savegames", NULL);
         M_MakeDirectory(topdir);
 
-        // eg. ~/.local/share/chocolate-doom/savegames/doom2.wad/
+        // eg. ~/.local/share/mindoom/savegames/doom2.wad/
 
         savegamedir = M_StringJoin(topdir, DIR_SEPARATOR_S, iwadname,
                                    DIR_SEPARATOR_S, NULL);

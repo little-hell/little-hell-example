@@ -109,7 +109,7 @@ dependencies header files. It's _really_ great and I recommend you try it.
 The only dependency _you_ need is `git`, and Nix. All the dependencies that _Doom_ needs are taken care of. 
 
 ```bash
-git clone https://github.com/zendoom/doom
+git clone https://github.com/ranguli/mindoom
 cd doom
 nix-shell shell.nix
 meson build
