@@ -142,30 +142,30 @@ Then your build steps are exactly the same as the steps above, minus the `nix` c
 Don't.
 
 ## Release Roadmap
-- [v0.0.1](https://github.com/ranguli/mindoom/releases/tag/v0.0.1):
-    - [x] Remove CMake build system
-    - [x] Remove Autotools build system
-    - [x] Remove codebases for Strife, Hexen, and Heretic
-    - [x] Remove packaging and distribution code
-    - [x] Misc. repository cleanup
-- v0.0.2:
-    - [x] Remove GUS emulation
-    - [x] Remove music packs
-    - [x] Remove native MIDI playback
-    - [x] Remove fluidsynth music playback
-    - [x] Remove timidity support
-    - [x] Only support/emulation of OPL3 / Soundblaster.
-- v0.0.3:
-    - [ ] Rebrand/re-reference everything internally from Chocolate Doom to Mindoom.
-    - [ ] Remove Windows-specific code
-    - [ ] No support for real OPL hardware (just the emulation)   
-- v0.0.4:
-    - [ ] Remove all references to non-DOOM v1.9 in the code.
-    - [ ] Remove DeHackEd
-    - [ ] Remove WAD merging (a la DeuTex)
-    - [ ] Remove `textscreen` and endoom.
 - v0.0.5:
-    - [ ] The _refactor release_. Start doing static analysis and get to cleaning. This will span multiple releases. 
+   - [ ] The _refactor release_. Start doing static analysis and get to cleaning. This will span multiple releases.
+- v0.0.4:
+   - [ ] Remove all references to non-DOOM v1.9 in the code.
+   - [ ] Remove DeHackEd
+   - [ ] Remove WAD merging (a la DeuTex)
+   - [ ] Remove `textscreen` and endoom.
+- [v0.0.3](https://github.com/ranguli/mindoom/releases/tag/v0.0.3):
+   - [x] Rebrand/re-reference everything internally from Chocolate Doom to Mindoom.
+   - [x] Remove Windows-specific code
+   - [x] No support for real OPL hardware (just the emulation)
+- [v0.0.2](https://github.com/ranguli/mindoom/releases/tag/v0.0.2):
+   - [x] Remove GUS emulation
+   - [x] Remove music packs
+   - [x] Remove native MIDI playback
+   - [x] Remove fluidsynth music playback
+   - [x] Remove timidity support
+   - [x] Only support/emulation of OPL3 / Soundblaster.
+- [v0.0.1](https://github.com/ranguli/mindoom/releases/tag/v0.0.1):
+   - [x] Remove CMake build system
+   - [x] Remove Autotools build system
+   - [x] Remove codebases for Strife, Hexen, and Heretic
+   - [x] Remove packaging and distribution code
+   - [x] Misc. repository cleanup
 
 ## TODO:
 
