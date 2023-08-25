@@ -80,7 +80,7 @@ ninja -C build
 The only dependency _you_ need is `git`, and Nix. All the dependencies that _Doom_ needs are taken care of. 
 
 
-## Compability
+## Compatability
 
 Over the years a lot of configuration options have been added to various source ports of Doom as they add support for different things. Here is an (incomplete) table that overviews what options remain in mindoom:
 
