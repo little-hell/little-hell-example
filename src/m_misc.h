@@ -26,10 +26,6 @@
 
 #include "doomtype.h"
 
-#ifdef _WIN32
-wchar_t *M_ConvertUtf8ToWide(const char *str);
-char *M_ConvertWideToUtf8(const wchar_t *wstr);
-#endif
 char *M_ConvertUtf8ToSysNativeMB(const char *str);
 char *M_ConvertSysNativeMBToUtf8(const char *str);
 

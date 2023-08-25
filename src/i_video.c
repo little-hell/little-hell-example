@@ -23,13 +23,6 @@
 #include "SDL.h"
 #include "SDL_opengl.h"
 
-#ifdef _WIN32
-#ifndef WIN32_LEAN_AND_MEAN
-#define WIN32_LEAN_AND_MEAN
-#endif
-#include <windows.h>
-#endif
-
 #include "config.h"
 #include "d_loop.h"
 #include "deh_str.h"
@@ -1375,18 +1368,6 @@ static void SetVideoMode(void)
                                 pixel_format,
                                 SDL_TEXTUREACCESS_STREAMING,
                                 SCREENWIDTH, SCREENHEIGHT);
-
-    // Workaround for SDL 2.0.14+ alt-tab bug (taken from Doom Retro via Prboom-plus and Woof)
-#if defined(_WIN32)
-    {
-        SDL_version ver;
-        SDL_GetVersion(&ver);
-        if (ver.major == 2 && ver.minor == 0 && (ver.patch == 14 || ver.patch == 16))
-        {
-           SDL_SetHintWithPriority(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "1", SDL_HINT_OVERRIDE);
-        }
-    }
-#endif
 
     // Initially create the upscaled texture for rendering to screen
 

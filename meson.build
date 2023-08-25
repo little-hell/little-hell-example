@@ -95,7 +95,6 @@ game_source_files = files(
     src_dir / 'w_file.c',
     src_dir / 'w_file_stdc.c',
     src_dir / 'w_file_posix.c',
-    src_dir / 'w_file_win32.c',
     src_dir / 'w_merge.c',
     src_dir / 'z_zone.c',
 

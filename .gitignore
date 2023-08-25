@@ -4,6 +4,9 @@ TAGS
 tags
 \#*\#
 
+# Doom save games
+.dsg
+
 # CMake-specific ignores
 /.vs
 /build*
