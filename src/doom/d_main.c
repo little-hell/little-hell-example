@@ -676,10 +676,6 @@ static const char *banners[] =
     "                     "
     "DOOM 2: TNT - Evilution v%i.%i"
     "                           ",
-    // plutonia.wad
-    "                   "
-    "DOOM 2: Plutonia Experiment v%i.%i"
-    "                           ",
 };
 
 //
@@ -744,8 +740,7 @@ static void SetMissionForPackName(const char *pack_name)
         int mission;
     } packs[] = {
         { "doom2",    doom2 },
-        { "tnt",      pack_tnt },
-        { "plutonia", pack_plut },
+        { "tnt",      pack_tnt }
     };
 
     for (i = 0; i < arrlen(packs); ++i)

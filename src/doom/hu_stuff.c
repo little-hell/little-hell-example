@@ -210,9 +210,6 @@ void HU_Start(void)
                 s = "";
             }
             break;
-        case pack_plut:
-            s = HU_TITLEP;
-            break;
         case pack_tnt:
             s = HU_TITLET;
             break;
