@@ -92,9 +92,6 @@ static const music_module_t *music_modules[] =
 #ifdef _WIN32
     &music_win_module,
 #endif
-#ifdef HAVE_FLUIDSYNTH
-    &music_fl_module,
-#endif // HAVE_FLUIDSYNTH
 #ifndef DISABLE_SDL2MIXER
     &music_sdl_module,
 #endif // DISABLE_SDL2MIXER
@@ -485,22 +482,6 @@ void I_BindSoundVariables(void)
     M_BindIntVariable("winmm_reset_type",        &winmm_reset_type);
     M_BindIntVariable("winmm_reset_delay",       &winmm_reset_delay);
 #endif
-
-#ifdef HAVE_FLUIDSYNTH
-    M_BindIntVariable("fsynth_chorus_active",       &fsynth_chorus_active);
-    M_BindFloatVariable("fsynth_chorus_depth",      &fsynth_chorus_depth);
-    M_BindFloatVariable("fsynth_chorus_level",      &fsynth_chorus_level);
-    M_BindIntVariable("fsynth_chorus_nr",           &fsynth_chorus_nr);
-    M_BindFloatVariable("fsynth_chorus_speed",      &fsynth_chorus_speed);
-    M_BindStringVariable("fsynth_midibankselect",   &fsynth_midibankselect);
-    M_BindIntVariable("fsynth_polyphony",           &fsynth_polyphony);
-    M_BindIntVariable("fsynth_reverb_active",       &fsynth_reverb_active);
-    M_BindFloatVariable("fsynth_reverb_damp",       &fsynth_reverb_damp);
-    M_BindFloatVariable("fsynth_reverb_level",      &fsynth_reverb_level);
-    M_BindFloatVariable("fsynth_reverb_roomsize",   &fsynth_reverb_roomsize);
-    M_BindFloatVariable("fsynth_reverb_width",      &fsynth_reverb_width);
-    M_BindStringVariable("fsynth_sf_path",          &fsynth_sf_path);
-#endif // HAVE_FLUIDSYNTH
 
     M_BindIntVariable("use_libsamplerate",       &use_libsamplerate);
     M_BindFloatVariable("libsamplerate_scale",   &libsamplerate_scale);

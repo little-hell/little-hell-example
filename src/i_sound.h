@@ -275,22 +275,4 @@ extern int winmm_reset_type;
 extern int winmm_reset_delay;
 #endif
 
-// For FluidSynth module:
-
-#ifdef HAVE_FLUIDSYNTH
-extern char *fsynth_sf_path;
-extern int fsynth_chorus_active;
-extern float fsynth_chorus_depth;
-extern float fsynth_chorus_level;
-extern int fsynth_chorus_nr;
-extern float fsynth_chorus_speed;
-extern char *fsynth_midibankselect;
-extern int fsynth_polyphony;
-extern int fsynth_reverb_active;
-extern float fsynth_reverb_damp;
-extern float fsynth_reverb_level;
-extern float fsynth_reverb_roomsize;
-extern float fsynth_reverb_width;
-#endif // HAVE_FLUIDSYNTH
-
 #endif
