@@ -4,7 +4,6 @@ pkgs.mkShell {
     jack2
     meson
     ninja
-    fluidsynth
     pulseaudio
     alsa-lib
     libsndfile

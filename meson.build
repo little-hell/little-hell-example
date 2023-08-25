@@ -4,9 +4,8 @@ project('zendoom', 'c',
 sdl2 = dependency('SDL2')
 sdl2_net = dependency('SDL2_net')
 sdl2_mixer = dependency('SDL2_mixer')
-fluidsynth = dependency('fluidsynth')
 
-deps = [sdl2, sdl2_net, sdl2_mixer, fluidsynth]
+deps = [sdl2, sdl2_net, sdl2_mixer]
 
 # Source files used by both the client binary and the server binary
 src_dir = 'src'
