@@ -10,7 +10,7 @@ One could argue that this completely guts and kills the soul of DOOM. And you pr
 ## Motivation
 
 ### Minimalism in the build system
-Build systems for C can be awfully yucky and not very Zen. Zendoom supports one build system: Meson. There aren't a dozen nested `CMakeLists.txt` and `Makefile.am` files. There is one build file, 99% of which is just listing the source files to be compiled. It's _great_. This means:
+Build systems for C can be awfully yucky and not very Zen. Mindoom supports one build system: Meson. There aren't a dozen nested `CMakeLists.txt` and `Makefile.am` files. There is one build file, 99% of which is just listing the source files to be compiled. It's _great_. This means:
 
 - [x] Add Nix shell for Zen-like, project dependency management and an isolated development environment. _Your system package manager is not Zen._
 - [x] Add Meson build 
@@ -18,7 +18,7 @@ Build systems for C can be awfully yucky and not very Zen. Zendoom supports one 
 - [x] Remove GNU autotools build
 
 ### Minimalism in platform support, packaging and distribution
-`zendoom` simply does not care about packaging and distribution. This means: 
+`mindoom` simply does not care about packaging and distribution. This means: 
 - [x] Removal of packaging support for Win32 and macOS.
 - [x] No Linux packages either. No `.rpm` or `.deb` files. 
 
