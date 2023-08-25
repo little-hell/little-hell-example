@@ -144,23 +144,6 @@ static default_t	doom_defaults_list[] =
     CONFIG_VARIABLE_INT(music_volume),
 
     //!
-    // @game strife
-    //
-    // If non-zero, dialogue text is displayed over characters' pictures
-    // when engaging actors who have voices.
-    //
-
-    CONFIG_VARIABLE_INT(show_talk),
-
-    //!
-    // @game strife
-    //
-    // Volume of voice sound effects, range 0-15.
-    //
-
-    CONFIG_VARIABLE_INT(voice_volume),
-
-    //!
     // @game doom
     //
     // If non-zero, messages are displayed on the heads-up display
@@ -207,46 +190,6 @@ static default_t	doom_defaults_list[] =
     CONFIG_VARIABLE_KEY(key_straferight),
 
     //!
-    // @game strife
-    //
-    // Keyboard key to use health.
-    //
-
-    CONFIG_VARIABLE_KEY(key_useHealth),
-
-    //!
-    // @game hexen
-    //
-    // Keyboard key to jump.
-    //
-
-    CONFIG_VARIABLE_KEY(key_jump),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to fly upward.
-    //
-
-    CONFIG_VARIABLE_KEY(key_flyup),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to fly downwards.
-    //
-
-    CONFIG_VARIABLE_KEY(key_flydown),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to center flying.
-    //
-
-    CONFIG_VARIABLE_KEY(key_flycenter),
-
-    //!
     // @game heretic hexen
     //
     // Keyboard key to look up.
@@ -269,110 +212,6 @@ static default_t	doom_defaults_list[] =
     //
 
     CONFIG_VARIABLE_KEY(key_lookcenter),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to query inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invquery),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to display mission objective.
-    //
-
-    CONFIG_VARIABLE_KEY(key_mission),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to display inventory popup.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invPop),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to display keys popup.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invKey),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to jump to start of inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invHome),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to jump to end of inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invEnd),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to scroll left in the inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invleft),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to scroll right in the inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invright),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to scroll left in the inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invLeft),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to scroll right in the inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invRight),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to use the current item in the inventory.
-    //
-
-    CONFIG_VARIABLE_KEY(key_useartifact),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to use inventory item.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invUse),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to drop an inventory item.
-    //
-
-    CONFIG_VARIABLE_KEY(key_invDrop),
 
     //!
     // @game strife
@@ -450,14 +289,6 @@ static default_t	doom_defaults_list[] =
     CONFIG_VARIABLE_INT(mouseb_speed),
 
     //!
-    // @game hexen strife
-    //
-    // Mouse button to jump.
-    //
-
-    CONFIG_VARIABLE_INT(mouseb_jump),
-
-    //!
     // If non-zero, joystick input is enabled.
     //
 
@@ -491,14 +322,6 @@ static default_t	doom_defaults_list[] =
     //
 
     CONFIG_VARIABLE_INT(joyb_speed),
-
-    //!
-    // @game hexen strife
-    //
-    // Joystick virtual button that makes the player jump.
-    //
-
-    CONFIG_VARIABLE_INT(joyb_jump),
 
     //!
     // @game doom heretic hexen
@@ -679,14 +502,6 @@ static default_t	doom_defaults_list[] =
     //
 
     CONFIG_VARIABLE_STRING(chatmacro9),
-
-    //!
-    // @game strife
-    //
-    // Serial port number to use for SERSETUP.EXE (unused).
-    //
-
-    CONFIG_VARIABLE_INT(comport),
 };
 
 static default_collection_t doom_defaults =
@@ -1211,14 +1026,6 @@ static default_t extra_defaults_list[] =
     //
 
     CONFIG_VARIABLE_INT(mouseb_invright),
-
-    //!
-    // @game heretic hexen
-    //
-    // Mouse button to use artifact.
-    //
-
-    CONFIG_VARIABLE_INT(mouseb_useartifact),
 
     //!
     // If non-zero, double-clicking a mouse button acts like pressing
@@ -1807,70 +1614,6 @@ static default_t extra_defaults_list[] =
     //
 
     CONFIG_VARIABLE_KEY(key_arti_morph),
-
-    //!
-    // @game hexen
-    //
-    // Key to use one of each artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_all),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "quartz flask" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_health),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "flechette" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_poisonbag),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "disc of repulsion" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_blastradius),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "chaos device" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_teleport),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "banishment device" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_teleportother),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "porkalator" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_egg),
-
-    //!
-    // @game hexen
-    //
-    // Key to use "icon of the defender" artifact.
-    //
-
-    CONFIG_VARIABLE_KEY(key_arti_invulnerability),
 
     //!
     // Key to re-display last message.
