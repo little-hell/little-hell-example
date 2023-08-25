@@ -8,6 +8,23 @@ Mindoom is the [MINIX](https://en.wikipedia.org/wiki/Minix) of Doom ports. It's 
 
 One could argue that this completely guts and kills the soul of DOOM. And you probably wouldn't even be wrong, but this is for science and John Carmack released Doom under the GPL.
 
+
+
+- [Motivation](#motivation)
+    - [Minimalism in the build system](#minimalism-in-the-build-system)
+    - [Minimalism in platform support, packing, and distribution](#minimalism-in-platform-support-packaging-and-distribution)
+    - [Minimalism in sound emulation support](#minimalism-in-sound-emulation-support)
+    - [Minimalism in features and legacy support](#minimalism-in-features-and-legacy-support)
+    - [Minimalism quantified](#minimalism-quantified)
+- [Development](#development)
+    - [Contributing](#contributing)
+    - [Building](#building)
+        - [Dependencies](#dependencies)
+- [Release Roadmap](#release-roadmap)
+- [TODO](#todo)
+- [Compability Overview](#compatability-overview)
+
+
 ## Motivation
 
 ### Minimalism in the build system
@@ -25,7 +42,7 @@ Build systems for C can be awfully yucky and not very Zen. Mindoom supports one 
 
 It's a project built around exploration of the codebase - build the code yourself. 
 
-### Minimalism in sound support and emulation
+### Minimalism in sound emulation support
 - [x] Remove GUS emulation
 - [x] Remove PC speaker emulation
 - [x] Remove PAS 
@@ -67,21 +84,63 @@ Lines of code aren't a metric of code quality, but they sure are a metric of cod
 | TNSDL              | 1     | 1     | 0       | 11     | TNSDL              |       |       |         |       |
 | Sum                | 626   | 45186 | 49487   | 230396 | Sum                | 317   | 20761 | 18528   | 76885 |
 
-## Building
+## Development
+
+### Contributing
+
+Contributions are _absolutely_ appreciated and will be received with open arms so long as they mesh with the goals of the project.
+If your PR involves cleaning something up, it probably aligns with the goals of `mindoom` and we'd be thrilled to have it. 
+See [HACKING.MD](https://github.com/ranguli/mindoom/blob/master/HACKING.md) for coding conventions and what not.
+
+### Building
 
 ```bash
 git clone https://github.com/zendoom/doom
 cd doom
+nix-shell shell.nix
 meson build
 ninja -C build
 ```
 
-### Dependencies
+#### Dependencies
 
 The only dependency _you_ need is `git`, and Nix. All the dependencies that _Doom_ needs are taken care of. 
 
 
-## Compatability
+## Release Roadmap
+- [v0.0.1](https://github.com/ranguli/mindoom/releases/tag/v0.0.1):
+    - [x] Remove CMake build system
+    - [x] Remove Autotools build system
+    - [x] Remove codebases for Strife, Hexen, and Heretic
+    - [x] Remove packaging and distribution code
+    - [x] Misc. repository cleanup
+- v0.0.2:
+    - [x] Remove GUS emulation
+    - [x] Remove music packs
+    - [x] Remove native MIDI playback
+    - [x] Remove fluidsynth music playback
+    - [x] Remove timidity support
+    - [x] Only support/emulation of OPL3 / Soundblaster.
+        - [ ] No support for real OPL hardware (just the emulation)   
+- v0.0.3:
+    - [ ] Remove all references to non-DOOM v1.9 in the code.
+- v0.0.4:
+    - [ ] Remove DeHackEd
+    - [ ] Remove WAD merging (a la DeuTex)
+- v0.0.5:
+    - [ ] Refactor the remaining sound subsystems post v0.0.2    
+
+## TODO:
+
+- Github actions
+- Embedded scripting of some kind with a well-documented API
+- A simpler configuration system? Text files are fine, but surely we can clean it up someway.
+- Only support PNG screenshots (no PCX)
+- Remove DOS emulation of null Read Access Violation (system.c:300)
+- (Gradually) replace bespoke file I/O with posix ones
+- Remove gamma correction feature
+- 
+## Compatability Overview
 
 Over the years a lot of configuration options have been added to various source ports of Doom as they add support for different things. Here is an (incomplete) table that overviews what options remain in mindoom:
 
@@ -213,35 +272,3 @@ Over the years a lot of configuration options have been added to various source 
 | key_multi_msgplayer2       |             |
 | key_multi_msgplayer3       |             |
 | key_multi_msgplayer4       |             |
-
-## Roadmap
-- v0.0.1:
-    - [x] Remove CMake build system
-    - [x] Remove Autotools build system
-    - [x] Remove codebases for Strife, Hexen, and Heretic
-    - [x] Remove packaging and distribution code
-    - [x] Misc. repository cleanup
-- v0.0.2:
-    - [x] Remove GUS emulation
-    - [x] Remove music packs
-    - [x] Remove native MIDI playback
-    - [x] Remove fluidsynth music playback
-    - [x] Remove timidity support
-    - [x] Only support/emulation of OPL3 / Soundblaster.
-        - [ ] No support for real OPL hardware (just the emulation)
-    - [ ] Refactor the remaining sound subsystems       
-- v0.0.3:
-    - [ ] Remove all references to non-DOOM v1.9 in the code.
-- v0.0.4:
-    - [ ] Remove DeHackEd
-    - [ ] Remove WAD merging (a la DeuTex) 
-
-## TODO:
-
-- Github actions
-- Embedded scripting of some kind with a well-documented API
-- A simpler configuration system? Text files are fine, but surely we can clean it up someway.
-- Only support PNG screenshots (no PCX)
-- Remove DOS emulation of null Read Access Violation (system.c:300)
-- (Gradually) replace bespoke file I/O with posix ones
-- Remove gamma correction feature
