@@ -895,7 +895,6 @@ static struct
     {"Doom 1.7/1.7a",        "1.7",        exe_doom_1_7},
     {"Doom 1.8",             "1.8",        exe_doom_1_8},
     {"Doom 1.9",             "1.9",        exe_doom_1_9},
-    {"Hacx",                 "hacx",       exe_hacx},
     {"Ultimate Doom",        "ultimate",   exe_ultimate},
     {"Final Doom",           "final",      exe_final},
     {"Final Doom (alt)",     "final2",     exe_final2},
@@ -918,9 +917,7 @@ static void InitGameVersion(void)
     // @category compat
     //
     // Emulate a specific version of Doom.  Valid values are "1.2", 
-    // "1.666", "1.7", "1.8", "1.9", "ultimate", "final", "final2", and
-    // "hacx"
-    //
+    // "1.666", "1.7", "1.8", "1.9", "ultimate", "final", and "final2",
 
     p = M_CheckParmWithArgs("-gameversion", 1);
 
@@ -950,13 +947,7 @@ static void InitGameVersion(void)
     }
     else
     {
-        if (gamemission == pack_hacx)
-        {
-            // hacx.exe: identified by iwad filename
-
-            gameversion = exe_hacx;
-        }
-        else if (gamemode == shareware || gamemode == registered
+        if (gamemode == shareware || gamemode == registered
               || (gamemode == commercial && gamemission == doom2))
         {
             // original
@@ -1096,16 +1087,6 @@ static void LoadIwadDeh(void)
         // valid DEHACKED lumps, so ignore errors and just continue if this
         // is an old IWAD.
         DEH_LoadLumpByName("DEHACKED", false, true);
-    }
-
-    // If this is the HACX IWAD, we need to load the DEHACKED lump.
-    if (gameversion == exe_hacx)
-    {
-        if (!DEH_LoadLumpByName("DEHACKED", true, false))
-        {
-            I_Error("DEHACKED lump not found.  Please check that this is the "
-                    "Hacx v1.2 IWAD.");
-        }
     }
 
     if (IsFrenchIWAD())
