@@ -156,18 +156,19 @@ Don't.
     - [x] Remove timidity support
     - [x] Only support/emulation of OPL3 / Soundblaster.
 - v0.0.3:
+    - [ ] Rebrand/re-reference everything internally from Chocolate Doom to Mindoom.
+- v0.0.4:
     - [ ] Remove Windows-specific code
     - [ ] No support for real OPL hardware (just the emulation)   
-    - [ ]
-- v0.0.4:
-    - [ ] Remove all references to non-DOOM v1.9 in the code.
 - v0.0.5:
-    - [ ] Remove DeHackEd
+    - [ ] Remove all references to non-DOOM v1.9 in the code.
 - v0.0.6:
-    - [ ] Remove WAD merging (a la DeuTex)
+    - [ ] Remove DeHackEd
 - v0.0.7:
-    - [ ] Remove `textscreen` and endoom.
+    - [ ] Remove WAD merging (a la DeuTex)
 - v0.0.8:
+    - [ ] Remove `textscreen` and endoom.
+- v0.0.9:
     - [ ] The _refactor release_. Start doing static analysis and get to cleaning. This will span multiple releases. 
 
 ## TODO:
