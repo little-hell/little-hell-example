@@ -241,14 +241,14 @@ enum
     ep1,
     ep2,
     ep3,
-    ep4,
     ep_end
 } episodes_e;
 
-menuitem_t EpisodeMenu[] = {{1, "M_EPI1", M_Episode, 'k'},
-                            {1, "M_EPI2", M_Episode, 't'},
-                            {1, "M_EPI3", M_Episode, 'i'},
-                            {1, "M_EPI4", M_Episode, 't'}};
+menuitem_t EpisodeMenu[] = {
+    {1, "M_EPI1", M_Episode, 'k'},
+    {1, "M_EPI2", M_Episode, 't'},
+    {1, "M_EPI3", M_Episode, 'i'},
+};
 
 menu_t EpiDef = {
     ep_end,        // # of menu items
@@ -692,19 +692,11 @@ void M_DrawReadThis2(void)
 {
     inhelpscreens = true;
 
-    // We only ever draw the second page if this is
-    // gameversion == exe_doom_1_9 and gamemode == registered
+    // We only ever draw the second page if this if
+    // we're on Doom v1.9 Registered
 
     V_DrawPatchDirect(0, 0, W_CacheLumpName(DEH_String("HELP1"), PU_CACHE));
 }
-
-void M_DrawReadThisCommercial(void)
-{
-    inhelpscreens = true;
-
-    V_DrawPatchDirect(0, 0, W_CacheLumpName(DEH_String("HELP"), PU_CACHE));
-}
-
 
 //
 // Change Sfx & Music volumes
@@ -1487,10 +1479,7 @@ boolean M_Responder(event_t *ev)
         {
             M_StartControlPanel();
 
-            if (gameversion >= exe_ultimate)
-                currentMenu = &ReadDef2;
-            else
-                currentMenu = &ReadDef1;
+            currentMenu = &ReadDef1;
 
             itemOn = 0;
             S_StartSound(NULL, sfx_swtchn);
@@ -1895,43 +1884,6 @@ void M_Init(void)
     messageString = NULL;
     messageLastMenuActive = menuactive;
     quickSaveSlot = -1;
-
-    // Here we could catch other version dependencies,
-    //  like HELP1/2, and four episodes.
-
-    // The same hacks were used in the original Doom EXEs.
-
-    if (gameversion >= exe_ultimate)
-    {
-        MainMenu[readthis].routine = M_ReadThis2;
-        ReadDef2.prevMenu = NULL;
-    }
-
-    if (gameversion >= exe_final && gameversion <= exe_final2)
-    {
-        ReadDef2.routine = M_DrawReadThisCommercial;
-    }
-
-    if (gamemode == commercial)
-    {
-        MainMenu[readthis] = MainMenu[quitdoom];
-        MainDef.numitems--;
-        MainDef.y += 8;
-        NewDef.prevMenu = &MainDef;
-        ReadDef1.routine = M_DrawReadThisCommercial;
-        ReadDef1.x = 330;
-        ReadDef1.y = 165;
-        ReadMenu1[rdthsempty1].routine = M_FinishReadThis;
-    }
-
-    // Versions of doom.exe before the Ultimate Doom release only had
-    // three episodes; if we're emulating one of those then don't try
-    // to show episode four. If we are, then do show episode four
-    // (should crash if missing).
-    if (gameversion < exe_ultimate)
-    {
-        EpiDef.numitems--;
-    }
 
     opldev = M_CheckParm("-opldev") > 0;
 }

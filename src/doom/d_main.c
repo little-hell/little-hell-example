@@ -528,19 +528,7 @@ void D_DoAdvanceDemo(void)
     paused = false;
     gameaction = ga_nothing;
 
-    // The Ultimate Doom executable changed the demo sequence to add
-    // a DEMO4 demo.  Final Doom was based on Ultimate, so also
-    // includes this change; however, the Final Doom IWADs do not
-    // include a DEMO4 lump, so the game bombs out with an error
-    // when it reaches this point in the demo sequence.
-
-    // However! There is an alternate version of Final Doom that
-    // includes a fixed executable.
-
-    if (gameversion == exe_ultimate || gameversion == exe_final)
-        demosequence = (demosequence + 1) % 7;
-    else
-        demosequence = (demosequence + 1) % 6;
+    demosequence = (demosequence + 1) % 6;
 
     switch (demosequence)
     {
@@ -578,11 +566,7 @@ void D_DoAdvanceDemo(void)
             else
             {
                 pagetic = 200;
-
-                if (gameversion >= exe_ultimate)
-                    pagename = DEH_String("CREDIT");
-                else
-                    pagename = DEH_String("HELP2");
+                pagename = DEH_String("HELP2");
             }
             break;
         case 5:
@@ -777,14 +761,7 @@ static struct
     const char *cmdline;
     GameVersion_t version;
 } gameversions[] = {
-    {"Doom 1.2", "1.2", exe_doom_1_2},
-    {"Doom 1.666", "1.666", exe_doom_1_666},
-    {"Doom 1.7/1.7a", "1.7", exe_doom_1_7},
-    {"Doom 1.8", "1.8", exe_doom_1_8},
     {"Doom 1.9", "1.9", exe_doom_1_9},
-    {"Ultimate Doom", "ultimate", exe_ultimate},
-    {"Final Doom", "final", exe_final},
-    {"Final Doom (alt)", "final2", exe_final2},
     {NULL, NULL, 0},
 };
 
@@ -792,140 +769,10 @@ static struct
 
 static void InitGameVersion(void)
 {
-    byte *demolump;
-    char demolumpname[6];
-    int demoversion;
-    int p;
-    int i;
-    boolean status;
-
-    //!
-    // @arg <version>
-    // @category compat
-    //
-    // Emulate a specific version of Doom.  Valid values are "1.2",
-    // "1.666", "1.7", "1.8", "1.9", "ultimate", "final", and "final2",
-
-    p = M_CheckParmWithArgs("-gameversion", 1);
-
-    if (p)
-    {
-        for (i = 0; gameversions[i].description != NULL; ++i)
-        {
-            if (!strcmp(myargv[p + 1], gameversions[i].cmdline))
-            {
-                gameversion = gameversions[i].version;
-                break;
-            }
-        }
-
-        if (gameversions[i].description == NULL)
-        {
-            printf("Supported game versions:\n");
-
-            for (i = 0; gameversions[i].description != NULL; ++i)
-            {
-                printf("\t%s (%s)\n", gameversions[i].cmdline,
-                       gameversions[i].description);
-            }
-
-            I_Error("Unknown game version '%s'", myargv[p + 1]);
-        }
-    }
-    else
-    {
-        if (gamemode == shareware || gamemode == registered ||
-            (gamemode == commercial))
-        {
-            // original
-            gameversion = exe_doom_1_9;
-
-            // Detect version from demo lump
-            for (i = 1; i <= 3; ++i)
-            {
-                M_snprintf(demolumpname, 6, "demo%i", i);
-                if (W_CheckNumForName(demolumpname) > 0)
-                {
-                    demolump = W_CacheLumpName(demolumpname, PU_STATIC);
-                    demoversion = demolump[0];
-                    W_ReleaseLumpName(demolumpname);
-                    status = true;
-                    switch (demoversion)
-                    {
-                        case 0:
-                        case 1:
-                        case 2:
-                        case 3:
-                        case 4:
-                            gameversion = exe_doom_1_2;
-                            break;
-                        case 106:
-                            gameversion = exe_doom_1_666;
-                            break;
-                        case 107:
-                            gameversion = exe_doom_1_7;
-                            break;
-                        case 108:
-                            gameversion = exe_doom_1_8;
-                            break;
-                        case 109:
-                            gameversion = exe_doom_1_9;
-                            break;
-                        default:
-                            status = false;
-                            break;
-                    }
-                    if (status)
-                    {
-                        break;
-                    }
-                }
-            }
-        }
-        else if (gamemode == retail)
-        {
-            gameversion = exe_ultimate;
-        }
-        else if (gamemode == commercial)
-        {
-            // Final Doom: tnt or plutonia
-            // Defaults to emulating the first Final Doom executable,
-            // which has the crash in the demo loop; however, having
-            // this as the default should mean that it plays back
-            // most demos correctly.
-
-            gameversion = exe_final;
-        }
-    }
-
-    // Deathmatch 2.0 did not exist until Doom v1.4
-    if (gameversion <= exe_doom_1_2 && deathmatch == 2)
-    {
-        deathmatch = 1;
-    }
-
-    // The original exe does not support retail - 4th episode not supported
-
-    if (gameversion < exe_ultimate && gamemode == retail)
-    {
-        gamemode = registered;
-    }
-}
-
-void PrintGameVersion(void)
-{
-    int i;
-
-    for (i = 0; gameversions[i].description != NULL; ++i)
-    {
-        if (gameversions[i].version == gameversion)
-        {
-            printf("Emulating the behavior of the "
-                   "'%s' executable.\n",
-                   gameversions[i].description);
-            break;
-        }
-    }
+    gamemode = registered;
+    gameversion = exe_doom_1_9;
+    gamemission = doom;
+    deathmatch = 1;
 }
 
 // Function called at exit to display the ENDOOM screen
@@ -1467,8 +1314,6 @@ void D_DoomMain(void)
 
     DEH_printf("D_CheckNetGame: Checking network game status.\n");
     D_CheckNetGame();
-
-    PrintGameVersion();
 
     DEH_printf("HU_Init: Setting up heads up display.\n");
     HU_Init();
