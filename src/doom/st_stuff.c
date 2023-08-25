@@ -515,31 +515,12 @@ boolean ST_Responder(event_t *ev)
                 plyr->message = DEH_String(STSTR_MUS);
                 cht_GetParam(&cheat_mus, buf);
 
-                // Note: The original v1.9 had a bug that tried to play back
-                // the Doom II music regardless of gamemode.  This was fixed
-                // in the Ultimate Doom executable so that it would work for
-                // the Doom 1 music as well.
+                musnum = mus_e1m1 + (buf[0] - '1') * 9 + (buf[1] - '1');
 
-                if (gamemode == commercial || gameversion < exe_ultimate)
-                {
-                    musnum =
-                        mus_runnin + (buf[0] - '0') * 10 + buf[1] - '0' - 1;
-
-                    if (((buf[0] - '0') * 10 + buf[1] - '0') > 35 &&
-                        gameversion >= exe_doom_1_8)
-                        plyr->message = DEH_String(STSTR_NOMUS);
-                    else
-                        S_ChangeMusic(musnum, 1);
-                }
+                if (((buf[0] - '1') * 9 + buf[1] - '1') > 31)
+                    plyr->message = DEH_String(STSTR_NOMUS);
                 else
-                {
-                    musnum = mus_e1m1 + (buf[0] - '1') * 9 + (buf[1] - '1');
-
-                    if (((buf[0] - '1') * 9 + buf[1] - '1') > 31)
-                        plyr->message = DEH_String(STSTR_NOMUS);
-                    else
-                        S_ChangeMusic(musnum, 1);
-                }
+                    S_ChangeMusic(musnum, 1);
             }
             else if ((logical_gamemission == doom &&
                       cht_CheckCheat(&cheat_noclip, ev->data2)) ||
@@ -606,52 +587,25 @@ boolean ST_Responder(event_t *ev)
 
             cht_GetParam(&cheat_clev, buf);
 
-            if (gamemode == commercial)
-            {
-                epsd = 0;
-                map = (buf[0] - '0') * 10 + buf[1] - '0';
-            }
-            else
-            {
-                epsd = buf[0] - '0';
-                map = buf[1] - '0';
-
-            }
+            epsd = buf[0] - '0';
+            map = buf[1] - '0';
 
             // Catch invalid maps.
-            if (gamemode != commercial)
+            if (epsd < 1)
             {
-                if (epsd < 1)
-                {
-                    return false;
-                }
-                if (epsd > 4)
-                {
-                    return false;
-                }
-                if (epsd == 4 && gameversion < exe_ultimate)
-                {
-                    return false;
-                }
-                if (map < 1)
-                {
-                    return false;
-                }
-                if (map > 9)
-                {
-                    return false;
-                }
+                return false;
             }
-            else
+            if (epsd >= 4)
             {
-                if (map < 1)
-                {
-                    return false;
-                }
-                if (map > 40)
-                {
-                    return false;
-                }
+                return false;
+            }
+            if (map < 1)
+            {
+                return false;
+            }
+            if (map > 9)
+            {
+                return false;
             }
 
             // So be it.

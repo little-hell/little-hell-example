@@ -507,32 +507,22 @@ P_CrossSpecialLine
 
     line = &lines[linenum];
     
-    if (gameversion <= exe_doom_1_2)
+    //	Triggers that other things can activate
+    if (!thing->player)
     {
-        if (line->special > 98 && line->special != 104)
-        {
-            return;
-        }
-    }
-    else
-    {
-        //	Triggers that other things can activate
-        if (!thing->player)
-        {
-            // Things that should NOT trigger specials...
-            switch(thing->type)
-            {
-                case MT_ROCKET:
-                case MT_PLASMA:
-                case MT_BFG:
-                case MT_TROOPSHOT:
-                case MT_HEADSHOT:
-                case MT_BRUISERSHOT:
-                    return;
+	// Things that should NOT trigger specials...
+	switch(thing->type)
+	{
+	    case MT_ROCKET:
+	    case MT_PLASMA:
+	    case MT_BFG:
+	    case MT_TROOPSHOT:
+	    case MT_HEADSHOT:
+	    case MT_BRUISERSHOT:
+		return;
 
-                default: break;
-            }
-        }
+	    default: break;
+	}
     }
 
     if (!thing->player)

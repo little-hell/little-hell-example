@@ -430,8 +430,7 @@ unsigned int NET_ExpandTicNum(unsigned int relative, unsigned int b)
 
 // Check that game settings are valid
 
-boolean NET_ValidGameSettings(GameMode_t mode, GameMission_t mission,
-                              net_gamesettings_t *settings)
+boolean NET_ValidGameSettings(net_gamesettings_t *settings)
 {
     if (settings->ticdup <= 0)
         return false;
@@ -443,12 +442,6 @@ boolean NET_ValidGameSettings(GameMode_t mode, GameMission_t mission,
         return false;
 
     if (settings->skill < sk_noitems || settings->skill > sk_nightmare)
-        return false;
-
-    if (!D_ValidGameVersion(mission, settings->gameversion))
-        return false;
-
-    if (!D_ValidEpisodeMap(mission, mode, settings->episode, settings->map))
         return false;
 
     return true;

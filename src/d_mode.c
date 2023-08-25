@@ -58,20 +58,6 @@ boolean D_ValidEpisodeMap(GameMission_t mission, GameMode_t mode, int episode,
 {
     int i;
 
-    // Hacks for Heretic secret episodes
-
-    if (mission == heretic)
-    {
-        if (mode == retail && episode == 6)
-        {
-            return map >= 1 && map <= 3;
-        }
-        else if (mode == registered && episode == 4)
-        {
-            return map == 1;
-        }
-    }
-
     // Find the table entry for this mission/mode combination.
 
     for (i = 0; i < arrlen(valid_modes); ++i)
@@ -86,89 +72,6 @@ boolean D_ValidEpisodeMap(GameMission_t mission, GameMode_t mode, int episode,
     // Unknown mode/mission combination
 
     return false;
-}
-
-// Get the number of valid episodes for the specified mission/mode.
-
-int D_GetNumEpisodes(GameMission_t mission, GameMode_t mode)
-{
-    int episode;
-
-    episode = 1;
-
-    while (D_ValidEpisodeMap(mission, mode, episode, 1))
-    {
-        ++episode;
-    }
-
-    return episode - 1;
-}
-
-// Table of valid versions
-
-static struct
-{
-    GameMission_t mission;
-    GameVersion_t version;
-} valid_versions[] = {
-    {doom, exe_doom_1_2},       {doom, exe_doom_1_666},
-    {doom, exe_doom_1_7},       {doom, exe_doom_1_8},
-    {doom, exe_doom_1_9},       {doom, exe_ultimate},
-    {doom, exe_final},          {doom, exe_final2},
-    {heretic, exe_heretic_1_3}, {hexen, exe_hexen_1_1},
-    {strife, exe_strife_1_2},   {strife, exe_strife_1_31},
-};
-
-boolean D_ValidGameVersion(GameMission_t mission, GameVersion_t version)
-{
-    int i;
-
-    for (i = 0; i < arrlen(valid_versions); ++i)
-    {
-        if (valid_versions[i].mission == mission &&
-            valid_versions[i].version == version)
-        {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-// Does this mission type use ExMy form, rather than MAPxy form?
-
-boolean D_IsEpisodeMap(GameMission_t mission)
-{
-    switch (mission)
-    {
-        case doom:
-        case heretic:
-            return true;
-
-        case none:
-        case hexen:
-        case strife:
-        default:
-            return false;
-    }
-}
-
-const char *D_GameMissionString(GameMission_t mission)
-{
-    switch (mission)
-    {
-        case none:
-        default:
-            return "none";
-        case doom:
-            return "doom";
-        case heretic:
-            return "heretic";
-        case hexen:
-            return "hexen";
-        case strife:
-            return "strife";
-    }
 }
 
 const char *D_GameModeString(GameMode_t mode)

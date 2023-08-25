@@ -314,9 +314,8 @@ void P_ZMovement (mobj_t* mo)
         // So we need to check that this is either retail or commercial
         // (but not doom2)
 	
-	int correct_lost_soul_bounce = gameversion >= exe_ultimate;
 
-	if (correct_lost_soul_bounce && mo->flags & MF_SKULLFLY)
+	if (mo->flags & MF_SKULLFLY)
 	{
 	    // the skull slammed into something
 	    mo->momz = -mo->momz;
@@ -345,7 +344,7 @@ void P_ZMovement (mobj_t* mo)
 	// hit by a raising floor this incorrectly reverses its Y momentum.
 	//
 
-        if (!correct_lost_soul_bounce && mo->flags & MF_SKULLFLY)
+        if (mo->flags & MF_SKULLFLY)
             mo->momz = -mo->momz;
 
 	if ( (mo->flags & MF_MISSILE)

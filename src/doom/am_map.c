@@ -719,7 +719,7 @@ AM_Responder
             rc = false;
         }
 
-        if ((!deathmatch || gameversion <= exe_doom_1_8)
+        if ((!deathmatch)
          && cht_CheckCheat(&cheat_amap, ev->data2))
         {
             rc = false;

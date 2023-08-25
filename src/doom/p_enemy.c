@@ -176,10 +176,7 @@ boolean P_CheckMeleeRange (mobj_t*	actor)
     pl = actor->target;
     dist = P_AproxDistance (pl->x-actor->x, pl->y-actor->y);
 
-    if (gameversion <= exe_doom_1_2)
-        range = MELEERANGE;
-    else
-        range = MELEERANGE-20*FRACUNIT+pl->info->radius;
+    range = MELEERANGE-20*FRACUNIT+pl->info->radius;
 
     if (dist >= range)
         return false;
@@ -672,8 +669,7 @@ void A_Chase (mobj_t*	actor)
     // modify target threshold
     if  (actor->threshold)
     {
-        if (gameversion > exe_doom_1_2 && 
-            (!actor->target || actor->target->health <= 0))
+        if ((!actor->target || actor->target->health <= 0))
 	{
 	    actor->threshold = 0;
 	}
@@ -933,18 +929,12 @@ void A_SargAttack (mobj_t* actor)
 		
     A_FaceTarget (actor);
 
-    if (gameversion > exe_doom_1_2)
-    {
-        if (!P_CheckMeleeRange (actor))
-            return;
-    }
+    if (!P_CheckMeleeRange (actor))
+	return;
 
     damage = ((P_Random()%10)+1)*4;
 
-    if (gameversion <= exe_doom_1_2)
-        P_LineAttack(actor, actor->angle, MELEERANGE, 0, damage);
-    else
-        P_DamageMobj (actor->target, actor, actor, damage);
+    P_LineAttack(actor, actor->angle, MELEERANGE, 0, damage);
 }
 
 void A_HeadAttack (mobj_t* actor)
@@ -1613,54 +1603,21 @@ void A_Explode (mobj_t* thingy)
 
 // Check whether the death of the specified monster type is allowed
 // to trigger the end of episode special action.
-//
-// This behavior changed in v1.9, the most notable effect of which
-// was to break uac_dead.wad
 
 static boolean CheckBossEnd(mobjtype_t motype)
 {
-    if (gameversion < exe_ultimate)
+    if (gamemap != 8)
     {
-        if (gamemap != 8)
-        {
-            return false;
-        }
-
-        // Baron death on later episodes is nothing special.
-
-        if (motype == MT_BRUISER && gameepisode != 1)
-        {
-            return false;
-        }
-
-        return true;
+	return false;
     }
-    else
+
+    // Baron death on later episodes is nothing special.
+    if (motype == MT_BRUISER && gameepisode != 1)
     {
-        // New logic that appeared in Ultimate Doom.
-        // Looks like the logic was overhauled while adding in the
-        // episode 4 support.  Now bosses only trigger on their
-        // specific episode.
-
-	switch(gameepisode)
-	{
-            case 1:
-                return gamemap == 8 && motype == MT_BRUISER;
-
-            case 2:
-                return gamemap == 8 && motype == MT_CYBORG;
-
-            case 3:
-                return gamemap == 8 && motype == MT_SPIDER;
-
-	    case 4:
-                return (gamemap == 6 && motype == MT_CYBORG)
-                    || (gamemap == 8 && motype == MT_SPIDER);
-
-            default:
-                return gamemap == 8;
-	}
+	return false;
     }
+
+    return true;
 }
 
 //

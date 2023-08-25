@@ -1242,21 +1242,11 @@ void G_ScreenShot(void)
 {
     gameaction = ga_screenshot;
 }
-
-
 // DOOM Par Times
 static const int pars[4][10] = {{0},
                                 {0, 30, 75, 120, 90, 165, 180, 180, 30, 165},
                                 {0, 90, 90, 90, 120, 90, 360, 240, 30, 170},
                                 {0, 90, 45, 90, 150, 90, 90, 165, 30, 135}};
-
-// DOOM II Par Times
-static const int cpars[32] = {
-    30,  90,  120, 120, 90,  150, 120, 120, 270, 90,  //  1-10
-    210, 150, 150, 150, 210, 150, 420, 150, 210, 150, // 11-20
-    240, 150, 180, 150, 150, 300, 330, 420, 300, 180, // 21-30
-    120, 30                                           // 31-32
-};
 
 //
 // G_DoCompleted
@@ -1293,121 +1283,50 @@ void G_DoCompleted(void)
     if (automapactive)
         AM_Stop();
 
-    if (gamemode != commercial)
+    switch (gamemap)
     {
-        switch (gamemap)
-        {
-            case 8:
-                gameaction = ga_victory;
-                return;
-            case 9:
-                for (i = 0; i < MAXPLAYERS; i++)
-                    players[i].didsecret = true;
-                break;
-        }
+        case 8:
+            gameaction = ga_victory;
+            return;
+        case 9:
+            for (i = 0; i < MAXPLAYERS; i++)
+                players[i].didsecret = true;
+            break;
     }
-
-    //#if 0  Hmmm - why?
-    if ((gamemap == 8) && (gamemode != commercial))
-    {
-        // victory
-        gameaction = ga_victory;
-        return;
-    }
-
-    if ((gamemap == 9) && (gamemode != commercial))
-    {
-        // exit secret level
-        for (i = 0; i < MAXPLAYERS; i++)
-            players[i].didsecret = true;
-    }
-    //#endif
-
 
     wminfo.didsecret = players[consoleplayer].didsecret;
     wminfo.epsd = gameepisode - 1;
     wminfo.last = gamemap - 1;
 
-    // wminfo.next is 0 biased, unlike gamemap
-    if (gamemode == commercial)
+    if (secretexit)
+        wminfo.next = 8; // go to secret level
+    else if (gamemap == 9)
     {
-        if (secretexit)
-            switch (gamemap)
-            {
-                case 15:
-                    wminfo.next = 30;
-                    break;
-                case 31:
-                    wminfo.next = 31;
-                    break;
-            }
-        else
-            switch (gamemap)
-            {
-                case 31:
-                case 32:
-                    wminfo.next = 15;
-                    break;
-                default:
-                    wminfo.next = gamemap;
-            }
+        // returning from secret level
+        switch (gameepisode)
+        {
+            case 1:
+                wminfo.next = 3;
+                break;
+            case 2:
+                wminfo.next = 5;
+                break;
+            case 3:
+                wminfo.next = 6;
+                break;
+            case 4:
+                wminfo.next = 2;
+                break;
+        }
     }
     else
-    {
-        if (secretexit)
-            wminfo.next = 8; // go to secret level
-        else if (gamemap == 9)
-        {
-            // returning from secret level
-            switch (gameepisode)
-            {
-                case 1:
-                    wminfo.next = 3;
-                    break;
-                case 2:
-                    wminfo.next = 5;
-                    break;
-                case 3:
-                    wminfo.next = 6;
-                    break;
-                case 4:
-                    wminfo.next = 2;
-                    break;
-            }
-        }
-        else
-            wminfo.next = gamemap; // go to next level
-    }
+        wminfo.next = gamemap; // go to next level
 
     wminfo.maxkills = totalkills;
     wminfo.maxitems = totalitems;
     wminfo.maxsecret = totalsecret;
     wminfo.maxfrags = 0;
-
-    // Set par time. Exceptions are added for purposes of
-    // statcheck regression testing.
-    if (gamemode == commercial)
-    {
-        // map33 reads its par time from beyond the cpars[] array
-        if (gamemap == 33)
-        {
-            int cpars32;
-
-            memcpy(&cpars32, DEH_String(GAMMALVL0), sizeof(int));
-            cpars32 = LONG(cpars32);
-
-            wminfo.partime = TICRATE * cpars32;
-        }
-        else
-        {
-            wminfo.partime = TICRATE * cpars[gamemap - 1];
-        }
-    }
-    else
-    {
-        wminfo.partime = TICRATE * cpars[gamemap];
-    }
-
+    wminfo.partime = TICRATE*pars[gameepisode][gamemap];
     wminfo.pnum = consoleplayer;
 
     for (i = 0; i < MAXPLAYERS; i++)
@@ -1440,23 +1359,6 @@ void G_WorldDone(void)
 
     if (secretexit)
         players[consoleplayer].didsecret = true;
-
-    if (gamemode == commercial)
-    {
-        switch (gamemap)
-        {
-            case 15:
-            case 31:
-                if (!secretexit)
-                    break;
-            case 6:
-            case 11:
-            case 20:
-            case 30:
-                F_StartFinale();
-                break;
-        }
-    }
 }
 
 void G_DoWorldDone(void)
@@ -1664,56 +1566,16 @@ void G_InitNew(skill_t skill, int episode, int map)
         S_ResumeSound();
     }
 
-    /*
-    // Note: This commented-out block of code was added at some point
-    // between the DOS version(s) and the Doom source release. It isn't
-    // found in disassemblies of the DOS version and causes IDCLEV and
-    // the -warp command line parameter to behave differently.
-    // This is left here for posterity.
-
-    // This was quite messy with SPECIAL and commented parts.
-    // Supposedly hacks to make the latest edition work.
-    // It might not work properly.
-    if (episode < 1)
-      episode = 1;
-
-    if ( gamemode == retail )
-    {
-      if (episode > 4)
-	episode = 4;
-    }
-    else if ( gamemode == shareware )
-    {
-      if (episode > 1)
-	   episode = 1;	// only start episode 1 on shareware
-    }
-    else
-    {
-      if (episode > 3)
-	episode = 3;
-    }
-    */
-
     if (skill > sk_nightmare)
         skill = sk_nightmare;
 
-    if (gameversion >= exe_ultimate)
+    if (episode < 1)
     {
-        if (episode == 0)
-        {
-            episode = 4;
-        }
+        episode = 1;
     }
-    else
+    if (episode > 3)
     {
-        if (episode < 1)
-        {
-            episode = 1;
-        }
-        if (episode > 3)
-        {
-            episode = 3;
-        }
+        episode = 3;
     }
 
     if (episode > 1 && gamemode == shareware)
@@ -1956,21 +1818,10 @@ void G_RecordDemo(const char *name)
     demorecording = true;
 }
 
-// Get the demo version code appropriate for the version set in gameversion.
+// TODO: refactor and remove 
 int G_VanillaVersionCode(void)
 {
-    switch (gameversion)
-    {
-        case exe_doom_1_666:
-            return 106;
-        case exe_doom_1_7:
-            return 107;
-        case exe_doom_1_8:
-            return 108;
-        case exe_doom_1_9:
-        default: // All other versions are variants on v1.9:
-            return 109;
-    }
+    return 109;
 }
 
 void G_BeginRecording(void)
@@ -1979,38 +1830,9 @@ void G_BeginRecording(void)
 
     demo_p = demobuffer;
 
-    //!
-    // @category demo
-    //
-    // Record a high resolution "Doom 1.91" demo.
-    //
-
-    longtics =
-        D_NonVanillaRecord(M_ParmExists("-longtics"), "Doom 1.91 demo format");
-
-    // If not recording a longtics demo, record in low res
-    lowres_turn = !longtics;
-
-    if (longtics)
-    {
-        *demo_p++ = DOOM_191_VERSION;
-    }
-    else if (gameversion > exe_doom_1_2)
-    {
-        *demo_p++ = G_VanillaVersionCode();
-    }
-
     *demo_p++ = gameskill;
     *demo_p++ = gameepisode;
     *demo_p++ = gamemap;
-    if (longtics || gameversion > exe_doom_1_2)
-    {
-        *demo_p++ = deathmatch;
-        *demo_p++ = respawnparm;
-        *demo_p++ = fastparm;
-        *demo_p++ = nomonsters;
-        *demo_p++ = consoleplayer;
-    }
 
     for (i = 0; i < MAXPLAYERS; i++)
         *demo_p++ = playeringame[i];
@@ -2037,20 +1859,8 @@ static const char *DemoVersionDescription(int version)
 
     switch (version)
     {
-        case 104:
-            return "v1.4";
-        case 105:
-            return "v1.5";
-        case 106:
-            return "v1.6/v1.666";
-        case 107:
-            return "v1.7/v1.7a";
-        case 108:
-            return "v1.8";
         case 109:
             return "v1.9";
-        case 111:
-            return "v1.91 hack demo?";
         default:
             break;
     }
@@ -2084,36 +1894,7 @@ void G_DoPlayDemo(void)
 
     demoversion = *demo_p++;
 
-    if (demoversion >= 0 && demoversion <= 4)
-    {
-        olddemo = true;
-        demo_p--;
-    }
-
     longtics = false;
-
-    // Longtics demos use the modified format that is generated by cph's
-    // hacked "v1.91" doom exe. This is a non-vanilla extension.
-    if (D_NonVanillaPlayback(demoversion == DOOM_191_VERSION, lumpnum,
-                             "Doom 1.91 demo format"))
-    {
-        longtics = true;
-    }
-    else if (demoversion != G_VanillaVersionCode() &&
-             !(gameversion <= exe_doom_1_2 && olddemo))
-    {
-        const char *message = "Demo is from a different game version!\n"
-                              "(read %i, should be %i)\n"
-                              "\n"
-                              "*** You may need to upgrade your version "
-                              "of Doom to v1.9. ***\n"
-                              "    See: https://www.doomworld.com/classicdoom"
-                              "/info/patches.php\n"
-                              "    This appears to be %s.";
-
-        I_Error(message, demoversion, G_VanillaVersionCode(),
-                DemoVersionDescription(demoversion));
-    }
 
     skill = *demo_p++;
     episode = *demo_p++;
