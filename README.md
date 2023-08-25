@@ -1,6 +1,6 @@
-# zendoom
+# mindoom
 
-Zendoom is the [MINIX](https://en.wikipedia.org/wiki/Minix) of Doom ports. It's a hyper-minimalist fork of Chocolate Doom that aims to:
+Mindoom is the [MINIX](https://en.wikipedia.org/wiki/Minix) of Doom ports. It's a hyper-minimalist fork of Chocolate Doom that aims to:
 - Have the smallest, easiest to study version of the Doom codebase, by throwing backwards compatibility to the wind (if necessary).
 - Make exploring the core principles of the Doom engine as zen-like as possible.
 - Integrate an embedded scripting language (such as Lua or Guile) to allow experimentation with the engine in a higher-level language.
@@ -9,7 +9,7 @@ One could argue that this completely guts and kills the soul of DOOM. And you pr
 
 ## Motivation
 
-### Zen in the build system
+### Minimalism in the build system
 Build systems for C can be awfully yucky and not very Zen. Zendoom supports one build system: Meson. There aren't a dozen nested `CMakeLists.txt` and `Makefile.am` files. There is one build file, 99% of which is just listing the source files to be compiled. It's _great_. This means:
 
 - [x] Add Nix shell for Zen-like, project dependency management and an isolated development environment. _Your system package manager is not Zen._
@@ -17,14 +17,14 @@ Build systems for C can be awfully yucky and not very Zen. Zendoom supports one 
 - [x] Remove CMake build
 - [x] Remove GNU autotools build
 
-### Zen in platform support, packaging and distribution
+### Minimalism in platform support, packaging and distribution
 `zendoom` simply does not care about packaging and distribution. This means: 
 - [x] Removal of packaging support for Win32 and macOS.
 - [x] No Linux packages either. No `.rpm` or `.deb` files. 
 
 It's a project built around exploration of the codebase - build the code yourself. 
 
-### Zen in sound support and emulation
+### Minimalism in sound support and emulation
 - [x] Remove GUS emulation
 - [x] Remove PC speaker emulation
 - [x] Remove PAS 
@@ -33,7 +33,7 @@ It's a project built around exploration of the codebase - build the code yoursel
 
 All we use is the OPL emulation. And we drop the hardware support for using a real OPL chip.
 
-### Zen in features and legacy support
+### Minimalism in features and legacy support
 A vast majority of the wonderful features added to source ports are extraneous to our goal of understanding the Doom engine. To that end, an awful lot has been removed:
 
 - [x] Remove DOOM II, Strife, Heretic, and Hexen support - we're talking about _Doom_ and _Doom_ only.
@@ -43,7 +43,7 @@ A vast majority of the wonderful features added to source ports are extraneous t
 
 The only features it _adds_ are to change the default controls to utilize the `WASD` key cluster, with `E` for interaction. Because anything else would not be Zen.
 
-### Zen statistics
+### Minimalism quantified
 
 Lines of code aren't a metric of code quality, but they sure are a metric of code quantity.
 
@@ -82,7 +82,7 @@ The only dependency _you_ need is `git`, and Nix. All the dependencies that _Doo
 
 ## Compability
 
-Over the years a lot of configuration options have been added to various source ports of Doom as they add support for different things. Here is an (incomplete) table that overviews what options remain in zendoom:
+Over the years a lot of configuration options have been added to various source ports of Doom as they add support for different things. Here is an (incomplete) table that overviews what options remain in mindoom:
 
 | Configuration Value        | Removed?    |
 |----------------------------|-------------|
