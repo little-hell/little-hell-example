@@ -215,8 +215,6 @@ opl_source_dir= 'opl'
 opl_source_files = files(
     opl_source_dir / 'opl3.c',
     opl_source_dir / 'opl.c',
-    opl_source_dir / 'opl_linux.c',
-    opl_source_dir / 'opl_obsd.c',
     opl_source_dir / 'opl_queue.c',
     opl_source_dir / 'opl_sdl.c',
     opl_source_dir / 'opl_timer.c',
