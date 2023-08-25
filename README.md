@@ -37,8 +37,8 @@ All we use is the OPL emulation. And we drop the hardware support for using a re
 A vast majority of the wonderful features added to source ports are extraneous to our goal of understanding the Doom engine. To that end, an awful lot has been removed:
 
 - [x] Remove DOOM II, Strife, Heretic, and Hexen support - we're talking about _Doom_ and _Doom_ only.
-- [x] Remove emulation and handling of various DOOM 1 minor version releases - we do Doom v1.9 only. 
-- [x] No hacks. No DeHackEd, no wad-merging like DeuTex. Just the vanilla stuff.
+- [ ] Remove emulation and handling of various DOOM 1 minor version releases - we do Doom v1.9 only. 
+- [ ] No hacks. No DeHackEd, no wad-merging like DeuTex. Just the vanilla stuff.
 - [x] Remove the `setup` application. Edit the `.cfg` by hand. Minimalism, baby.
 
 The only features it _adds_ are to change the default controls to utilize the `WASD` key cluster, with `E` for interaction. Because anything else would not be Zen.
