@@ -35,7 +35,6 @@
 #define NUM_QUITMESSAGES   8
 
 extern const char *doom1_endmsg[];
-extern const char *doom2_endmsg[];
 
 
 #endif

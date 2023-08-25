@@ -714,8 +714,6 @@ static const char *GameDescription(GameMode_t mode, GameMission_t mission)
                 return "ultdoom";
             else
                 return "doom";
-        case doom2:
-            return "doom2";
         case heretic:
             return "heretic";
         case hexen:

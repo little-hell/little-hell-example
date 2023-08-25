@@ -760,30 +760,6 @@ static void ReplaceExistingVoiceDoom1(void)
     ReleaseVoice(result);
 }
 
-static void ReplaceExistingVoiceDoom2(opl_channel_data_t *channel)
-{
-    int i;
-    int result;
-    int priority;
-
-    result = 0;
-
-    priority = 0x8000;
-
-    for (i = 0; i < voice_alloced_num - 3; i++)
-    {
-        if (voice_alloced_list[i]->priority < priority
-         && voice_alloced_list[i]->channel >= channel)
-        {
-            priority = voice_alloced_list[i]->priority;
-            result = i;
-        }
-    }
-
-    ReleaseVoice(result);
-}
-
-
 static unsigned int FrequencyForVoice(opl_voice_t *voice)
 {
     genmidi_voice_t *gm_voice;
@@ -1014,27 +990,6 @@ static void KeyOnEvent(opl_track_data_t *track, midi_event_t *event)
 
             VoiceKeyOn(channel, instrument, 0, note, key, volume);
             break;
-        case opl_doom2_1_666:
-            if (voice_alloced_num == num_opl_voices)
-            {
-                ReplaceExistingVoiceDoom2(channel);
-            }
-            if (voice_alloced_num == num_opl_voices - 1 && double_voice)
-            {
-                ReplaceExistingVoiceDoom2(channel);
-            }
-
-            // Find and program a voice for this instrument.  If this
-            // is a double voice instrument, we must do this twice.
-
-            if (double_voice)
-            {
-                VoiceKeyOn(channel, instrument, 1, note, key, volume);
-            }
-
-            VoiceKeyOn(channel, instrument, 0, note, key, volume);
-            break;
-        default:
         case opl_doom_1_9:
             if (voice_free_num == 0)
             {

@@ -33,7 +33,6 @@
 
 static const iwad_t iwads[] =
 {
-    { "doom2.wad",    doom2,     commercial, "Doom II" },
     { "doom.wad",     doom,      retail,     "Doom" },
     { "doom1.wad",    doom,      shareware,  "Doom Shareware" },
     { "heretic.wad",  heretic,   retail,     "Heretic" },
@@ -303,9 +302,6 @@ static void AddSteamDirs(void)
     }
     steampath = M_StringJoin(homedir, "/.steam/root/steamapps/common", NULL);
 
-    AddIWADPath(steampath, "/Doom 2/base");
-    AddIWADPath(steampath, "/Doom 2/finaldoombase");
-    AddIWADPath(steampath, "/Master Levels of Doom/doom2");
     AddIWADPath(steampath, "/Ultimate Doom/base");
     AddIWADPath(steampath, "/Final Doom/base");
     AddIWADPath(steampath, "/DOOM 3 BFG Edition/base/wads");

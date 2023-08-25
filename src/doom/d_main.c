@@ -644,14 +644,6 @@ void D_StartTitle (void)
 
 static const char *banners[] =
 {
-    // doom2.wad
-    "                         "
-    "DOOM 2: Hell on Earth v%i.%i"
-    "                           ",
-    // doom2.wad v1.666
-    "                         "
-    "DOOM 2: Hell on Earth v%i.%i66"
-    "                          ",
     // doom1.wad
     "                            "
     "DOOM Shareware Startup v%i.%i"
@@ -668,10 +660,6 @@ static const char *banners[] =
     "                          "
     "DOOM System Startup v%i.%i66"
     "                          "
-    // doom.wad (Ultimate DOOM)
-    "                         "
-    "The Ultimate DOOM Startup v%i.%i"
-    "                        "
 };
 
 //
@@ -727,76 +715,19 @@ static char *GetGameName(const char *gamename)
     return M_StringDuplicate(gamename);
 }
 
-static void SetMissionForPackName(const char *pack_name)
-{
-    int i;
-    static const struct
-    {
-        const char *name;
-        int mission;
-    } packs[] = {
-        { "doom2",    doom2 }
-    };
-
-    for (i = 0; i < arrlen(packs); ++i)
-    {
-        if (!strcasecmp(pack_name, packs[i].name))
-        {
-            gamemission = packs[i].mission;
-            return;
-        }
-    }
-
-    printf("Valid mission packs are:\n");
-
-    for (i = 0; i < arrlen(packs); ++i)
-    {
-        printf("\t%s\n", packs[i].name);
-    }
-
-    I_Error("Unknown mission pack name: %s", pack_name);
-}
-
 //
 // Find out what version of Doom is playing.
 //
 
 void D_IdentifyVersion(void)
+// TODO: remove function entirely
 {
-    // gamemission is set up by the D_FindIWAD function.  But if 
-    // we specify '-iwad', we have to identify using 
-    // IdentifyIWADByName.  However, if the iwad does not match
-    // any known IWAD name, we may have a dilemma.  Try to 
-    // identify by its contents.
-
     if (gamemission == none)
     {
-        unsigned int i;
-
-        for (i=0; i<numlumps; ++i)
-        {
-            if (!strncasecmp(lumpinfo[i]->name, "MAP01", 8))
-            {
-                gamemission = doom2;
-                break;
-            } 
-            else if (!strncasecmp(lumpinfo[i]->name, "E1M1", 8))
-            {
-                gamemission = doom;
-                break;
-            }
-        }
-
-        if (gamemission == none)
-        {
-            // Still no idea.  I don't think this is going to work.
-
-            I_Error("Unknown or invalid IWAD file.");
-        }
+	gamemission = doom;
     }
 
     // Make sure gamemode is set up correctly
-
     if (logical_gamemission == doom)
     {
         gamemode = registered;
@@ -938,7 +869,7 @@ static void InitGameVersion(void)
     else
     {
         if (gamemode == shareware || gamemode == registered
-              || (gamemode == commercial && gamemission == doom2))
+              || (gamemode == commercial))
         {
             // original
             gameversion = exe_doom_1_9;
@@ -1013,13 +944,6 @@ static void InitGameVersion(void)
     {
         gamemode = registered;
     }
-
-    // EXEs prior to the Final Doom exes do not support Final Doom.
-
-    if (gameversion < exe_final && gamemode == commercial)
-    {
-        gamemission = doom2;
-    }
 }
 
 void PrintGameVersion(void)
@@ -1056,54 +980,6 @@ static void D_Endoom(void)
     endoom = W_CacheLumpName(DEH_String("ENDOOM"), PU_STATIC);
 
     I_Endoom(endoom);
-}
-
-boolean IsFrenchIWAD(void)
-{
-    return (gamemission == doom2 && W_CheckNumForName("M_RDTHIS") < 0
-          && W_CheckNumForName("M_EPISOD") < 0 && W_CheckNumForName("M_EPI1") < 0
-          && W_CheckNumForName("M_EPI2") < 0 && W_CheckNumForName("M_EPI3") < 0
-          && W_CheckNumForName("WIOSTF") < 0 && W_CheckNumForName("WIOBJ") >= 0);
-}
-
-// Load dehacked patches needed for certain IWADs.
-static void LoadIwadDeh(void)
-{
-    if (IsFrenchIWAD())
-    {
-        char *french_deh = NULL;
-        char *dirname;
-
-        // Look for french.deh in the same directory as the IWAD file.
-        dirname = M_DirName(iwadfile);
-        french_deh = M_StringJoin(dirname, DIR_SEPARATOR_S, "french.deh", NULL);
-        printf("French version\n");
-        free(dirname);
-
-        // If the dehacked patch isn't found, try searching the WAD
-        // search path instead.  We might find it...
-        if (!M_FileExists(french_deh))
-        {
-            free(french_deh);
-            french_deh = D_FindWADByName("french.deh");
-        }
-
-        // Still not found?
-        if (french_deh == NULL)
-        {
-            I_Error("Unable to find French Doom II dehacked file\n"
-                    "(french.deh).  The dehacked file is required in order to\n"
-                    "emulate French doom2.exe correctly.  It can be found in\n"
-                    "your nearest /idgames repository mirror at:\n\n"
-                    "   utils/exe_edit/patches/french.zip");
-        }
-
-        if (!DEH_LoadFile(french_deh))
-        {
-            I_Error("Failed to load french.deh needed for emulating French\n"
-                    "doom2.exe.");
-        }
-    }
 }
 
 static void G_CheckDemoStatusAtExit (void)
@@ -1320,19 +1196,6 @@ void D_DoomMain (void)
     if (W_CheckNumForName("DMENUPIC") >= 0)
     {
         gamevariant = bfgedition;
-    }
-
-    //!
-    // @category mod
-    //
-    // Disable automatic loading of Dehacked patches for certain
-    // IWAD files.
-    //
-    if (!M_ParmExists("-nodeh"))
-    {
-        // Some IWADs have dehacked patches that need to be loaded for
-        // them to be played properly.
-        LoadIwadDeh();
     }
 
     // Doom 3: BFG Edition includes modified versions of the classic

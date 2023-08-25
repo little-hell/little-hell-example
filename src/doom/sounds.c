@@ -31,6 +31,7 @@
 #define MUSIC(name) \
     { name, 0, NULL, NULL }
 
+//TODO: remove all non-DOOM 1 music
 musicinfo_t S_music[] =
 {
     MUSIC(NULL),
@@ -115,6 +116,7 @@ musicinfo_t S_music[] =
 
 sfxinfo_t S_sfx[] =
 {
+  //TODO: remove all non-DOOM 1 sfx 
   // S_sfx[0] needs to be a dummy for odd reasons.
   SOUND("none",   0),
   SOUND("pistol", 64),

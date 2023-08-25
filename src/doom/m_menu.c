@@ -970,22 +970,11 @@ void M_QuitResponse(int key)
 
 
 static const char *M_SelectEndMessage(void)
+// TODO: refactor out this function entirely 
 {
     const char **endmsg;
 
-    if (logical_gamemission == doom)
-    {
-        // Doom 1
-
-        endmsg = doom1_endmsg;
-    }
-    else
-    {
-        // Doom 2
-
-        endmsg = doom2_endmsg;
-    }
-
+    endmsg = doom1_endmsg;
     return endmsg[gametic % NUM_QUITMESSAGES];
 }
 

@@ -134,7 +134,7 @@ char *M_FileCaseExists(const char *path)
         filename = path_dup;
     }
 
-    // 1: lowercase filename, e.g. doom2.wad
+    // 1: lowercase filename, e.g. doom.wad
     M_ForceLowercase(filename);
 
     if (M_FileExists(path_dup))
@@ -142,7 +142,7 @@ char *M_FileCaseExists(const char *path)
         return path_dup;
     }
 
-    // 2: uppercase filename, e.g. DOOM2.WAD
+    // 2: uppercase filename, e.g. DOOM.WAD
     M_ForceUppercase(filename);
 
     if (M_FileExists(path_dup))
@@ -150,7 +150,7 @@ char *M_FileCaseExists(const char *path)
         return path_dup;
     }
 
-    // 3. uppercase basename with lowercase extension, e.g. DOOM2.wad
+    // 3. uppercase basename with lowercase extension, e.g. DOOM.wad
     ext = strrchr(path_dup, '.');
     if (ext != NULL && ext > filename)
     {
@@ -162,7 +162,7 @@ char *M_FileCaseExists(const char *path)
         }
     }
 
-    // 4. lowercase filename with uppercase first letter, e.g. Doom2.wad
+    // 4. lowercase filename with uppercase first letter, e.g. Doom.wad
     if (strlen(filename) > 1)
     {
         M_ForceLowercase(filename + 1);

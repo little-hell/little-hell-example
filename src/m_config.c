@@ -2194,7 +2194,7 @@ char *M_GetSaveGameDir(const char *iwadname)
         topdir = M_StringJoin(configdir, "savegames", NULL);
         M_MakeDirectory(topdir);
 
-        // eg. ~/.local/share/mindoom/savegames/doom2.wad/
+        // eg. ~/.local/share/mindoom/savegames/doom.wad/
 
         savegamedir = M_StringJoin(topdir, DIR_SEPARATOR_S, iwadname,
                                    DIR_SEPARATOR_S, NULL);

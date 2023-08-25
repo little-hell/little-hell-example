@@ -27,7 +27,6 @@
 typedef enum
 {
     doom,            // Doom 1
-    doom2,           // Doom 2
     heretic,         // Heretic
     hexen,           // Hexen
     strife,          // Strife
