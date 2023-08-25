@@ -1773,7 +1773,6 @@ static boolean I_OPL_InitMusic(void)
 
 const static snddevice_t music_opl_devices[] =
 {
-    SNDDEVICE_ADLIB,
     SNDDEVICE_SB,
 };
 
