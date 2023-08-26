@@ -68,24 +68,23 @@ The only features it _adds_ are to change the default controls to utilize the `W
 
 Lines of code aren't a metric of code quality, but they sure are a metric of code quantity.
 
-| Chocolate Doom     | files | blank | comment | code   | Zen Doom           | files | blank | comment | code  |
+| Chocolate Doom [(203f5da)](https://github.com/chocolate-doom/chocolate-doom/commit/203f5da3f9bfd38b5db7d9e2b501748ac550b602)    | files | blank | comment | code   | Zen Doom [(4d2877f)](https://github.com/ranguli/mindoom/commit/4d2877face48a5caad45ee60d20e69e13ef01f67) | files | blank | comment | code  |
 |--------------------|-------|-------|---------|--------|--------------------|-------|-------|---------|-------|
-| C                  | 329   | 37986 | 40769   | 198641 | C                  | 165   | 17626 | 13785   | 66092 |
-| C/C++ Header       | 223   | 5647  | 7973    | 24521  | C/C++ Header       | 142   | 2942  | 4702    | 9482  |
-| Markdown           | 13    | 499   | 9       | 2485   | Markdown           | 4     | 162   | 0       | 733   |
-| Meson              |       |       |         |        | Meson              | 1     | 14    | 8       | 253   |
+| C                  | 329   | 37986 | 40769   | 198641 | C                  | 147   | 15445 | 12312   | 58477 |
+| C/C++ Header       | 223   | 5647  | 7973    | 24521  | C/C++ Header       | 136   | 2834  | 4562    | 9250  |
+| Meson              |       |       |         |        | Meson              | 1     | 13    | 7       | 227   |
 | make               | 19    | 258   | 14      | 1072   | make               |       |       |         |       |
 | CMake              | 16    | 98    | 258     | 858    | CMake              | 1     | 1     | 0       | 76    |
 | Objective-C        | 5     | 303   | 196     | 789    | Objective-C        |       |       |         |       |
 | Python             | 5     | 276   | 228     | 709    | Python             | 1     | 15    | 32      | 57    |
-| Nix                |       |       |         |        | Nix                | 1     | 0     | 0       | 19    |
+| Nix                |       |       |         |        | Nix                | 1     | 0     | 0       | 18    |
 | XML                | 2     | 3     | 2       | 614    | XML                |       |       |         |       |
 | YAML               | 4     | 28    | 3       | 296    | YAML               |       |       |         |       |
 | m4                 | 1     | 40    | 4       | 246    | m4                 |       |       |         |       |
 | Bourne Again Shell | 4     | 3     | 3       | 32     | Bourne Again Shell | 1     | 0     | 0       | 6     |
 | Dockerfile         | 1     | 11    | 8       | 20     | Dockerfile         |       |       |         |       |
 | TNSDL              | 1     | 1     | 0       | 11     | TNSDL              |       |       |         |       |
-| Sum                | 626   | 45186 | 49487   | 230396 | Sum                | 317   | 20761 | 18528   | 76885 |
+| Sum                | 626   | 45186 | 49487   | 230396 | Sum                | 307   | 18527 | 16914   | 70267 |
 
 ## Development
 
@@ -150,7 +149,7 @@ Don't.
    - [ ] Remove DeHackEd
    - [ ] Remove WAD merging (a la DeuTex)
    - [ ] Remove `textscreen` and endoom.
-- v0.0.4:
+- [v0.0.4](https://github.com/ranguli/mindoom/releases/tag/v0.0.4):
    - [x] Remove all references to non-DOOM v1.9 in the code.
 - [v0.0.3](https://github.com/ranguli/mindoom/releases/tag/v0.0.3):
    - [x] Rebrand/re-reference everything internally from Chocolate Doom to Mindoom.
