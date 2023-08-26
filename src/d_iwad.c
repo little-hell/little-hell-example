@@ -32,12 +32,7 @@
 #include "z_zone.h"
 
 static const iwad_t iwads[] = {
-    {"doom.wad", doom, retail, "Doom"},
-    {"doom1.wad", doom, shareware, "Doom Shareware"},
-    {"heretic.wad", heretic, retail, "Heretic"},
-    {"heretic1.wad", heretic, shareware, "Heretic Shareware"},
-    {"hexen.wad", hexen, commercial, "Hexen"},
-    {"strife1.wad", strife, commercial, "Strife"},
+    {"doom.wad", doom, retail, "Doom"}
 };
 
 boolean D_IsIWADName(const char *name)
@@ -284,34 +279,6 @@ static void AddXdgDirs(void)
     AddIWADPath(env, "/games/doom3bfg/base/wads");
 }
 
-#ifndef __MACOSX__
-// Steam on Linux allows installing some select Windows games,
-// including the classic Doom series (running DOSBox via Wine).  We
-// could parse *.vdf files to more accurately detect installation
-// locations, but the defaults are likely to be good enough for just
-// about everyone.
-static void AddSteamDirs(void)
-{
-    const char *homedir;
-    char *steampath;
-
-    homedir = getenv("HOME");
-    if (homedir == NULL)
-    {
-        homedir = "/";
-    }
-    steampath = M_StringJoin(homedir, "/.steam/root/steamapps/common", NULL);
-
-    AddIWADPath(steampath, "/Ultimate Doom/base");
-    AddIWADPath(steampath, "/Final Doom/base");
-    AddIWADPath(steampath, "/DOOM 3 BFG Edition/base/wads");
-    AddIWADPath(steampath, "/Heretic Shadow of the Serpent Riders/base");
-    AddIWADPath(steampath, "/Hexen/base");
-    AddIWADPath(steampath, "/Hexen Deathkings of the Dark Citadel/base");
-    AddIWADPath(steampath, "/Strife");
-    free(steampath);
-}
-#endif // __MACOSX__
 #endif // !_WIN32
 
 //
@@ -349,9 +316,6 @@ static void BuildIWADDirList(void)
     }
 
     AddXdgDirs();
-#ifndef __MACOSX__
-    AddSteamDirs();
-#endif
 
     // Don't run this function again.
 

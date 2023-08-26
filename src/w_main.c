@@ -87,35 +87,22 @@ void W_AutoLoadWADs(const char *path)
     I_EndGlob(glob);
 }
 
-// Lump names that are unique to particular game types. This lets us check
-// the user is not trying to play with the wrong executable, eg.
-// chocolate-doom -iwad hexen.wad.
-static const struct
-{
-    GameMission_t mission;
-    const char *lumpname;
-} unique_lumps[] = {
-    {doom, "POSSA1"},
-    {heretic, "IMPXA1"},
-    {hexen, "ETTNA1"},
-    {strife, "AGRDA1"},
-};
+    
 
 void W_CheckCorrectIWAD(GameMission_t mission)
 {
-    int i;
+    // A lump name that is unique to a particular game type (DOOM). 
+    // POSSA1 is the first frame of a zombie trooper.
+    // If we don't see this in an IWAD, it is probably the wrong
+    // type.
+    // i.e mindoom -iwad hexen.wad
+    const char* unique_lump = "POSSA1";     
+
     lumpindex_t lumpnum;
+    lumpnum = W_CheckNumForName(unique_lump);
 
-    for (i = 0; i < arrlen(unique_lumps); ++i)
+    if (lumpnum == -1)
     {
-        if (mission != unique_lumps[i].mission)
-        {
-            lumpnum = W_CheckNumForName(unique_lumps[i].lumpname);
-
-            if (lumpnum >= 0)
-            {
-                I_Error("\nYou are trying to use an incompatible IWAD file.");
-            }
-        }
+        I_Error("\nYou are trying to use an incompatible IWAD file.");
     }
 }

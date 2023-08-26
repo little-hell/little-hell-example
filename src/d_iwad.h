@@ -21,10 +21,8 @@
 
 #include "d_mode.h"
 
+// TODO: now that there's only one option, we don't need this
 #define IWAD_MASK_DOOM    ((1 << doom))
-#define IWAD_MASK_HERETIC (1 << heretic)
-#define IWAD_MASK_HEXEN   (1 << hexen)
-#define IWAD_MASK_STRIFE  (1 << strife)
 
 typedef struct
 {

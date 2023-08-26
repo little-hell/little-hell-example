@@ -189,46 +189,6 @@ static default_t doom_defaults_list[] = {
     CONFIG_VARIABLE_KEY(key_straferight),
 
     //!
-    // @game heretic hexen
-    //
-    // Keyboard key to look up.
-    //
-
-    CONFIG_VARIABLE_KEY(key_lookup),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to look down.
-    //
-
-    CONFIG_VARIABLE_KEY(key_lookdown),
-
-    //!
-    // @game heretic hexen
-    //
-    // Keyboard key to center the view.
-    //
-
-    CONFIG_VARIABLE_KEY(key_lookcenter),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to look up.
-    //
-
-    CONFIG_VARIABLE_KEY(key_lookUp),
-
-    //!
-    // @game strife
-    //
-    // Keyboard key to look down.
-    //
-
-    CONFIG_VARIABLE_KEY(key_lookDown),
-
-    //!
     // Keyboard key to fire the currently selected weapon.
     //
 
@@ -374,32 +334,6 @@ static default_t doom_defaults_list[] = {
     // a value in the range 2-9 enables the "normal" digital sound
     // effects.
     //
-
-    CONFIG_VARIABLE_INT(snd_sfxdevice),
-
-    //!
-    // SoundBlaster I/O port. Unused.
-    //
-
-    CONFIG_VARIABLE_INT(snd_sbport),
-
-    //!
-    // SoundBlaster IRQ.  Unused.
-    //
-
-    CONFIG_VARIABLE_INT(snd_sbirq),
-
-    //!
-    // SoundBlaster DMA channel.  Unused.
-    //
-
-    CONFIG_VARIABLE_INT(snd_sbdma),
-
-    //!
-    // Output port to use for OPL MIDI playback.  Unused.
-    //
-
-    CONFIG_VARIABLE_INT(snd_mport),
 
     //!
     // Gamma correction level.  A value of zero disables gamma

@@ -29,7 +29,6 @@ typedef enum
     doom,    // Doom 1
     heretic, // Heretic
     hexen,   // Hexen
-    strife,  // Strife
     none
 } GameMission_t;
 

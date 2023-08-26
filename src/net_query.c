@@ -703,23 +703,11 @@ static void formatted_printf(int wide, const char *s, ...)
 
 static const char *GameDescription(GameMode_t mode, GameMission_t mission)
 {
+    // Because we only support the registered sub-type of DOOM 1 only, this will always be "regdoom"
     switch (mission)
     {
         case doom:
-            if (mode == shareware)
-                return "swdoom";
-            else if (mode == registered)
                 return "regdoom";
-            else if (mode == retail)
-                return "ultdoom";
-            else
-                return "doom";
-        case heretic:
-            return "heretic";
-        case hexen:
-            return "hexen";
-        case strife:
-            return "strife";
         default:
             return "?";
     }
