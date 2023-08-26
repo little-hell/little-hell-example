@@ -142,15 +142,16 @@ Then your build steps are exactly the same as the steps above, minus the `nix` c
 Don't.
 
 ## Release Roadmap
-- v0.0.5: The refactor, comment, and log release
+- v0.0.6: The refactor, comment, and log release
    - [ ] Start doing static analysis and get to cleaning. This will be a huge undertaking, likely spanning multiple releases.
    - [ ] Add comments and documentation to whatever we refactor.
    - [ ] Add debug logging to whatever we refactor.
-- v0.0.4:
-   - [ ] Remove all references to non-DOOM v1.9 in the code.
+- v0.0.5:
    - [ ] Remove DeHackEd
    - [ ] Remove WAD merging (a la DeuTex)
    - [ ] Remove `textscreen` and endoom.
+- v0.0.4:
+   - [x] Remove all references to non-DOOM v1.9 in the code.
 - [v0.0.3](https://github.com/ranguli/mindoom/releases/tag/v0.0.3):
    - [x] Rebrand/re-reference everything internally from Chocolate Doom to Mindoom.
    - [x] Remove Windows-specific code

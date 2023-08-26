@@ -1,5 +1,5 @@
 project('mindoom', 'c',
-       default_options: 'default_library=static')
+       default_options: ['default_library=static', 'buildtype=debugoptimized'])
 add_project_arguments('-DDISABLE_SDL_MIXER', language: 'c')
 
 sdl2 = dependency('SDL2')

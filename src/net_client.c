@@ -165,10 +165,6 @@ static int last_latency;
 sha1_digest_t net_local_wad_sha1sum;
 sha1_digest_t net_local_deh_sha1sum;
 
-// Are we playing with the freedoom IWAD?
-
-unsigned int net_local_is_freedoom;
-
 #define NET_CL_ExpandTicNum(b) NET_ExpandTicNum(recvwindow_start, (b))
 
 // Called when we become disconnected from the server
@@ -1070,7 +1066,6 @@ boolean NET_CL_Connect(net_addr_t *addr, net_connect_data_t *data)
 
     memcpy(net_local_wad_sha1sum, data->wad_sha1sum, sizeof(sha1_digest_t));
     memcpy(net_local_deh_sha1sum, data->deh_sha1sum, sizeof(sha1_digest_t));
-    net_local_is_freedoom = data->is_freedoom;
 
     // create a new network I/O context and add just the necessary module
     client_context = NET_NewContext();

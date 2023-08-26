@@ -264,16 +264,6 @@ static void DEH_ParseComment(char *comment)
     {
         deh_allow_long_cheats = true;
     }
-
-    // Allow magic comments to allow parsing [STRINGS] section
-    // that are usually only found in BEX format files. This allows
-    // for substitution of map and episode names when loading
-    // Freedoom/FreeDM IWADs.
-
-    if (strstr(comment, "*allow-extended-strings*") != NULL)
-    {
-        deh_allow_extended_strings = true;
-    }
 }
 
 // Parses a dehacked file by reading from the context
