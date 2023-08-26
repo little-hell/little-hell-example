@@ -30,10 +30,7 @@ static struct
     int episode;
     int map;
 } valid_modes[] = {
-    {doom, shareware, 1, 9},     {doom, registered, 3, 9},
-    {doom, retail, 4, 9},        {heretic, shareware, 1, 9},
-    {heretic, registered, 3, 9}, {heretic, retail, 5, 9},
-    {hexen, commercial, 1, 60},  {strife, commercial, 1, 34},
+    {doom, registered, 3, 9}
 };
 
 // Check that a gamemode+gamemission received over the network is valid.
@@ -78,14 +75,8 @@ const char *D_GameModeString(GameMode_t mode)
 {
     switch (mode)
     {
-        case shareware:
-            return "shareware";
         case registered:
             return "registered";
-        case commercial:
-            return "commercial";
-        case retail:
-            return "retail";
         case indetermined:
         default:
             return "unknown";
