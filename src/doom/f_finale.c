@@ -29,8 +29,6 @@
 #include "w_wad.h"
 #include "s_sound.h"
 
-#include "deh_str.h"
-
 // Data.
 #include "d_main.h"
 #include "dstrings.h"

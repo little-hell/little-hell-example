@@ -20,28 +20,5 @@
 #ifndef DEH_MISC_H
 #define DEH_MISC_H
 
-extern const uint8_t INITIAL_HEALTH;
-extern const uint8_t INITIAL_BULLETS;
-
-extern const uint8_t MAX_HEALTH;
-extern const uint8_t MAX_ARMOR;
-extern const uint8_t GREEN_ARMOR_CLASS;
-extern const uint8_t BLUE_ARMOR_CLASS;
-extern const uint8_t MAX_SOULSPHERE;
-
-extern const uint8_t SOULSPHERE_HEALTH;
-extern const uint8_t MEGASPHERE_HEALTH;
-extern const uint8_t GOD_MODE_HEALTH;
-
-extern const uint8_t IDFA_ARMOR;
-extern const uint8_t IDFA_ARMOR_CLASS;
-
-extern const uint8_t IDKFA_ARMOR;
-extern const uint8_t IDKFA_ARMOR_CLASS;
-
-extern const uint8_t BFG_CELLS_PER_SHOT;
-
-extern const uint8_t SPECIES_INFIGHTING;
-
 #endif /* #ifndef DEH_MISC_H */
 

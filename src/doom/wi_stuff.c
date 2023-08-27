@@ -36,8 +36,6 @@
 
 #include "doomstat.h"
 
-#include "deh_str.h"
-
 // Data.
 #include "sounds.h"
 

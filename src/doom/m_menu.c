@@ -28,8 +28,6 @@
 
 #include "d_main.h"
 
-#include "deh_str.h"
-
 #include "i_input.h"
 #include "i_swap.h"
 #include "i_system.h"

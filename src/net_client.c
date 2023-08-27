@@ -21,7 +21,6 @@
 
 #include "config.h"
 #include "doomtype.h"
-#include "deh_str.h"
 #include "d_loop.h"
 #include "i_system.h"
 #include "i_timer.h"

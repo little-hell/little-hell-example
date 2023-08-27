@@ -22,8 +22,6 @@
 #include "doomdef.h"
 #include "doomkeys.h"
 
-#include "deh_str.h"
-
 #include "z_zone.h"
 
 #include "i_input.h"

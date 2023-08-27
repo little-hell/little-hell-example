@@ -44,6 +44,29 @@
 // The maximum number of players, multiplayer/networking.
 #define MAXPLAYERS 4
 
+extern const uint8_t INITIAL_HEALTH;
+extern const uint8_t INITIAL_BULLETS;
+
+extern const uint8_t MAX_HEALTH;
+extern const uint8_t MAX_ARMOR;
+extern const uint8_t GREEN_ARMOR_CLASS;
+extern const uint8_t BLUE_ARMOR_CLASS;
+extern const uint8_t MAX_SOULSPHERE;
+
+extern const uint8_t SOULSPHERE_HEALTH;
+extern const uint8_t MEGASPHERE_HEALTH;
+extern const uint8_t GOD_MODE_HEALTH;
+
+extern const uint8_t IDFA_ARMOR;
+extern const uint8_t IDFA_ARMOR_CLASS;
+
+extern const uint8_t IDKFA_ARMOR;
+extern const uint8_t IDKFA_ARMOR_CLASS;
+
+extern const uint8_t BFG_CELLS_PER_SHOT;
+
+extern const uint8_t SPECIES_INFIGHTING;
+
 // The current state of the game: whether we are
 // playing, gazing at the intermission screen,
 // the game final animation, or a demo. 
@@ -164,5 +187,7 @@ typedef enum
     IRONTICS	= (60*TICRATE)
     
 } powerduration_t;
+
+
 
 #endif          // __DOOMDEF__
