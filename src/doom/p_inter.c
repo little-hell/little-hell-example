@@ -22,7 +22,6 @@
 #include "dstrings.h"
 #include "sounds.h"
 
-#include "deh_misc.h"
 #include "doomstat.h"
 
 #include "m_random.h"

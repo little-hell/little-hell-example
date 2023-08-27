@@ -24,8 +24,6 @@
 #include "doomkeys.h"
 #include "doomstat.h"
 
-#include "deh_misc.h"
-
 #include "z_zone.h"
 #include "f_finale.h"
 #include "m_argv.h"
@@ -1826,35 +1824,6 @@ void G_DeferedPlayDemo(const char *name)
     gameaction = ga_playdemo;
 }
 
-// Generate a string describing a demo version
-
-static const char *DemoVersionDescription(int version)
-{
-    static char resultbuf[16];
-
-    switch (version)
-    {
-        case 109:
-            return "v1.9";
-        default:
-            break;
-    }
-
-    // Unknown version.  Perhaps this is a pre-v1.4 IWAD?  If the version
-    // byte is in the range 0-4 then it can be a v1.0-v1.2 demo.
-
-    if (version >= 0 && version <= 4)
-    {
-        return "v1.0/v1.1/v1.2";
-    }
-    else
-    {
-        M_snprintf(resultbuf, sizeof(resultbuf), "%i.%i (unknown)",
-                   version / 100, version % 100);
-        return resultbuf;
-    }
-}
-
 void G_DoPlayDemo(void)
 {
     skill_t skill;
@@ -1869,11 +1838,18 @@ void G_DoPlayDemo(void)
 
     demoversion = *demo_p++;
 
+    if (demoversion >= 0 && demoversion <= 4)
+    {
+        olddemo = true;
+        demo_p--;
+    }
+
     longtics = false;
 
     skill = *demo_p++;
     episode = *demo_p++;
     map = *demo_p++;
+
     if (!olddemo)
     {
         deathmatch = *demo_p++;

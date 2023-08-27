@@ -92,7 +92,6 @@ game_source_files = files(
     src_dir / 'z_zone.c',
 
     src_dir / doom_source_dir / 'am_map.c',
-    src_dir / doom_source_dir / 'deh_misc.c',
     src_dir / doom_source_dir / 'd_items.c',
     src_dir / doom_source_dir / 'd_main.c',
     src_dir / doom_source_dir / 'd_net.c',

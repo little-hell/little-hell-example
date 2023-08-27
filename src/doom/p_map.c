@@ -20,8 +20,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "deh_misc.h"
-
 #include "m_bbox.h"
 #include "m_random.h"
 #include "i_system.h"

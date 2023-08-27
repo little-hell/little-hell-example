@@ -258,7 +258,7 @@ static void CloseWindow(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(window))
 
 static void CheckSHA1Sums(void)
 {
-    boolean correct_wad, correct_deh;
+    boolean correct_wad;
     txt_window_t *window;
     txt_window_action_t *cont_button;
 
