@@ -48,8 +48,6 @@
 
 const char *configdir;
 
-static char *autoload_path = "";
-
 // Default filenames for configuration files.
 
 static const char *default_main_config;
@@ -632,23 +630,6 @@ static default_t extra_defaults_list[] = {
     // possible without clipping occurring.
 
     CONFIG_VARIABLE_FLOAT(libsamplerate_scale),
-
-    //!
-    // Full path to a directory in which WAD files and dehacked patches
-    // can be placed to be automatically loaded on startup. A subdirectory
-    // of this directory matching the IWAD name is checked to find the
-    // files to load.
-
-    CONFIG_VARIABLE_STRING(autoload_path),
-
-    //!
-    // Full path to a directory containing configuration files for
-    // substitute music packs. These packs contain high quality renderings
-    // of game music to be played instead of using the system's built-in
-    // MIDI playback.
-    //
-
-    CONFIG_VARIABLE_STRING(music_pack_path),
 
     //!
     // @game doom strife
@@ -1915,9 +1896,6 @@ void M_LoadDefaults(void)
 {
     int i;
 
-    // This variable is a special snowflake for no good reason.
-    M_BindStringVariable("autoload_path", &autoload_path);
-
     // check for a custom default file
 
     //!
@@ -2201,35 +2179,4 @@ char *M_GetSaveGameDir()
 
     free(topdir);
     return savegamedir;
-}
-
-//
-// Calculate the path to the directory for autoloaded WADs/DEHs.
-// Creates the directory as necessary.
-//
-char *M_GetAutoloadDir(const char *iwadname)
-{
-    char *result;
-
-    if (autoload_path == NULL || strlen(autoload_path) == 0)
-    {
-        char *prefdir;
-        prefdir = SDL_GetPrefPath("", PACKAGE_TARNAME);
-        if (prefdir == NULL)
-        {
-            printf("M_GetAutoloadDir: SDL_GetPrefPath failed\n");
-            return NULL;
-        }
-        autoload_path = M_StringJoin(prefdir, "autoload", NULL);
-        SDL_free(prefdir);
-    }
-
-    M_MakeDirectory(autoload_path);
-
-    result = M_StringJoin(autoload_path, DIR_SEPARATOR_S, iwadname, NULL);
-    M_MakeDirectory(result);
-
-    // TODO: Add README file
-
-    return result;
 }
