@@ -21,7 +21,6 @@
 #include <ctype.h>
 #include <string.h>
 
-#include "deh_str.h"
 #include "doomkeys.h"
 #include "d_iwad.h"
 #include "i_system.h"
@@ -135,7 +134,7 @@ static char *SearchDirectoryForIWAD(const char *dir, int mask,
             continue;
         }
 
-        filename = CheckDirectoryHasIWAD(dir, DEH_String(iwads[i].name));
+        filename = CheckDirectoryHasIWAD(dir, iwads[i].name);
 
         if (filename != NULL)
         {

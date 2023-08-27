@@ -42,9 +42,7 @@ extern boolean net_waiting_for_launch;
 extern char *net_player_name;
 
 extern sha1_digest_t net_server_wad_sha1sum;
-extern sha1_digest_t net_server_deh_sha1sum;
 extern sha1_digest_t net_local_wad_sha1sum;
-extern sha1_digest_t net_local_deh_sha1sum;
 
 extern boolean drone;
 
