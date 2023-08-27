@@ -315,46 +315,6 @@ static boolean ValidArgumentReplacement(format_arg_t original,
     return original == replacement;
 }
 
-// Return true if the specified string contains no format arguments.
-
-static boolean ValidFormatReplacement(const char *original, const char *replacement)
-{
-    const char *rover1;
-    const char *rover2;
-    int argtype1, argtype2;
-
-    // Check each argument in turn and compare types.
-
-    rover1 = original; rover2 = replacement;
-
-    for (;;)
-    {
-        argtype1 = NextFormatArgument(&rover1);
-        argtype2 = NextFormatArgument(&rover2);
-
-        if (argtype2 == FORMAT_ARG_INVALID)
-        {
-            // No more arguments left to read from the replacement string.
-
-            break;
-        }
-        else if (argtype1 == FORMAT_ARG_INVALID)
-        {
-            // Replacement string has more arguments than the original.
-
-            return false;
-        }
-        else if (!ValidArgumentReplacement(argtype1, argtype2))
-        {
-            // Not a valid replacement argument.
-
-            return false;
-        }
-    }
-
-    return true;
-}
-
 // Get replacement format string, checking arguments.
 
 static const char *FormatStringReplacement(const char *s)

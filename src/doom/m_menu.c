@@ -636,7 +636,7 @@ void M_QuickSave(void)
         quickSaveSlot = -2; // means to pick a slot now
         return;
     }
-    DEH_snprintf(tempstring, sizeof(tempstring), QSPROMPT,
+    M_snprintf(tempstring, sizeof(tempstring), QSPROMPT,
                  savegamestrings[quickSaveSlot]);
     M_StartMessage(tempstring, M_QuickSaveResponse, true);
 }
@@ -668,7 +668,7 @@ void M_QuickLoad(void)
         M_StartMessage(QSAVESPOT, NULL, false);
         return;
     }
-    DEH_snprintf(tempstring, sizeof(tempstring), QLPROMPT,
+    M_snprintf(tempstring, sizeof(tempstring), QLPROMPT,
                  savegamestrings[quickSaveSlot]);
     M_StartMessage(tempstring, M_QuickLoadResponse, true);
 }
@@ -974,7 +974,7 @@ static const char *M_SelectEndMessage(void)
 
 void M_QuitDOOM(int choice)
 {
-    DEH_snprintf(endstring, sizeof(endstring), "%s\n\n" DOSY,
+    M_snprintf(endstring, sizeof(endstring), "%s\n\n" DOSY,
                  M_SelectEndMessage());
 
     M_StartMessage(endstring, M_QuitResponse, true);

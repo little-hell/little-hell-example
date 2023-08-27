@@ -39,6 +39,8 @@
 #include "doomstat.h"
 #include "r_state.h"
 
+#include "m_misc.h"
+
 typedef enum
 {
     F_STAGE_TEXT,
@@ -633,7 +635,7 @@ void F_BunnyScroll(void)
         laststage = stage;
     }
 
-    DEH_snprintf(name, 10, "END%i", stage);
+    M_snprintf(name, 10, "END%i", stage);
     V_DrawPatch((SCREENWIDTH - 13 * 8) / 2, (SCREENHEIGHT - 8 * 8) / 2,
                 W_CacheLumpName(name, PU_CACHE));
 }

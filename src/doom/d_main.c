@@ -27,6 +27,7 @@
 
 #include "config.h"
 #include "doomdef.h"
+#include "doom_icon.h"
 #include "doomstat.h"
 
 #include "dstrings.h"
@@ -288,8 +289,6 @@ boolean D_Display(void)
 
 static void EnableLoadingDisk(void)
 {
-    const char *disk_lump_name;
-
     if (show_diskicon)
     {
         V_EnableLoadingDisk("STDISK", SCREENWIDTH - LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
@@ -538,30 +537,6 @@ void D_StartTitle(void)
     demosequence = -1;
     D_AdvanceDemo();
 }
-
-// Strings for dehacked replacements of the startup banner
-//
-// These are from the original source: some of them are perhaps
-// not used in any dehacked patches
-
-static const char *banners[] = {
-    // doom1.wad
-    "                            "
-    "DOOM Shareware Startup v%i.%i"
-    "                           ",
-    // doom.wad
-    "                            "
-    "DOOM Registered Startup v%i.%i"
-    "                           ",
-    // Registered DOOM uses this
-    "                          "
-    "DOOM System Startup v%i.%i"
-    "                          ",
-    // Doom v1.666
-    "                          "
-    "DOOM System Startup v%i.%i66"
-    "                          "};
-
 //
 // Get game name: if the startup banner has been replaced, use that.
 // Otherwise, use the name given
@@ -603,45 +578,6 @@ static boolean D_AddFile(char *filename)
 
     return handle != NULL;
 }
-
-// Copyright message banners
-// Some dehacked mods replace these.  These are only displayed if they are
-// replaced by dehacked.
-
-static const char *copyright_banners[] = {
-    "=========================================================================="
-    "=\n"
-    "ATTENTION:  This version of DOOM has been modified.  If you would like "
-    "to\n"
-    "get a copy of the original game, call 1-800-IDGAMES or see the readme "
-    "file.\n"
-    "        You will not receive technical support for modified games.\n"
-    "                      press enter to continue\n"
-    "=========================================================================="
-    "=\n",
-
-    "=========================================================================="
-    "=\n"
-    "                 Commercial product - do not distribute!\n"
-    "         Please report software piracy to the SPA: 1-800-388-PIR8\n"
-    "=========================================================================="
-    "=\n",
-
-    "=========================================================================="
-    "=\n"
-    "                                Shareware!\n"
-    "=========================================================================="
-    "=\n"};
-
-static struct
-{
-    const char *description;
-    const char *cmdline;
-    GameVersion_t version;
-} gameversions[] = {
-    {"Doom 1.9", "1.9", exe_doom_1_9},
-    {NULL, NULL, 0},
-};
 
 // Initialize the game version
 
@@ -687,7 +623,6 @@ void D_DoomMain(void)
     int p;
     char file[256];
     char demolumpname[9];
-    int numiwadlumps;
 
     I_AtExit(D_Endoom, false);
 
@@ -695,7 +630,7 @@ void D_DoomMain(void)
 
     I_PrintBanner(PACKAGE_STRING);
 
-    DEH_printf("Z_Init: Init zone memory allocation daemon. \n");
+    printf("Z_Init: Init zone memory allocation daemon. \n");
     Z_Init();
 
     //!
@@ -814,7 +749,7 @@ void D_DoomMain(void)
         deathmatch = 2;
 
     if (devparm)
-        DEH_printf(D_DEVSTR);
+        printf(D_DEVSTR);
 
 
     // Auto-detect the configuration dir.
@@ -839,7 +774,7 @@ void D_DoomMain(void)
             scale = 10;
         if (scale > 400)
             scale = 400;
-        DEH_printf("turbo scale: %i%%\n", scale);
+        printf("turbo scale: %i%%\n", scale);
         forwardmove[0] = forwardmove[0] * scale / 100;
         forwardmove[1] = forwardmove[1] * scale / 100;
         sidemove[0] = sidemove[0] * scale / 100;
@@ -847,11 +782,11 @@ void D_DoomMain(void)
     }
 
     // init subsystems
-    DEH_printf("V_Init: allocate screens.\n");
+    printf("V_Init: allocate screens.\n");
     V_Init();
 
     // Load configuration files before initialising other subsystems.
-    DEH_printf("M_LoadDefaults: Load system defaults.\n");
+    printf("M_LoadDefaults: Load system defaults.\n");
     M_SetConfigFilenames("default.cfg", PROGRAM_PREFIX "doom.cfg");
     D_BindVariables();
     M_LoadDefaults();
@@ -872,9 +807,8 @@ void D_DoomMain(void)
 
     modifiedgame = false;
 
-    DEH_printf("W_Init: Init WADfiles.\n");
+    printf("W_Init: Init WADfiles.\n");
     D_AddFile(iwadfile);
-    numiwadlumps = numlumps;
 
     W_CheckCorrectIWAD(doom);
 
@@ -925,7 +859,7 @@ void D_DoomMain(void)
         }
         else
         {
-            DEH_snprintf(file, sizeof(file), "%s.lmp", myargv[p + 1]);
+            M_snprintf(file, sizeof(file), "%s.lmp", myargv[p + 1]);
         }
 
         free(uc_filename);
@@ -989,7 +923,7 @@ void D_DoomMain(void)
 
     I_PrintStartupBanner(gamedescription);
 
-    DEH_printf("I_Init: Setting up machine state.\n");
+    printf("I_Init: Setting up machine state.\n");
     I_CheckIsScreensaver();
     I_InitTimer();
     I_InitJoystick();
@@ -1136,31 +1070,31 @@ void D_DoomMain(void)
         startloadgame = -1;
     }
 
-    DEH_printf("M_Init: Init miscellaneous info.\n");
+    printf("M_Init: Init miscellaneous info.\n");
     M_Init();
 
-    DEH_printf("R_Init: Init DOOM refresh daemon - ");
+    printf("R_Init: Init DOOM refresh daemon - ");
     R_Init();
 
-    DEH_printf("\nP_Init: Init Playloop state.\n");
+    printf("\nP_Init: Init Playloop state.\n");
     P_Init();
 
-    DEH_printf("S_Init: Setting up sound.\n");
+    printf("S_Init: Setting up sound.\n");
     S_Init(sfxVolume * 8, musicVolume * 8);
 
-    DEH_printf("D_CheckNetGame: Checking network game status.\n");
+    printf("D_CheckNetGame: Checking network game status.\n");
     D_CheckNetGame();
 
-    DEH_printf("HU_Init: Setting up heads up display.\n");
+    printf("HU_Init: Setting up heads up display.\n");
     HU_Init();
 
-    DEH_printf("ST_Init: Init status bar.\n");
+    printf("ST_Init: Init status bar.\n");
     ST_Init();
 
     if (M_CheckParmWithArgs("-statdump", 1))
     {
         I_AtExit(StatDump, true);
-        DEH_printf("External statistics registered.\n");
+        printf("External statistics registered.\n");
     }
 
     //!
