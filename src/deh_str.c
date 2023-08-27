@@ -82,18 +82,9 @@ static deh_substitution_t *SubstitutionForString(const char *s)
 
 const char *DEH_String(const char *s)
 {
-    deh_substitution_t *subst;
-
-    subst = SubstitutionForString(s);
-
-    if (subst != NULL)
-    {
-        return subst->to_text;
-    }
-    else
-    {
-        return s;
-    }
+    // No-op. We removed DeHackEd support.
+    // TODO: Remove all DEH_String() calls and pass the string directly.
+    return s;
 }
 
 static void InitHashTable(void)
@@ -368,19 +359,8 @@ static boolean ValidFormatReplacement(const char *original, const char *replacem
 
 static const char *FormatStringReplacement(const char *s)
 {
-    const char *repl;
-
-    repl = DEH_String(s);
-
-    if (!ValidFormatReplacement(s, repl))
-    {
-        printf("WARNING: Unsafe dehacked replacement provided for "
-               "printf format string: %s\n", s);
-
-        return s;
-    }
-
-    return repl;
+    // No-op. We removed DeHackEd support.
+    return s;
 }
 
 // printf(), performing a replacement on the format string.

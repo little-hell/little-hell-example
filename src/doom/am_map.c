@@ -19,8 +19,6 @@
 
 #include <stdio.h>
 
-#include "deh_main.h"
-
 #include "z_zone.h"
 #include "doomkeys.h"
 #include "doomdef.h"
@@ -689,29 +687,29 @@ boolean AM_Responder(event_t *ev)
             followplayer = !followplayer;
             f_oldloc.x = INT_MAX;
             if (followplayer)
-                plr->message = DEH_String(AMSTR_FOLLOWON);
+                plr->message = AMSTR_FOLLOWON;
             else
-                plr->message = DEH_String(AMSTR_FOLLOWOFF);
+                plr->message = AMSTR_FOLLOWOFF;
         }
         else if (key == key_map_grid)
         {
             grid = !grid;
             if (grid)
-                plr->message = DEH_String(AMSTR_GRIDON);
+                plr->message = AMSTR_GRIDON;
             else
-                plr->message = DEH_String(AMSTR_GRIDOFF);
+                plr->message = AMSTR_GRIDOFF;
         }
         else if (key == key_map_mark)
         {
             M_snprintf(buffer, sizeof(buffer), "%s %d",
-                       DEH_String(AMSTR_MARKEDSPOT), markpointnum);
+                       AMSTR_MARKEDSPOT, markpointnum);
             plr->message = buffer;
             AM_addMark();
         }
         else if (key == key_map_clearmark)
         {
             AM_clearMarks();
-            plr->message = DEH_String(AMSTR_MARKSCLEARED);
+            plr->message = AMSTR_MARKSCLEARED;
         }
         else
         {

@@ -107,14 +107,9 @@ typedef struct
 
     boolean drone;
 
-    // SHA1 hash sums of the client's WAD directory and dehacked data
+    // SHA1 hash sums of the client's WAD directory
 
     sha1_digest_t wad_sha1sum;
-    sha1_digest_t deh_sha1sum;
-
-    // Player class (for Hexen)
-
-    int player_class;
 
 } net_client_t;
 
@@ -409,9 +404,6 @@ static void NET_SV_SendWaitingData(net_client_t *client)
 
     memcpy(&wait_data.wad_sha1sum, &controller->wad_sha1sum,
            sizeof(sha1_digest_t));
-    memcpy(&wait_data.deh_sha1sum, &controller->deh_sha1sum,
-           sizeof(sha1_digest_t));
-
     // set name and address of each player:
 
     for (i = 0; i < wait_data.num_players; ++i)
@@ -762,12 +754,10 @@ static void NET_SV_ParseSYN(net_packet_t *packet, net_client_t *client,
 
     // Save the SHA1 checksums and other details.
     memcpy(client->wad_sha1sum, data.wad_sha1sum, sizeof(sha1_digest_t));
-    memcpy(client->deh_sha1sum, data.deh_sha1sum, sizeof(sha1_digest_t));
     client->max_players = data.max_players;
     client->name = M_StringDuplicate(player_name);
     client->recording_lowres = data.lowres_turn;
     client->drone = data.drone;
-    client->player_class = data.player_class;
 
     // Send a reply back to the client, indicating a successful connection
     // and specifying the protocol that will be used for communications.
@@ -852,20 +842,6 @@ static void StartGame(void)
     }
 
     sv_settings.num_players = NET_SV_NumPlayers();
-
-    // Copy player classes:
-
-    for (i = 0; i < NET_MAXPLAYERS; ++i)
-    {
-        if (sv_players[i] != NULL)
-        {
-            sv_settings.player_classes[i] = sv_players[i]->player_class;
-        }
-        else
-        {
-            sv_settings.player_classes[i] = 0;
-        }
-    }
 
     nowtime = I_GetTimeMS();
 

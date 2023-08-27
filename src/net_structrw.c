@@ -42,8 +42,6 @@ void NET_WriteConnectData(net_packet_t *packet, net_connect_data_t *data)
     NET_WriteInt8(packet, data->drone);
     NET_WriteInt8(packet, data->max_players);
     NET_WriteSHA1Sum(packet, data->wad_sha1sum);
-    NET_WriteSHA1Sum(packet, data->deh_sha1sum);
-    NET_WriteInt8(packet, data->player_class);
 }
 
 boolean NET_ReadConnectData(net_packet_t *packet, net_connect_data_t *data)
@@ -53,15 +51,11 @@ boolean NET_ReadConnectData(net_packet_t *packet, net_connect_data_t *data)
         && NET_ReadInt8(packet, (unsigned int *) &data->lowres_turn)
         && NET_ReadInt8(packet, (unsigned int *) &data->drone)
         && NET_ReadInt8(packet, (unsigned int *) &data->max_players)
-        && NET_ReadSHA1Sum(packet, data->wad_sha1sum)
-        && NET_ReadSHA1Sum(packet, data->deh_sha1sum)
-        && NET_ReadInt8(packet, (unsigned int *) &data->player_class);
+        && NET_ReadSHA1Sum(packet, data->wad_sha1sum);
 }
 
 void NET_WriteSettings(net_packet_t *packet, net_gamesettings_t *settings)
 {
-    int i;
-
     NET_WriteInt8(packet, settings->ticdup);
     NET_WriteInt8(packet, settings->extratics);
     NET_WriteInt8(packet, settings->deathmatch);
@@ -79,17 +73,11 @@ void NET_WriteSettings(net_packet_t *packet, net_gamesettings_t *settings)
     NET_WriteInt8(packet, settings->random);
     NET_WriteInt8(packet, settings->num_players);
     NET_WriteInt8(packet, settings->consoleplayer);
-
-    for (i = 0; i < settings->num_players; ++i)
-    {
-        NET_WriteInt8(packet, settings->player_classes[i]);
-    }
 }
 
 boolean NET_ReadSettings(net_packet_t *packet, net_gamesettings_t *settings)
 {
     boolean success;
-    int i;
 
     success = NET_ReadInt8(packet, (unsigned int *) &settings->ticdup)
            && NET_ReadInt8(packet, (unsigned int *) &settings->extratics)
@@ -114,14 +102,6 @@ boolean NET_ReadSettings(net_packet_t *packet, net_gamesettings_t *settings)
         return false;
     }
 
-    for (i = 0; i < settings->num_players && i < NET_MAXPLAYERS; ++i)
-    {
-        if (!NET_ReadInt8(packet,
-                          (unsigned int *) &settings->player_classes[i]))
-        {
-            return false;
-        }
-    }
 
     return true;
 }
@@ -473,7 +453,6 @@ void NET_WriteWaitData(net_packet_t *packet, net_waitdata_t *data)
     }
 
     NET_WriteSHA1Sum(packet, data->wad_sha1sum);
-    NET_WriteSHA1Sum(packet, data->deh_sha1sum);
 }
 
 boolean NET_ReadWaitData(net_packet_t *packet, net_waitdata_t *data)
@@ -512,8 +491,7 @@ boolean NET_ReadWaitData(net_packet_t *packet, net_waitdata_t *data)
         M_StringCopy(data->player_addrs[i], s, MAXPLAYERNAME);
     }
 
-    return NET_ReadSHA1Sum(packet, data->wad_sha1sum)
-        && NET_ReadSHA1Sum(packet, data->deh_sha1sum);
+    return NET_ReadSHA1Sum(packet, data->wad_sha1sum);
 }
 
 static boolean NET_ReadBlob(net_packet_t *packet, uint8_t *buf, size_t len)

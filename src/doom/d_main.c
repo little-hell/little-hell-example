@@ -26,7 +26,6 @@
 #include <string.h>
 
 #include "config.h"
-#include "deh_main.h"
 #include "doomdef.h"
 #include "doomstat.h"
 
@@ -234,7 +233,7 @@ boolean D_Display(void)
 
     // clean up border stuff
     if (gamestate != oldgamestate && gamestate != GS_LEVEL)
-        I_SetPalette(W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE));
+        I_SetPalette(W_CacheLumpName("PLAYPAL", PU_CACHE));
 
     // see if the border needs to be initially drawn
     if (gamestate == GS_LEVEL && oldgamestate != GS_LEVEL)
@@ -276,7 +275,7 @@ boolean D_Display(void)
         else
             y = viewwindowy + 4;
         V_DrawPatchDirect(viewwindowx + (scaledviewwidth - 68) / 2, y,
-                          W_CacheLumpName(DEH_String("M_PAUSE"), PU_CACHE));
+                          W_CacheLumpName("M_PAUSE", PU_CACHE));
     }
 
 
@@ -293,17 +292,7 @@ static void EnableLoadingDisk(void)
 
     if (show_diskicon)
     {
-        if (M_CheckParm("-cdrom") > 0)
-        {
-            disk_lump_name = DEH_String("STCDROM");
-        }
-        else
-        {
-            disk_lump_name = DEH_String("STDISK");
-        }
-
-        V_EnableLoadingDisk(disk_lump_name, SCREENWIDTH - LOADING_DISK_W,
-                            SCREENHEIGHT - LOADING_DISK_H);
+        V_EnableLoadingDisk("STDISK", SCREENWIDTH - LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
     }
 }
 
@@ -311,17 +300,8 @@ static void EnableLoadingDisk(void)
 // Add configuration file variable bindings.
 //
 
-
-static const char *const chat_macro_defaults[10] = {
-    HUSTR_CHATMACRO0, HUSTR_CHATMACRO1, HUSTR_CHATMACRO2, HUSTR_CHATMACRO3,
-    HUSTR_CHATMACRO4, HUSTR_CHATMACRO5, HUSTR_CHATMACRO6, HUSTR_CHATMACRO7,
-    HUSTR_CHATMACRO8, HUSTR_CHATMACRO9};
-
-
 void D_BindVariables(void)
 {
-    int i;
-
     M_ApplyPlatformDefaults();
 
     I_BindInputVariables();
@@ -334,11 +314,6 @@ void D_BindVariables(void)
     M_BindMapControls();
     M_BindMenuControls();
     M_BindChatControls(MAXPLAYERS);
-
-    key_multi_msgplayer[0] = HUSTR_KEYGREEN;
-    key_multi_msgplayer[1] = HUSTR_KEYINDIGO;
-    key_multi_msgplayer[2] = HUSTR_KEYBROWN;
-    key_multi_msgplayer[3] = HUSTR_KEYRED;
 
     NET_BindVariables();
 
@@ -353,17 +328,6 @@ void D_BindVariables(void)
     M_BindIntVariable("vanilla_demo_limit", &vanilla_demo_limit);
     M_BindIntVariable("show_endoom", &show_endoom);
     M_BindIntVariable("show_diskicon", &show_diskicon);
-
-    // Multiplayer chat macros
-
-    for (i = 0; i < 10; ++i)
-    {
-        char buf[12];
-
-        chat_macros[i] = M_StringDuplicate(chat_macro_defaults[i]);
-        M_snprintf(buf, sizeof(buf), "chatmacro%i", i);
-        M_BindStringVariable(buf, &chat_macros[i]);
-    }
 }
 
 //
@@ -533,48 +497,33 @@ void D_DoAdvanceDemo(void)
     switch (demosequence)
     {
         case 0:
-            if (gamemode == commercial)
-                pagetic = TICRATE * 11;
-            else
-                pagetic = 170;
+            pagetic = 170;
             gamestate = GS_DEMOSCREEN;
-            pagename = DEH_String("TITLEPIC");
-            if (gamemode == commercial)
-                S_StartMusic(mus_dm2ttl);
-            else
-                S_StartMusic(mus_intro);
+            pagename = "TITLEPIC";
+            S_StartMusic(mus_intro);
             break;
         case 1:
-            G_DeferedPlayDemo(DEH_String("demo1"));
+            G_DeferedPlayDemo("demo1");
             break;
         case 2:
             pagetic = 200;
             gamestate = GS_DEMOSCREEN;
-            pagename = DEH_String("CREDIT");
+            pagename = "CREDIT";
             break;
         case 3:
-            G_DeferedPlayDemo(DEH_String("demo2"));
+            G_DeferedPlayDemo("demo2");
             break;
         case 4:
             gamestate = GS_DEMOSCREEN;
-            if (gamemode == commercial)
-            {
-                pagetic = TICRATE * 11;
-                pagename = DEH_String("TITLEPIC");
-                S_StartMusic(mus_dm2ttl);
-            }
-            else
-            {
-                pagetic = 200;
-                pagename = DEH_String("HELP2");
-            }
+            pagetic = 200;
+            pagename = "HELP2";
             break;
         case 5:
-            G_DeferedPlayDemo(DEH_String("demo3"));
+            G_DeferedPlayDemo("demo3");
             break;
             // THE DEFINITIVE DOOM Special Edition demo
         case 6:
-            G_DeferedPlayDemo(DEH_String("demo4"));
+            G_DeferedPlayDemo("demo4");
             break;
     }
 }
@@ -617,53 +566,9 @@ static const char *banners[] = {
 // Get game name: if the startup banner has been replaced, use that.
 // Otherwise, use the name given
 //
-
+//TODO: Remove
 static char *GetGameName(const char *gamename)
 {
-    size_t i;
-
-    for (i = 0; i < arrlen(banners); ++i)
-    {
-        const char *deh_sub;
-        // Has the banner been replaced?
-
-        deh_sub = DEH_String(banners[i]);
-
-        if (deh_sub != banners[i])
-        {
-            size_t gamename_size;
-            int version;
-            char *deh_gamename;
-
-            // Has been replaced.
-            // We need to expand via printf to include the Doom version number
-            // We also need to cut off spaces to get the basic name
-
-            gamename_size = strlen(deh_sub) + 10;
-            deh_gamename = malloc(gamename_size);
-            if (deh_gamename == NULL)
-            {
-                I_Error("GetGameName: Failed to allocate new string");
-            }
-            version = G_VanillaVersionCode();
-            DEH_snprintf(deh_gamename, gamename_size, banners[i], version / 100,
-                         version % 100);
-
-            while (deh_gamename[0] != '\0' && isspace(deh_gamename[0]))
-            {
-                memmove(deh_gamename, deh_gamename + 1, gamename_size - 1);
-            }
-
-            while (deh_gamename[0] != '\0' &&
-                   isspace(deh_gamename[strlen(deh_gamename) - 1]))
-            {
-                deh_gamename[strlen(deh_gamename) - 1] = '\0';
-            }
-
-            return deh_gamename;
-        }
-    }
-
     return M_StringDuplicate(gamename);
 }
 
@@ -728,33 +633,6 @@ static const char *copyright_banners[] = {
     "=========================================================================="
     "=\n"};
 
-// Prints a message only if it has been modified by dehacked.
-
-void PrintDehackedBanners(void)
-{
-    size_t i;
-
-    for (i = 0; i < arrlen(copyright_banners); ++i)
-    {
-        const char *deh_s;
-
-        deh_s = DEH_String(copyright_banners[i]);
-
-        if (deh_s != copyright_banners[i])
-        {
-            printf("%s", deh_s);
-
-            // Make sure the modified banner always ends in a newline character.
-            // If it doesn't, add a newline.  This fixes av.wad.
-
-            if (deh_s[strlen(deh_s) - 1] != '\n')
-            {
-                printf("\n");
-            }
-        }
-    }
-}
-
 static struct
 {
     const char *description;
@@ -791,7 +669,7 @@ static void D_Endoom(void)
         return;
     }
 
-    endoom = W_CacheLumpName(DEH_String("ENDOOM"), PU_STATIC);
+    endoom = W_CacheLumpName("ENDOOM", PU_STATIC);
 
     I_Endoom(endoom);
 }
@@ -1005,22 +883,6 @@ void D_DoomMain(void)
     D_IdentifyVersion();
     InitGameVersion();
 
-    // Doom 3: BFG Edition includes modified versions of the classic
-    // IWADs which can be identified by an additional DMENUPIC lump.
-    // Furthermore, the M_GDHIGH lumps have been modified in a way that
-    // makes them incompatible to Vanilla Doom and the modified version
-    // of doom2.wad is missing the TITLEPIC lump.
-    // We specifically check for DMENUPIC here, before PWADs have been
-    // loaded which could probably include a lump of that name.
-
-    // Load Dehacked patches specified on the command line with -deh.
-    // Note that there's a very careful and deliberate ordering to how
-    // Dehacked patches are loaded. The order we use is:
-    //  1. IWAD dehacked patches.
-    //  2. Command line dehacked patches specified with -deh.
-    //  3. PWAD dehacked patches in DEHACKED lumps.
-    DEH_ParseCommandLine();
-
     // Load PWAD files.
     modifiedgame = W_ParseCommandLine();
 
@@ -1090,31 +952,6 @@ void D_DoomMain(void)
     // Generate the WAD hash table.  Speed things up a bit.
     W_GenerateHashTable();
 
-    // Load DEHACKED lumps from WAD files - but only if we give the right
-    // command line parameter.
-
-    //!
-    // @category mod
-    //
-    // Load Dehacked patches from DEHACKED lumps contained in one of the
-    // loaded PWAD files.
-    //
-    if (M_ParmExists("-dehlump"))
-    {
-        int i, loaded = 0;
-
-        for (i = numiwadlumps; i < numlumps; ++i)
-        {
-            if (!strncmp(lumpinfo[i]->name, "DEHACKED", 8))
-            {
-                DEH_LoadLump(i, false, false);
-                loaded++;
-            }
-        }
-
-        printf("  loaded %i DEHACKED lumps from PWAD files.\n", loaded);
-    }
-
     // Set the gamedescription string. This is only possible now that
     // we've finished loading Dehacked patches.
     D_SetGameDescription();
@@ -1139,7 +976,7 @@ void D_DoomMain(void)
             for (i = 0; i < 23; i++)
                 if (W_CheckNumForName(name[i]) < 0)
                     I_Error(
-                        DEH_String("\nThis is not the registered version."));
+                        "\nThis is not the registered version.");
     }
 
     if (W_CheckNumForName("SS_START") >= 0 || W_CheckNumForName("FF_END") >= 0)
@@ -1151,7 +988,6 @@ void D_DoomMain(void)
     }
 
     I_PrintStartupBanner(gamedescription);
-    PrintDehackedBanners();
 
     DEH_printf("I_Init: Setting up machine state.\n");
     I_CheckIsScreensaver();

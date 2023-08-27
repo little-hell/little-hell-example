@@ -24,7 +24,6 @@
 
 #include "z_zone.h"
 
-#include "deh_main.h"
 #include "i_swap.h"
 #include "m_argv.h"
 #include "m_bbox.h"

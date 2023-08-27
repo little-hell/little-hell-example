@@ -21,7 +21,6 @@
 
 #include "config.h"
 #include "doomtype.h"
-#include "deh_main.h"
 #include "deh_str.h"
 #include "d_loop.h"
 #include "i_system.h"
@@ -163,7 +162,6 @@ static int last_latency;
 // Hash checksums of our wad directory and dehacked data.
 
 sha1_digest_t net_local_wad_sha1sum;
-sha1_digest_t net_local_deh_sha1sum;
 
 #define NET_CL_ExpandTicNum(b) NET_ExpandTicNum(recvwindow_start, (b))
 
@@ -1065,7 +1063,6 @@ boolean NET_CL_Connect(net_addr_t *addr, net_connect_data_t *data)
     NET_ReferenceAddress(addr);
 
     memcpy(net_local_wad_sha1sum, data->wad_sha1sum, sizeof(sha1_digest_t));
-    memcpy(net_local_deh_sha1sum, data->deh_sha1sum, sizeof(sha1_digest_t));
 
     // create a new network I/O context and add just the necessary module
     client_context = NET_NewContext();

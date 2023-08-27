@@ -135,7 +135,7 @@ static char *SearchDirectoryForIWAD(const char *dir, int mask,
             continue;
         }
 
-        filename = CheckDirectoryHasIWAD(dir, DEH_String(iwads[i].name));
+        filename = CheckDirectoryHasIWAD(dir, iwads[i].name);
 
         if (filename != NULL)
         {

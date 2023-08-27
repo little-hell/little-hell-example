@@ -20,7 +20,6 @@
 #include <stdio.h>
 
 #include "i_system.h"
-#include "deh_main.h"
 #include "doomdef.h"
 #include "p_local.h"
 
@@ -109,9 +108,6 @@ void P_InitSwitchList(void)
         case retail:
             episode = 2;
             break;
-        case commercial:
-            episode = 3;
-            break;
         default:
             episode = 1;
             break;
@@ -124,9 +120,9 @@ void P_InitSwitchList(void)
 	if (alphSwitchList[i].episode <= episode)
 	{
 	    switchlist[slindex++] =
-                R_TextureNumForName(DEH_String(alphSwitchList[i].name1));
+                R_TextureNumForName(alphSwitchList[i].name1);
 	    switchlist[slindex++] =
-                R_TextureNumForName(DEH_String(alphSwitchList[i].name2));
+                R_TextureNumForName(alphSwitchList[i].name2);
 	}
     }
 

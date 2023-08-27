@@ -32,8 +32,6 @@
 #include "w_checksum.h"
 #include "w_wad.h"
 
-#include "deh_main.h"
-
 #include "d_loop.h"
 
 ticcmd_t *netcmds;
@@ -50,7 +48,7 @@ static void PlayerQuitGame(player_t *player)
     // Do this the same way as Vanilla Doom does, to allow dehacked
     // replacements of this message
 
-    M_StringCopy(exitmsg, DEH_String("Player 1 left the game"),
+    M_StringCopy(exitmsg, "Player 1 left the game",
                  sizeof(exitmsg));
 
     exitmsg[7] += player_num;
@@ -208,10 +206,8 @@ static void InitConnectData(net_connect_data_t *connect_data)
                              && !M_ParmExists("-longtics"))
                               || shorttics;
 
-    // Read checksums of our WAD directory and dehacked information
-
+    // Read checksums of our WAD directory
     W_Checksum(connect_data->wad_sha1sum);
-    DEH_Checksum(connect_data->deh_sha1sum);
 }
 
 void D_ConnectNetGame(void)

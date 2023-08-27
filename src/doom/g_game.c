@@ -24,7 +24,6 @@
 #include "doomkeys.h"
 #include "doomstat.h"
 
-#include "deh_main.h"
 #include "deh_misc.h"
 
 #include "z_zone.h"
@@ -588,7 +587,7 @@ void G_DoLoadLevel(void)
     //  we look for an actual index, instead of simply
     //  setting one.
 
-    skyflatnum = R_FlatNumForName(DEH_String(SKYFLATNAME));
+    skyflatnum = R_FlatNumForName(SKYFLATNAME);
 
     levelstarttic = gametic; // for time calculation
 
@@ -844,7 +843,7 @@ void G_Ticker(void)
                 break;
             case ga_screenshot:
                 V_ScreenShot("DOOM%02i.%s");
-                players[consoleplayer].message = DEH_String("screen shot");
+                players[consoleplayer].message = "screen shot";
                 gameaction = ga_nothing;
                 break;
             case ga_nothing:
@@ -1042,11 +1041,11 @@ void G_PlayerReborn(int player)
 
     p->usedown = p->attackdown = true; // don't do anything immediately
     p->playerstate = PST_LIVE;
-    p->health = deh_initial_health; // Use dehacked value
+    p->health = INITIAL_HEALTH;
     p->readyweapon = p->pendingweapon = wp_pistol;
     p->weaponowned[wp_fist] = true;
     p->weaponowned[wp_pistol] = true;
-    p->ammo[am_clip] = deh_initial_bullets;
+    p->ammo[am_clip] = INITIAL_BULLETS;
 
     for (i = 0; i < NUMAMMO; i++)
         p->maxammo[i] = maxammo[i];
@@ -1514,7 +1513,7 @@ void G_DoSaveGame(void)
     gameaction = ga_nothing;
     M_StringCopy(savedescription, "", sizeof(savedescription));
 
-    players[consoleplayer].message = DEH_String(GGSAVED);
+    players[consoleplayer].message = GGSAVED;
 
     // draw the pattern into the back screen
     R_FillBackScreen();
@@ -1626,47 +1625,23 @@ void G_InitNew(skill_t skill, int episode, int map)
     gamemap = map;
     gameskill = skill;
 
-    // Set the sky to use.
-    //
-    // Note: This IS broken, but it is how Vanilla Doom behaves.
-    // See http://doomwiki.org/wiki/Sky_never_changes_in_Doom_II.
-    //
-    // Because we set the sky here at the start of a game, not at the
-    // start of a level, the sky texture never changes unless we
-    // restore from a saved game.  This was fixed before the Doom
-    // source release, but this IS the way Vanilla DOS Doom behaves.
-
-    if (gamemode == commercial)
+    switch (gameepisode)
     {
-        skytexturename = DEH_String("SKY3");
-        skytexture = R_TextureNumForName(skytexturename);
-        if (gamemap < 21)
-        {
-            skytexturename = DEH_String(gamemap < 12 ? "SKY1" : "SKY2");
-            skytexture = R_TextureNumForName(skytexturename);
-        }
+        default:
+        case 1:
+            skytexturename = "SKY1";
+            break;
+        case 2:
+            skytexturename = "SKY2";
+            break;
+        case 3:
+            skytexturename = "SKY3";
+            break;
+        case 4: // Special Edition sky
+            skytexturename = "SKY4";
+            break;
     }
-    else
-    {
-        switch (gameepisode)
-        {
-            default:
-            case 1:
-                skytexturename = "SKY1";
-                break;
-            case 2:
-                skytexturename = "SKY2";
-                break;
-            case 3:
-                skytexturename = "SKY3";
-                break;
-            case 4: // Special Edition sky
-                skytexturename = "SKY4";
-                break;
-        }
-        skytexturename = DEH_String(skytexturename);
-        skytexture = R_TextureNumForName(skytexturename);
-    }
+    skytexture = R_TextureNumForName(skytexturename);
 
     G_DoLoadLevel();
 }

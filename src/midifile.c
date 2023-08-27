@@ -805,34 +805,5 @@ void PrintTrack(midi_track_t *track)
     }
 }
 
-int main(int argc, char *argv[])
-{
-    midi_file_t *file;
-    unsigned int i;
-
-    if (argc < 2)
-    {
-        printf("Usage: %s <filename>\n", argv[0]);
-        exit(1);
-    }
-
-    file = MIDI_LoadFile(argv[1]);
-
-    if (file == NULL)
-    {
-        fprintf(stderr, "Failed to open %s\n", argv[1]);
-        exit(1);
-    }
-
-    for (i=0; i<file->num_tracks; ++i)
-    {
-        printf("\n== Track %u ==\n\n", i);
-
-        PrintTrack(&file->tracks[i]);
-    }
-
-    return 0;
-}
-
 #endif
 

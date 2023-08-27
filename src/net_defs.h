@@ -179,8 +179,6 @@ typedef struct
     int drone;
     int max_players;
     sha1_digest_t wad_sha1sum;
-    sha1_digest_t deh_sha1sum;
-    int player_class;
 } net_connect_data_t;
 
 // Game settings sent by client to server when initiating game start,
@@ -209,10 +207,6 @@ typedef struct
 
     int num_players;
     int consoleplayer;
-
-    // Hexen player classes:
-
-    int player_classes[NET_MAXPLAYERS];
 
 } net_gamesettings_t;
 
@@ -268,7 +262,6 @@ typedef struct
     char player_names[NET_MAXPLAYERS][MAXPLAYERNAME];
     char player_addrs[NET_MAXPLAYERS][MAXPLAYERNAME];
     sha1_digest_t wad_sha1sum;
-    sha1_digest_t deh_sha1sum;
 } net_waitdata_t;
 
 #endif /* #ifndef NET_DEFS_H */
