@@ -586,7 +586,6 @@ static void InitGameVersion(void)
     gamemode = registered;
     gameversion = exe_doom_1_9;
     gamemission = doom;
-    deathmatch = 1;
 }
 
 // Function called at exit to display the ENDOOM screen
