@@ -1200,7 +1200,6 @@ static void SetVideoMode(void)
         SDL_SetWindowMinimumSize(screen, SCREENWIDTH, actualheight);
 
         I_InitWindowTitle();
-        I_InitWindowIcon();
     }
 
     // The SDL_RENDERER_TARGETTEXTURE flag is required to render the

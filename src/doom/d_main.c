@@ -27,7 +27,6 @@
 
 #include "config.h"
 #include "doomdef.h"
-#include "doom_icon.h"
 #include "doomstat.h"
 
 #include "dstrings.h"
@@ -74,8 +73,6 @@
 #include "statdump.h"
 
 #include "d_main.h"
-
-#include "doom_icon.c"
 
 //
 // D-DoomLoop()
@@ -917,8 +914,8 @@ void D_DoomMain(void)
     I_CheckIsScreensaver();
     I_InitTimer();
     I_InitJoystick();
-    //I_InitSound(true);
-    //I_InitMusic();
+    I_InitSound(true);
+    I_InitMusic();
 
     printf("NET_Init: Init network subsystem.\n");
     NET_Init();

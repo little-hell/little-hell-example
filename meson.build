@@ -1,6 +1,6 @@
 project('mindoom', 'c',
-       default_options: ['default_library=static', 'buildtype=debugoptimized'])
-add_project_arguments('-DDISABLE_SDL_MIXER', language: 'c')
+       default_options: ['default_library=static', 'buildtype=debug'])
+add_project_arguments(language: 'c')
 
 sdl2 = dependency('SDL2')
 sdl2_net = dependency('SDL2_net')
@@ -95,7 +95,6 @@ game_source_files = files(
     src_dir / doom_source_dir / 'd_main.c',
     src_dir / doom_source_dir / 'd_net.c',
     src_dir / doom_source_dir / 'doomdef.c',
-    src_dir / doom_source_dir / 'doom_icon.c',
     src_dir / doom_source_dir / 'doomstat.c',
     src_dir / doom_source_dir / 'dstrings.c',
     src_dir / doom_source_dir / 'f_finale.c',

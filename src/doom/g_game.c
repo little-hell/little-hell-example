@@ -923,10 +923,6 @@ void G_Ticker(void)
             WI_Ticker();
             break;
 
-        case GS_FINALE:
-            F_Ticker();
-            break;
-
         case GS_DEMOSCREEN:
             D_PageTicker();
             break;

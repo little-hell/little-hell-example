@@ -124,36 +124,7 @@ void F_StartFinale(void)
 
 boolean F_Responder(event_t *event)
 {
-    if (finalestage == F_STAGE_CAST)
-        return F_CastResponder(event);
-
     return false;
-}
-
-
-//
-// F_Ticker
-//
-void F_Ticker(void)
-{
-    // advance animation
-    finalecount++;
-
-    if (finalestage == F_STAGE_CAST)
-    {
-        F_CastTicker();
-        return;
-    }
-
-    if (finalestage == F_STAGE_TEXT &&
-        finalecount > strlen(finaletext) * TEXTSPEED + TEXTWAIT)
-    {
-        finalecount = 0;
-        finalestage = F_STAGE_ARTSCREEN;
-        wipegamestate = -1; // force a wipe
-        if (gameepisode == 3)
-            S_StartMusic(mus_bunny);
-    }
 }
 
 
@@ -306,15 +277,6 @@ void F_CastTicker(void)
             case S_SPOS_ATK2:
                 sfx = sfx_shotgn;
                 break;
-            case S_SKEL_FIST2:
-                sfx = sfx_skeswg;
-                break;
-            case S_SKEL_FIST4:
-                sfx = sfx_skepch;
-                break;
-            case S_SKEL_MISS2:
-                sfx = sfx_skeatk;
-                break;
             case S_TROO_ATK3:
                 sfx = sfx_claw;
                 break;
@@ -324,9 +286,6 @@ void F_CastTicker(void)
             case S_BOSS_ATK2:
             case S_HEAD_ATK2:
                 sfx = sfx_firsht;
-                break;
-            case S_SKULL_ATK2:
-                sfx = sfx_sklatk;
                 break;
             case S_SPID_ATK2:
             case S_SPID_ATK3:

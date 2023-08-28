@@ -11,6 +11,7 @@ pkgs.clangStdenv.mkDerivation {
     cppcheck
     gcc
     gdb
+    gdbgui
     glib
     hotspot
     meson
@@ -20,5 +21,6 @@ pkgs.clangStdenv.mkDerivation {
     SDL2
     SDL2_mixer
     SDL2_net
+    valgrind
   ];
 }
