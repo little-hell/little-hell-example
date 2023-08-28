@@ -438,7 +438,6 @@ void R_InitTextures(void)
     int *patchlookup;
 
     int nummappatches;
-    int offset;
     int maxoff;
     int maxoff2;
     int numtextures1;
@@ -534,7 +533,7 @@ void R_InitTextures(void)
             directory = maptex + 1;
         }
 
-        offset = LONG(*directory);
+            int offset = LONG(*directory);
 
         if (offset > maxoff)
             I_Error("R_InitTextures: bad texture directory");
@@ -628,9 +627,6 @@ void R_InitFlats(void)
 //
 void R_InitSpriteLumps(void)
 {
-    int i;
-    patch_t *patch;
-
     firstspritelump = W_GetNumForName("S_START") + 1;
     lastspritelump = W_GetNumForName("S_END") - 1;
 
@@ -641,12 +637,12 @@ void R_InitSpriteLumps(void)
     spritetopoffset =
         Z_Malloc(numspritelumps * sizeof(*spritetopoffset), PU_STATIC, 0);
 
-    for (i = 0; i < numspritelumps; i++)
+    for (int i = 0; i < numspritelumps; i++)
     {
         if (!(i & 63))
             printf(".");
 
-        patch = W_CacheLumpNum(firstspritelump + i, PU_CACHE);
+        patch_t *patch = W_CacheLumpNum(firstspritelump + i, PU_CACHE);
         spritewidth[i] = SHORT(patch->width) << FRACBITS;
         spriteoffset[i] = SHORT(patch->leftoffset) << FRACBITS;
         spritetopoffset[i] = SHORT(patch->topoffset) << FRACBITS;
@@ -692,13 +688,11 @@ void R_InitData(void)
 //
 int R_FlatNumForName(const char *name)
 {
-    int i;
-    char namet[9];
-
-    i = W_CheckNumForName(name);
+    int i = W_CheckNumForName(name);
 
     if (i == -1)
     {
+        char namet[9];
         namet[8] = 0;
         memcpy(namet, name, 8);
         I_Error("R_FlatNumForName: %s not found", namet);

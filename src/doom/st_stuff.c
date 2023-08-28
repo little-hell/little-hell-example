@@ -637,7 +637,6 @@ void ST_updateFaceWidget(void)
     int i;
     angle_t badguyangle;
     angle_t diffang;
-    static int lastattackdown = -1;
     static int priority = 0;
     boolean doevilgrin;
 
@@ -753,6 +752,7 @@ void ST_updateFaceWidget(void)
 
     if (priority < 6)
     {
+        static int lastattackdown = -1;
         // rapid firing
         if (plyr->attackdown)
         {
@@ -871,16 +871,14 @@ void ST_doPaletteStuff(void)
 {
 
     int palette;
-    byte *pal;
     int cnt;
-    int bzc;
 
     cnt = plyr->damagecount;
 
     if (plyr->powers[pw_strength])
     {
         // slowly fade the berzerk out
-        bzc = 12 - (plyr->powers[pw_strength] >> 6);
+        int bzc = 12 - (plyr->powers[pw_strength] >> 6);
 
         if (bzc > cnt)
             cnt = bzc;
@@ -915,7 +913,7 @@ void ST_doPaletteStuff(void)
     if (palette != st_palette)
     {
         st_palette = palette;
-        pal = (byte *) W_CacheLumpNum(lu_palette, PU_CACHE) + palette * 768;
+        byte *pal = (byte *) W_CacheLumpNum(lu_palette, PU_CACHE) + palette * 768;
         I_SetPalette(pal);
     }
 }

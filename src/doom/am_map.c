@@ -398,7 +398,6 @@ void AM_changeWindowLoc(void)
 //
 void AM_initVariables(void)
 {
-    int pnum;
     static event_t st_notify = {ev_keyup, AM_MSGENTERED, 0, 0};
 
     automapactive = true;
@@ -424,7 +423,7 @@ void AM_initVariables(void)
     {
         plr = &players[0];
 
-        for (pnum = 0; pnum < MAXPLAYERS; pnum++)
+        for (int pnum = 0; pnum < MAXPLAYERS; pnum++)
         {
             if (playeringame[pnum])
             {
@@ -971,12 +970,12 @@ void AM_drawFline(fline_t *fl, int color)
     register int ay;
     register int d;
 
-    static int fuck = 0;
 
     // For debugging only
     if (fl->a.x < 0 || fl->a.x >= f_w || fl->a.y < 0 || fl->a.y >= f_h ||
         fl->b.x < 0 || fl->b.x >= f_w || fl->b.y < 0 || fl->b.y >= f_h)
     {
+        static int fuck = 0;
         fprintf(stderr, "fuck %d \r", fuck++);
         return;
     }
@@ -1211,8 +1210,6 @@ void AM_drawLineCharacter(mline_t *lineguy, int lineguylines, fixed_t scale,
 
 void AM_drawPlayers(void)
 {
-    int i;
-    player_t *p;
     static int their_colors[] = {GREENS, GRAYS, BROWNS, REDS};
     int their_color = -1;
     int color;
@@ -1229,10 +1226,10 @@ void AM_drawPlayers(void)
         return;
     }
 
-    for (i = 0; i < MAXPLAYERS; i++)
+    for (int i = 0; i < MAXPLAYERS; i++)
     {
         their_color++;
-        p = &players[i];
+        player_t *p = &players[i];
 
         if ((deathmatch && !singledemo) && p != plr)
             continue;

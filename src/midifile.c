@@ -433,7 +433,6 @@ static boolean ReadTrackHeader(midi_track_t *track, FILE *stream)
 static boolean ReadTrack(midi_track_t *track, FILE *stream)
 {
     midi_event_t *new_events;
-    midi_event_t *event;
     unsigned int last_event_type;
 
     track->num_events = 0;
@@ -459,8 +458,7 @@ static boolean ReadTrack(midi_track_t *track, FILE *stream)
         track->events = new_events;
 
         // Read the next event:
-
-        event = &track->events[track->num_events];
+        midi_event_t *event = &track->events[track->num_events];
         if (!ReadEvent(event, &last_event_type, stream))
         {
             return false;
@@ -561,11 +559,9 @@ static boolean ReadFileHeader(midi_file_t *file, FILE *stream)
 
 void MIDI_FreeFile(midi_file_t *file)
 {
-    int i;
-
     if (file->tracks != NULL)
     {
-        for (i = 0; i < file->num_tracks; ++i)
+        for (int i = 0; i < file->num_tracks; ++i)
         {
             FreeTrack(&file->tracks[i]);
         }

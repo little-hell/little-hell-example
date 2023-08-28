@@ -1100,24 +1100,17 @@ static void SetVoiceInstrument(opl_voice_t *voice, genmidi_instr_t *instr,
 
 static void SetVoiceVolume(opl_voice_t *voice, unsigned int volume)
 {
-    genmidi_voice_t *opl_voice;
-    unsigned int midi_volume;
-    unsigned int full_volume;
-    unsigned int car_volume;
-    unsigned int mod_volume;
-
     voice->note_volume = volume;
 
-    opl_voice = &voice->current_instr->voices[voice->current_instr_voice];
+    genmidi_voice_t *opl_voice = &voice->current_instr->voices[voice->current_instr_voice];
 
     // Multiply note volume and channel volume to get the actual volume.
+    unsigned int midi_volume = 2 * (volume_mapping_table[voice->channel->volume] + 1);
 
-    midi_volume = 2 * (volume_mapping_table[voice->channel->volume] + 1);
-
-    full_volume = (volume_mapping_table[voice->note_volume] * midi_volume) >> 9;
+    unsigned int full_volume = (volume_mapping_table[voice->note_volume] * midi_volume) >> 9;
 
     // The volume value to use in the register:
-    car_volume = 0x3f - full_volume;
+    unsigned int car_volume = 0x3f - full_volume;
 
     // Update the volume register(s) if necessary.
 
@@ -1134,7 +1127,7 @@ static void SetVoiceVolume(opl_voice_t *voice, unsigned int volume)
         if ((opl_voice->feedback & 0x01) != 0 &&
             opl_voice->modulator.level != 0x3f)
         {
-            mod_volume = opl_voice->modulator.level;
+            unsigned int mod_volume = opl_voice->modulator.level;
             if (mod_volume < car_volume)
             {
                 mod_volume = car_volume;

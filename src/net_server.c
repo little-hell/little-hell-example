@@ -578,7 +578,6 @@ static void NET_SV_ParseSYN(net_packet_t *packet, net_client_t *client,
     char *player_name;
     char *client_version;
     int num_players;
-    int i;
 
     NET_Log("server: processing SYN packet");
 
@@ -717,7 +716,7 @@ static void NET_SV_ParseSYN(net_packet_t *packet, net_client_t *client,
     {
         // find a slot, or return if none found
 
-        for (i = 0; i < MAXNETNODES; ++i)
+        for (int i = 0; i < MAXNETNODES; ++i)
         {
             if (!clients[i].active)
             {
@@ -971,9 +970,7 @@ static void NET_SV_SendResendRequest(net_client_t *client, int start, int end)
 {
     net_packet_t *packet;
     net_client_recv_t *recvobj;
-    int i;
     unsigned int nowtime;
-    int index;
 
     NET_Log("server: send resend to %s for tics %d-%d",
             NET_AddrToString(client->addr), start, end);
@@ -991,9 +988,9 @@ static void NET_SV_SendResendRequest(net_client_t *client, int start, int end)
 
     nowtime = I_GetTimeMS();
 
-    for (i = start; i <= end; ++i)
+    for (int i = start; i <= end; ++i)
     {
-        index = i - recvwindow_start;
+        int index = i - recvwindow_start;
 
         if (index >= BACKUPTICS)
         {
@@ -1650,7 +1647,6 @@ static void NET_SV_PumpSendQueue(net_client_t *client)
 void NET_SV_CheckDeadlock(net_client_t *client)
 {
     int nowtime;
-    int i;
 
     // Don't expect game data from clients.
 
@@ -1670,6 +1666,7 @@ void NET_SV_CheckDeadlock(net_client_t *client)
 
         // Search the receive window for the first tic we are expecting
         // from this player.
+        int i;
 
         for (i = 0; i < BACKUPTICS; ++i)
         {
@@ -1707,12 +1704,10 @@ void NET_SV_CheckDeadlock(net_client_t *client)
 
 static void NET_SV_GameEnded(void)
 {
-    int i;
-
     server_state = SERVER_WAITING_LAUNCH;
     sv_gamemode = registered;
 
-    for (i = 0; i < MAXNETNODES; ++i)
+    for (int i = 0; i < MAXNETNODES; ++i)
     {
         if (clients[i].active)
         {

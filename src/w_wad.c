@@ -101,7 +101,6 @@ wad_file_t *W_AddFile(const char *filename)
     wadinfo_t header;
     lumpindex_t i;
     wad_file_t *wad_file;
-    int length;
     int startlump;
     filelump_t *fileinfo;
     filelump_t *filerover;
@@ -188,7 +187,7 @@ wad_file_t *W_AddFile(const char *filename)
         }
 
         header.infotableofs = LONG(header.infotableofs);
-        length = header.numlumps * sizeof(filelump_t);
+        int length = header.numlumps * sizeof(filelump_t);
         fileinfo = Z_Malloc(length, PU_STATIC, 0);
 
         W_Read(wad_file, header.infotableofs, fileinfo, length);
@@ -520,7 +519,6 @@ void W_Profile (void)
 
 void W_GenerateHashTable(void)
 {
-    lumpindex_t i;
 
     // Free the old hash table, if there is one:
     if (lumphash != NULL)
@@ -533,12 +531,12 @@ void W_GenerateHashTable(void)
     {
         lumphash = Z_Malloc(sizeof(lumpindex_t) * numlumps, PU_STATIC, NULL);
 
-        for (i = 0; i < numlumps; ++i)
+        for (lumpindex_t i = 0; i < numlumps; ++i)
         {
             lumphash[i] = -1;
         }
 
-        for (i = 0; i < numlumps; ++i)
+        for (int i = 0; i < numlumps; ++i)
         {
             unsigned int hash;
 

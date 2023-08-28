@@ -300,7 +300,6 @@ static allocated_sound_t *GetAllocatedSoundBySfxInfoAndPitch(sfxinfo_t *sfxinfo,
 static allocated_sound_t *PitchShift(allocated_sound_t *insnd, int pitch)
 {
     allocated_sound_t *outsnd;
-    Sint16 *inp, *outp;
     Sint16 *srcbuf, *dstbuf;
     Uint32 srclen, dstlen;
 
@@ -327,10 +326,11 @@ static allocated_sound_t *PitchShift(allocated_sound_t *insnd, int pitch)
     outsnd->pitch = pitch;
     dstbuf = (Sint16 *) outsnd->chunk.abuf;
 
+    Sint16 *outp;
     // loop over output buffer. find corresponding input cell, copy over
     for (outp = dstbuf; outp < dstbuf + dstlen / 2; ++outp)
     {
-        inp = srcbuf + (int) ((float) (outp - dstbuf) / dstlen * srclen);
+        Sint16 *inp = srcbuf + (int) ((float) (outp - dstbuf) / dstlen * srclen);
         *outp = *inp;
     }
 

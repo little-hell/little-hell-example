@@ -167,7 +167,6 @@ boolean D_Display(void)
     static boolean fullscreen = false;
     static gamestate_t oldgamestate = -1;
     static int borderdrawcount;
-    int y;
     boolean wipe;
     boolean redrawsbar;
 
@@ -256,13 +255,6 @@ boolean D_Display(void)
         }
     }
 
-    if (testcontrols)
-    {
-        // Box showing current mouse speed
-
-        V_DrawMouseSpeedBox(testcontrols_mousespeed);
-    }
-
     menuactivestate = menuactive;
     viewactivestate = viewactive;
     inhelpscreensstate = inhelpscreens;
@@ -271,6 +263,8 @@ boolean D_Display(void)
     // draw pause pic
     if (paused)
     {
+        int y;
+
         if (automapactive)
             y = 4;
         else
@@ -358,17 +352,15 @@ boolean D_GrabMouseCallback(void)
 //
 void D_RunFrame()
 {
-    int nowtime;
-    int tics;
     static int wipestart;
     static boolean wipe;
 
     if (wipe)
     {
+        int nowtime = I_GetTime();
+        int tics = nowtime - wipestart;
         do
         {
-            nowtime = I_GetTime();
-            tics = nowtime - wipestart;
             I_Sleep(1);
         } while (tics <= 0);
 
@@ -929,8 +921,8 @@ void D_DoomMain(void)
     I_CheckIsScreensaver();
     I_InitTimer();
     I_InitJoystick();
-    I_InitSound(true);
-    I_InitMusic();
+    //I_InitSound(true);
+    //I_InitMusic();
 
     printf("NET_Init: Init network subsystem.\n");
     NET_Init();

@@ -401,19 +401,15 @@ void WI_drawOnLnode(int n, patch_t *c[])
 {
 
     int i;
-    int left;
-    int top;
-    int right;
-    int bottom;
     boolean fits = false;
 
     i = 0;
     do
     {
-        left = lnodes[wbs->epsd][n].x - SHORT(c[i]->leftoffset);
-        top = lnodes[wbs->epsd][n].y - SHORT(c[i]->topoffset);
-        right = left + SHORT(c[i]->width);
-        bottom = top + SHORT(c[i]->height);
+        int left = lnodes[wbs->epsd][n].x - SHORT(c[i]->leftoffset);
+        int top = lnodes[wbs->epsd][n].y - SHORT(c[i]->topoffset);
+        int right = left + SHORT(c[i]->width);
+        int bottom = top + SHORT(c[i]->height);
 
         if (left >= 0 && right < SCREENWIDTH && top >= 0 &&
             bottom < SCREENHEIGHT)
@@ -440,15 +436,13 @@ void WI_drawOnLnode(int n, patch_t *c[])
 
 void WI_initAnimatedBack(void)
 {
-    int i;
-    anim_t *a;
 
     if (wbs->epsd > 2)
         return;
 
-    for (i = 0; i < NUMANIMS[wbs->epsd]; i++)
+    for (int i = 0; i < NUMANIMS[wbs->epsd]; i++)
     {
-        a = &anims[wbs->epsd][i];
+        anim_t *a = &anims[wbs->epsd][i];
 
         // init variables
         a->ctr = -1;
@@ -465,15 +459,12 @@ void WI_initAnimatedBack(void)
 
 void WI_updateAnimatedBack(void)
 {
-    int i;
-    anim_t *a;
-
     if (wbs->epsd > 2)
         return;
 
-    for (i = 0; i < NUMANIMS[wbs->epsd]; i++)
+    for (int i = 0; i < NUMANIMS[wbs->epsd]; i++)
     {
-        a = &anims[wbs->epsd][i];
+        anim_t *a = &anims[wbs->epsd][i];
 
         if (bcnt == a->nexttic)
         {
@@ -514,15 +505,12 @@ void WI_updateAnimatedBack(void)
 
 void WI_drawAnimatedBack(void)
 {
-    int i;
-    anim_t *a;
-
     if (wbs->epsd > 2)
         return;
 
-    for (i = 0; i < NUMANIMS[wbs->epsd]; i++)
+    for (int i = 0; i < NUMANIMS[wbs->epsd]; i++)
     {
-        a = &anims[wbs->epsd][i];
+        anim_t *a = &anims[wbs->epsd][i];
 
         if (a->ctr >= 0)
             V_DrawPatch(a->loc.x, a->loc.y, a->p[a->ctr]);
@@ -541,7 +529,6 @@ int WI_drawNum(int x, int y, int n, int digits)
 
     int fontwidth = SHORT(num[0]->width);
     int neg;
-    int temp;
 
     if (digits < 0)
     {
@@ -554,7 +541,7 @@ int WI_drawNum(int x, int y, int n, int digits)
         {
             // figure out # of digits in #
             digits = 0;
-            temp = n;
+            int temp = n;
 
             while (temp)
             {
@@ -603,20 +590,16 @@ void WI_drawPercent(int x, int y, int p)
 //
 void WI_drawTime(int x, int y, int t)
 {
-
-    int div;
-    int n;
-
     if (t < 0)
         return;
 
     if (t <= 61 * 59)
     {
-        div = 1;
+        int div = 1;
 
         do
         {
-            n = (t / div) % 60;
+            int n = (t / div) % 60;
             x = WI_drawNum(x, y, n, 2) - SHORT(colon->width);
             div *= 60;
 
@@ -1415,11 +1398,10 @@ typedef void (*load_callback_t)(const char *lumpname, patch_t **variable);
 
 static void WI_loadUnloadData(load_callback_t callback)
 {
-    int i, j;
     char name[9];
     anim_t *a;
 
-    for (i = 0; i < NUMMAPS; i++)
+    for (int i = 0; i < NUMMAPS; i++)
     {
         M_snprintf(name, 9, "WILV%d%d", wbs->epsd, i);
         callback(name, &lnames[i]);
@@ -1436,10 +1418,10 @@ static void WI_loadUnloadData(load_callback_t callback)
 
     if (wbs->epsd < 3)
     {
-        for (j = 0; j < NUMANIMS[wbs->epsd]; j++)
+        for (int j = 0; j < NUMANIMS[wbs->epsd]; j++)
         {
             a = &anims[wbs->epsd][j];
-            for (i = 0; i < a->nanims; i++)
+            for (int i = 0; i < a->nanims; i++)
             {
                 // MONDO HACK!
                 if (wbs->epsd != 1 || j != 8)
@@ -1463,7 +1445,7 @@ static void WI_loadUnloadData(load_callback_t callback)
     else
         wiminus = NULL;
 
-    for (i = 0; i < 10; i++)
+    for (int i = 0; i < 10; i++)
     {
         // numbers 0-9
         M_snprintf(name, 9, "WINUM%d", i);
@@ -1526,7 +1508,7 @@ static void WI_loadUnloadData(load_callback_t callback)
     // "total"
     callback("WIMSTT", &total);
 
-    for (i = 0; i < MAXPLAYERS; i++)
+    for (int i = 0; i < MAXPLAYERS; i++)
     {
         // "1,2,3,4"
         M_snprintf(name, 9, "STPB%d", i);

@@ -181,10 +181,6 @@ void HU_Erase(void)
 
 void HU_Ticker(void)
 {
-
-    int i, rc;
-    char c;
-
     // tick down message counter if message is up
     if (message_counter && !--message_counter)
     {
@@ -212,8 +208,10 @@ void HU_Ticker(void)
     // check for incoming chat characters
     if (netgame)
     {
-        for (i = 0; i < MAXPLAYERS; i++)
+        for (int i = 0; i < MAXPLAYERS; i++)
         {
+            char c;
+
             if (!playeringame[i])
                 continue;
             if (i != consoleplayer && (c = players[i].cmd.chatchar))
@@ -222,7 +220,7 @@ void HU_Ticker(void)
                     chat_dest[i] = c;
                 else
                 {
-                    rc = HUlib_keyInIText(&w_inputbuffer[i], c);
+                    int rc = HUlib_keyInIText(&w_inputbuffer[i], c);
                     if (rc && c == KEY_ENTER)
                     {
                         if (w_inputbuffer[i].l.len &&

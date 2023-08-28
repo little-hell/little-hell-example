@@ -27,7 +27,7 @@ static struct
 {
     GameMission_t mission;
     GameMode_t mode;
-} valid_modes[] = {{doom, registered, 3, 9}};
+} valid_modes[] = {{doom, registered}};
 
 // Check that a gamemode+gamemission received over the network is valid.
 

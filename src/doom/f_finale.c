@@ -172,7 +172,6 @@ void F_TextWrite(void)
     int x, y, w;
     signed int count;
     const char *ch;
-    int c;
     int cx;
     int cy;
 
@@ -206,7 +205,7 @@ void F_TextWrite(void)
         count = 0;
     for (; count; count--)
     {
-        c = *ch++;
+        int c = *ch++;
         if (!c)
             break;
         if (c == '\n')
@@ -307,9 +306,6 @@ void F_CastTicker(void)
             case S_SPOS_ATK2:
                 sfx = sfx_shotgn;
                 break;
-            case S_VILE_ATK2:
-                sfx = sfx_vilatk;
-                break;
             case S_SKEL_FIST2:
                 sfx = sfx_skeswg;
                 break;
@@ -319,16 +315,6 @@ void F_CastTicker(void)
             case S_SKEL_MISS2:
                 sfx = sfx_skeatk;
                 break;
-            case S_FATT_ATK8:
-            case S_FATT_ATK5:
-            case S_FATT_ATK2:
-                sfx = sfx_firsht;
-                break;
-            case S_CPOS_ATK2:
-            case S_CPOS_ATK3:
-            case S_CPOS_ATK4:
-                sfx = sfx_shotgn;
-                break;
             case S_TROO_ATK3:
                 sfx = sfx_claw;
                 break;
@@ -336,7 +322,6 @@ void F_CastTicker(void)
                 sfx = sfx_sgtatk;
                 break;
             case S_BOSS_ATK2:
-            case S_BOS2_ATK2:
             case S_HEAD_ATK2:
                 sfx = sfx_firsht;
                 break;
@@ -347,16 +332,10 @@ void F_CastTicker(void)
             case S_SPID_ATK3:
                 sfx = sfx_shotgn;
                 break;
-            case S_BSPI_ATK2:
-                sfx = sfx_plasma;
-                break;
             case S_CYBER_ATK2:
             case S_CYBER_ATK4:
             case S_CYBER_ATK6:
                 sfx = sfx_rlaunc;
-                break;
-            case S_PAIN_ATK3:
-                sfx = sfx_sklatk;
                 break;
             default:
                 sfx = 0;
@@ -517,20 +496,16 @@ void F_CastDrawer(void)
 void F_DrawPatchCol(int x, patch_t *patch, int col)
 {
     column_t *column;
-    byte *source;
-    pixel_t *dest;
-    pixel_t *desttop;
-    int count;
-
     column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col]));
-    desttop = I_VideoBuffer + x;
+
+    pixel_t *desttop = desttop = I_VideoBuffer + x;
 
     // step through the posts in a column
     while (column->topdelta != 0xff)
     {
-        source = (byte *) column + 3;
-        dest = desttop + column->topdelta * SCREENWIDTH;
-        count = column->length;
+        byte *source = (byte *) column + 3;
+        pixel_t *dest = desttop + column->topdelta * SCREENWIDTH;
+        int count = column->length;
 
         while (count--)
         {
@@ -600,7 +575,6 @@ void F_BunnyScroll(void)
 
 static void F_ArtScreenDrawer(void)
 {
-    const char *lumpname;
 
     if (gameepisode == 3)
     {
@@ -608,6 +582,7 @@ static void F_ArtScreenDrawer(void)
     }
     else
     {
+        const char *lumpname;
         switch (gameepisode)
         {
             case 1:

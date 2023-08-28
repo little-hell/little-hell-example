@@ -1025,12 +1025,11 @@ boolean G_CheckSpot(int playernum, mapthing_t *mthing)
     fixed_t y;
     subsector_t *ss;
     mobj_t *mo;
-    int i;
 
     if (!players[playernum].mo)
     {
         // first spawn of level, before corpses
-        for (i = 0; i < playernum; i++)
+        for (int i = 0; i < playernum; i++)
             if (players[i].mo->x == mthing->x << FRACBITS &&
                 players[i].mo->y == mthing->y << FRACBITS)
                 return false;
@@ -1126,16 +1125,14 @@ boolean G_CheckSpot(int playernum, mapthing_t *mthing)
 //
 void G_DeathMatchSpawnPlayer(int playernum)
 {
-    int i, j;
-    int selections;
+    int selections = deathmatch_p - deathmatchstarts;
 
-    selections = deathmatch_p - deathmatchstarts;
     if (selections < 4)
         I_Error("Only %i deathmatch spots, 4 required", selections);
 
-    for (j = 0; j < 20; j++)
+    for (int j = 0; j < 20; j++)
     {
-        i = P_Random() % selections;
+        int i = P_Random() % selections;
         if (G_CheckSpot(playernum, &deathmatchstarts[i]))
         {
             deathmatchstarts[i].type = playernum + 1;

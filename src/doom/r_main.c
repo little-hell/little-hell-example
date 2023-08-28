@@ -553,14 +553,13 @@ void R_InitLightTables(void)
     int i;
     int j;
     int level;
-    int startmap;
     int scale;
 
     // Calculate the light levels to use
     //  for each level / distance combination.
     for (i = 0; i < LIGHTLEVELS; i++)
     {
-        startmap = ((LIGHTLEVELS - 1 - i) * 2) * NUMCOLORMAPS / LIGHTLEVELS;
+        int startmap = ((LIGHTLEVELS - 1 - i) * 2) * NUMCOLORMAPS / LIGHTLEVELS;
         for (j = 0; j < MAXLIGHTZ; j++)
         {
             scale =
@@ -606,10 +605,7 @@ void R_ExecuteSetViewSize(void)
 {
     fixed_t cosadj;
     fixed_t dy;
-    int i;
-    int j;
     int level;
-    int startmap;
 
     setsizeneeded = false;
 
@@ -657,18 +653,18 @@ void R_ExecuteSetViewSize(void)
     pspriteiscale = FRACUNIT * SCREENWIDTH / viewwidth;
 
     // thing clipping
-    for (i = 0; i < viewwidth; i++)
+    for (int i = 0; i < viewwidth; i++)
         screenheightarray[i] = viewheight;
 
     // planes
-    for (i = 0; i < viewheight; i++)
+    for (int i = 0; i < viewheight; i++)
     {
         dy = ((i - viewheight / 2) << FRACBITS) + FRACUNIT / 2;
         dy = abs(dy);
         yslope[i] = FixedDiv((viewwidth << detailshift) / 2 * FRACUNIT, dy);
     }
 
-    for (i = 0; i < viewwidth; i++)
+    for (int i = 0; i < viewwidth; i++)
     {
         cosadj = abs(finecosine[xtoviewangle[i] >> ANGLETOFINESHIFT]);
         distscale[i] = FixedDiv(FRACUNIT, cosadj);
@@ -676,10 +672,10 @@ void R_ExecuteSetViewSize(void)
 
     // Calculate the light levels to use
     //  for each level / scale combination.
-    for (i = 0; i < LIGHTLEVELS; i++)
+    for (int i = 0; i < LIGHTLEVELS; i++)
     {
-        startmap = ((LIGHTLEVELS - 1 - i) * 2) * NUMCOLORMAPS / LIGHTLEVELS;
-        for (j = 0; j < MAXLIGHTSCALE; j++)
+        int startmap = ((LIGHTLEVELS - 1 - i) * 2) * NUMCOLORMAPS / LIGHTLEVELS;
+        for (int j = 0; j < MAXLIGHTSCALE; j++)
         {
             level = startmap -
                     j * SCREENWIDTH / (viewwidth << detailshift) / DISTMAP;
@@ -729,20 +725,16 @@ void R_Init(void)
 //
 subsector_t *R_PointInSubsector(fixed_t x, fixed_t y)
 {
-    node_t *node;
-    int side;
-    int nodenum;
-
     // single subsector is a special case
     if (!numnodes)
         return subsectors;
 
-    nodenum = numnodes - 1;
+    int nodenum = numnodes - 1;
 
     while (!(nodenum & NF_SUBSECTOR))
     {
-        node = &nodes[nodenum];
-        side = R_PointOnSide(x, y, node);
+        node_t *node = &nodes[nodenum];
+        int side = R_PointOnSide(x, y, node);
         nodenum = node->children[side];
     }
 
@@ -755,7 +747,6 @@ subsector_t *R_PointInSubsector(fixed_t x, fixed_t y)
 //
 void R_SetupFrame(player_t *player)
 {
-    int i;
 
     viewplayer = player;
     viewx = player->mo->x;
@@ -776,7 +767,7 @@ void R_SetupFrame(player_t *player)
 
         walllights = scalelightfixed;
 
-        for (i = 0; i < MAXLIGHTSCALE; i++)
+        for (int i = 0; i < MAXLIGHTSCALE; i++)
             scalelightfixed[i] = fixedcolormap;
     }
     else

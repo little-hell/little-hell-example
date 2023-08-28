@@ -277,14 +277,12 @@ void V_DrawBlock(int x, int y, int width, int height, pixel_t *src)
 
 void V_DrawFilledBox(int x, int y, int w, int h, int c)
 {
-    pixel_t *buf, *buf1;
     int x1, y1;
-
-    buf = I_VideoBuffer + SCREENWIDTH * y + x;
+    pixel_t *buf = I_VideoBuffer + SCREENWIDTH * y + x;
 
     for (y1 = 0; y1 < h; ++y1)
     {
-        buf1 = buf;
+        pixel_t *buf1 = buf;
 
         for (x1 = 0; x1 < w; ++x1)
         {
@@ -380,7 +378,6 @@ void WritePNGfile(char *filename, pixel_t *data, int width, int height,
     png_infop pinfo;
     png_colorp pcolor;
     FILE *handle;
-    int i, j;
     int w_factor, h_factor;
     byte *rowbuf;
 
@@ -435,7 +432,7 @@ void WritePNGfile(char *filename, pixel_t *data, int width, int height,
         return;
     }
 
-    for (i = 0; i < 256; i++)
+    for (int i = 0; i < 256; i++)
     {
         pcolor[i].red = *(palette + 3 * i);
         pcolor[i].green = *(palette + 3 * i + 1);
@@ -451,17 +448,17 @@ void WritePNGfile(char *filename, pixel_t *data, int width, int height,
 
     if (rowbuf)
     {
-        for (i = 0; i < SCREENHEIGHT; i++)
+        for (int i = 0; i < SCREENHEIGHT; i++)
         {
             // expand the row 5x
-            for (j = 0; j < SCREENWIDTH; j++)
+            for (int j = 0; j < SCREENWIDTH; j++)
             {
                 memset(rowbuf + j * w_factor, *(data + i * SCREENWIDTH + j),
                        w_factor);
             }
 
             // write the row 6 times
-            for (j = 0; j < h_factor; j++)
+            for (int j = 0; j < h_factor; j++)
             {
                 png_write_row(ppng, rowbuf);
             }
@@ -521,7 +518,6 @@ void V_ScreenShot(const char *format)
 static void DrawAcceleratingBox(int speed)
 {
     int red, white, yellow;
-    int original_speed;
     int redline_x;
     int linelen;
 
@@ -537,7 +533,7 @@ static void DrawAcceleratingBox(int speed)
     if (speed >= mouse_threshold)
     {
         // Undo acceleration and get back the original mouse speed
-        original_speed = speed - mouse_threshold;
+        int original_speed = speed - mouse_threshold;
         original_speed = (int) (original_speed / mouse_acceleration);
         original_speed += mouse_threshold;
 

@@ -680,7 +680,6 @@ void P_KillMobj(mobj_t *source, mobj_t *target)
     // during the death frame of a thing.
     switch (target->type)
     {
-        case MT_WOLFSS:
         case MT_POSSESSED:
             item = MT_CLIP;
             break;
@@ -688,11 +687,6 @@ void P_KillMobj(mobj_t *source, mobj_t *target)
         case MT_SHOTGUY:
             item = MT_SHOTGUN;
             break;
-
-        case MT_CHAINGUY:
-            item = MT_CHAINGUN;
-            break;
-
         default:
             return;
     }
@@ -830,8 +824,7 @@ void P_DamageMobj(mobj_t *target, mobj_t *inflictor, mobj_t *source, int damage)
 
     target->reactiontime = 0; // we're awake now...
 
-    if ((!target->threshold || target->type == MT_VILE) && source &&
-        (source != target) && source->type != MT_VILE)
+    if ((!target->threshold) && source && (source != target))
     {
         // if not intent on another player,
         // chase after this one

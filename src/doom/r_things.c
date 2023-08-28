@@ -78,8 +78,6 @@ const char *spritename;
 void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
                          boolean flipped)
 {
-    int r;
-
     if (frame >= 29 || rotation > 8)
         I_Error("R_InstallSpriteLump: "
                 "Bad frame characters in lump %i",
@@ -102,7 +100,7 @@ void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
                     spritename, 'A' + frame);
 
         sprtemp[frame].rotate = false;
-        for (r = 0; r < 8; r++)
+        for (int r = 0; r < 8; r++)
         {
             sprtemp[frame].lump[r] = lump - firstspritelump;
             sprtemp[frame].flip[r] = (byte) flipped;
@@ -315,8 +313,6 @@ fixed_t sprtopscreen;
 
 void R_DrawMaskedColumn(column_t *column)
 {
-    int topscreen;
-    int bottomscreen;
     fixed_t basetexturemid;
 
     basetexturemid = dc_texturemid;
@@ -325,8 +321,8 @@ void R_DrawMaskedColumn(column_t *column)
     {
         // calculate unclipped screen coordinates
         //  for post
-        topscreen = sprtopscreen + spryscale * column->topdelta;
-        bottomscreen = topscreen + spryscale * column->length;
+        int topscreen = sprtopscreen + spryscale * column->topdelta;
+        int bottomscreen = topscreen + spryscale * column->length;
 
         dc_yl = (topscreen + FRACUNIT - 1) >> FRACBITS;
         dc_yh = (bottomscreen - 1) >> FRACBITS;

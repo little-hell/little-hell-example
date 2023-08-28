@@ -232,7 +232,6 @@ void StatCopy(const wbstartstruct_t *stats)
 
 void StatDump(void)
 {
-    FILE *dumpfile;
     int i;
 
     //!
@@ -256,6 +255,8 @@ void StatDump(void)
         DiscoverGamemode(captured_stats, num_captured_stats);
 
         // Allow "-" as output file, for stdout.
+        
+        FILE *dumpfile;
 
         if (strcmp(myargv[i + 1], "-") != 0)
         {

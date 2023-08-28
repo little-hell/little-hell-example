@@ -474,9 +474,6 @@ void P_CrossSpecialLine(int linenum, int side, mobj_t *thing)
             case MT_BFG:
             case MT_TROOPSHOT:
             case MT_HEADSHOT:
-            case MT_BRUISERSHOT:
-                return;
-
             default:
                 break;
         }

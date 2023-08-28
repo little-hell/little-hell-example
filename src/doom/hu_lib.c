@@ -78,20 +78,15 @@ boolean HUlib_delCharFromTextLine(hu_textline_t *t)
 
 void HUlib_drawTextLine(hu_textline_t *l, boolean drawcursor)
 {
-
-    int i;
-    int w;
-    int x;
-    unsigned char c;
-
     // draw the new stuff
-    x = l->x;
-    for (i = 0; i < l->len; i++)
+    int x = l->x;
+
+    for (int i = 0; i < l->len; i++)
     {
-        c = toupper(l->l[i]);
+        unsigned char c = toupper(l->l[i]);
         if (c != ' ' && c >= l->sc && c <= '_')
         {
-            w = SHORT(l->f[c - l->sc]->width);
+            int w = SHORT(l->f[c - l->sc]->width);
             if (x + w > SCREENWIDTH)
                 break;
             V_DrawPatchDirect(x, l->y, l->f[c - l->sc]);
@@ -116,19 +111,16 @@ void HUlib_drawTextLine(hu_textline_t *l, boolean drawcursor)
 // sorta called by HU_Erase and just better darn get things straight
 void HUlib_eraseTextLine(hu_textline_t *l)
 {
-    int lh;
-    int y;
-    int yoffset;
-
     // Only erases when NOT in automap and the screen is reduced,
     // and the text must either need updating or refreshing
     // (because of a recent change back from the automap)
 
     if (!automapactive && viewwindowx && l->needsupdate)
     {
-        lh = SHORT(l->f[0]->height) + 1;
-        for (y = l->y, yoffset = y * SCREENWIDTH; y < l->y + lh;
-             y++, yoffset += SCREENWIDTH)
+        int yoffset;
+        int lh = SHORT(l->f[0]->height) + 1;
+
+        for (int y = l->y, yoffset = y * SCREENWIDTH; y < l->y + lh; y++, yoffset += SCREENWIDTH)
         {
             if (y < viewwindowy || y >= viewwindowy + viewheight)
                 R_VideoErase(yoffset, SCREENWIDTH); // erase entire line
@@ -188,20 +180,18 @@ void HUlib_addMessageToSText(hu_stext_t *s, const char *prefix, const char *msg)
 
 void HUlib_drawSText(hu_stext_t *s)
 {
-    int i, idx;
-    hu_textline_t *l;
 
     if (!*s->on)
         return; // if not on, don't draw
 
     // draw everything
-    for (i = 0; i < s->h; i++)
+    for (int i = 0; i < s->h; i++)
     {
-        idx = s->cl - i;
+        int idx = s->cl - i;
         if (idx < 0)
             idx += s->h; // handle queue of lines
 
-        l = &s->l[idx];
+        hu_textline_t *l = &s->l[idx];
 
         // need a decision made here on whether to skip the draw
         HUlib_drawTextLine(l, false); // no cursor, please

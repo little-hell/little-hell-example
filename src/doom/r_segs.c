@@ -191,8 +191,6 @@ void R_RenderSegLoop(void)
 {
     angle_t angle;
     unsigned index;
-    int yl;
-    int yh;
     int mid;
     fixed_t texturecolumn;
     int top;
@@ -201,7 +199,7 @@ void R_RenderSegLoop(void)
     for (; rw_x < rw_stopx; rw_x++)
     {
         // mark floor / ceiling areas
-        yl = (topfrac + HEIGHTUNIT - 1) >> HEIGHTBITS;
+        int yl = (topfrac + HEIGHTUNIT - 1) >> HEIGHTBITS;
 
         // no space above wall?
         if (yl < ceilingclip[rw_x] + 1)
@@ -222,7 +220,7 @@ void R_RenderSegLoop(void)
             }
         }
 
-        yh = bottomfrac >> HEIGHTBITS;
+        int yh = bottomfrac >> HEIGHTBITS;
 
         if (yh >= floorclip[rw_x])
             yh = floorclip[rw_x] - 1;

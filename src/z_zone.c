@@ -112,22 +112,21 @@ static void ScanForBlock(void *start, void *end)
 {
     memblock_t *block;
     void **mem;
-    int i, len, tag;
 
     block = mainzone->blocklist.next;
 
     while (block->next != &mainzone->blocklist)
     {
-        tag = block->tag;
+        int tag = block->tag;
 
         if (tag == PU_STATIC || tag == PU_LEVEL || tag == PU_LEVSPEC)
         {
             // Scan for pointers on the assumption that pointers are aligned
             // on word boundaries (word size depending on pointer size):
             mem = (void **) ((byte *) block + sizeof(memblock_t));
-            len = (block->size - sizeof(memblock_t)) / sizeof(void *);
+            int len = (block->size - sizeof(memblock_t)) / sizeof(void *);
 
-            for (i = 0; i < len; ++i)
+            for (int i = 0; i < len; ++i)
             {
                 if (start <= mem[i] && mem[i] <= end)
                 {

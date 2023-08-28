@@ -349,8 +349,6 @@ static void NET_Query_ParseMasterResponse(net_addr_t *master_addr,
 {
     unsigned int packet_type;
     query_target_t *target;
-    char *addr_str;
-    net_addr_t *addr;
 
     // Read the header.  We are only interested in query responses.
 
@@ -365,7 +363,7 @@ static void NET_Query_ParseMasterResponse(net_addr_t *master_addr,
 
     for (;;)
     {
-        addr_str = NET_ReadString(packet);
+        char *addr_str = NET_ReadString(packet);
 
         if (addr_str == NULL)
         {
@@ -375,7 +373,7 @@ static void NET_Query_ParseMasterResponse(net_addr_t *master_addr,
         // Resolve address and add to targets list if it is not already
         // there.
 
-        addr = NET_ResolveAddress(query_context, addr_str);
+        net_addr_t *addr = NET_ResolveAddress(query_context, addr_str);
         if (addr != NULL)
         {
             GetTargetForAddr(addr, true);

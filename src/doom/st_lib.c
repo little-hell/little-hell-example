@@ -167,19 +167,14 @@ void STlib_initMultIcon(st_multicon_t *i, int x, int y, patch_t **il, int *inum,
 
 void STlib_updateMultIcon(st_multicon_t *mi, boolean refresh)
 {
-    int w;
-    int h;
-    int x;
-    int y;
-
     if (*mi->on && (mi->oldinum != *mi->inum || refresh) && (*mi->inum != -1))
     {
         if (mi->oldinum != -1)
         {
-            x = mi->x - SHORT(mi->p[mi->oldinum]->leftoffset);
-            y = mi->y - SHORT(mi->p[mi->oldinum]->topoffset);
-            w = SHORT(mi->p[mi->oldinum]->width);
-            h = SHORT(mi->p[mi->oldinum]->height);
+            int x = mi->x - SHORT(mi->p[mi->oldinum]->leftoffset);
+            int y = mi->y - SHORT(mi->p[mi->oldinum]->topoffset);
+            int w = SHORT(mi->p[mi->oldinum]->width);
+            int h = SHORT(mi->p[mi->oldinum]->height);
 
             if (y - ST_Y < 0)
                 I_Error("updateMultIcon: y - ST_Y < 0");
@@ -206,17 +201,13 @@ void STlib_initBinIcon(st_binicon_t *b, int x, int y, patch_t *i, boolean *val,
 
 void STlib_updateBinIcon(st_binicon_t *bi, boolean refresh)
 {
-    int x;
-    int y;
-    int w;
-    int h;
 
     if (*bi->on && (bi->oldval != *bi->val || refresh))
     {
-        x = bi->x - SHORT(bi->p->leftoffset);
-        y = bi->y - SHORT(bi->p->topoffset);
-        w = SHORT(bi->p->width);
-        h = SHORT(bi->p->height);
+        int x = bi->x - SHORT(bi->p->leftoffset);
+        int y = bi->y - SHORT(bi->p->topoffset);
+        int w = SHORT(bi->p->width);
+        int h = SHORT(bi->p->height);
 
         if (y - ST_Y < 0)
             I_Error("updateBinIcon: y - ST_Y < 0");

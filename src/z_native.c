@@ -337,15 +337,13 @@ void Z_FreeTags(int lowtag, int hightag)
 //
 void Z_CheckHeap(void)
 {
-    memblock_t *block;
-    memblock_t *prev;
-    int i;
 
     // Check all chains
 
-    for (i = 0; i < PU_NUM_TAGS; ++i)
+    for (int i = 0; i < PU_NUM_TAGS; ++i)
     {
-        prev = NULL;
+        memblock_t *prev = NULL;
+        memblock_t *block;
 
         for (block = allocated_blocks[i]; block != NULL; block = block->next)
         {

@@ -310,11 +310,7 @@ boolean PIT_CheckThing(mobj_t *thing)
         if (tmthing->z + tmthing->height < thing->z)
             return true; // underneath
 
-        if (tmthing->target &&
-            (tmthing->target->type == thing->type ||
-             (tmthing->target->type == MT_KNIGHT &&
-              thing->type == MT_BRUISER) ||
-             (tmthing->target->type == MT_BRUISER && thing->type == MT_KNIGHT)))
+        if (tmthing->target && (tmthing->target->type == thing->type))
         {
             // Don't hit same species as originator.
             if (thing == tmthing->target)

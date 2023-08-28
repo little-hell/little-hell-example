@@ -156,7 +156,6 @@ void S_Shutdown(void)
 
 static void S_StopChannel(int cnum)
 {
-    int i;
     channel_t *c;
 
     c = &channels[cnum];
@@ -172,7 +171,7 @@ static void S_StopChannel(int cnum)
 
         // check to see if other channels are playing the sound
 
-        for (i = 0; i < snd_channels; i++)
+        for (int i = 0; i < snd_channels; i++)
         {
             if (cnum != i && c->sfxinfo == channels[i].sfxinfo)
             {
@@ -401,7 +400,6 @@ void S_StartSound(void *origin_p, int sfx_id)
 {
     sfxinfo_t *sfx;
     mobj_t *origin;
-    int rc;
     int sep;
     int pitch;
     int cnum;
@@ -441,7 +439,7 @@ void S_StartSound(void *origin_p, int sfx_id)
     //  and if not, modify the params
     if (origin && origin != players[consoleplayer].mo)
     {
-        rc = S_AdjustSoundParams(players[consoleplayer].mo, origin, &volume,
+        int rc = S_AdjustSoundParams(players[consoleplayer].mo, origin, &volume,
                                  &sep);
 
         if (origin->x == players[consoleplayer].mo->x &&
@@ -530,7 +528,6 @@ void S_UpdateSounds(mobj_t *listener)
     int cnum;
     int volume;
     int sep;
-    sfxinfo_t *sfx;
     channel_t *c;
 
     I_UpdateSound();
@@ -538,7 +535,7 @@ void S_UpdateSounds(mobj_t *listener)
     for (cnum = 0; cnum < snd_channels; cnum++)
     {
         c = &channels[cnum];
-        sfx = c->sfxinfo;
+        sfxinfo_t *sfx = c->sfxinfo;
 
         if (c->sfxinfo)
         {
@@ -621,7 +618,6 @@ void S_StartMusic(int m_id)
 void S_ChangeMusic(int musicnum, int looping)
 {
     musicinfo_t *music = NULL;
-    char namebuf[9];
     void *handle;
 
     // The Doom IWAD file has two versions of the intro music: d_intro
@@ -653,6 +649,7 @@ void S_ChangeMusic(int musicnum, int looping)
     // get lumpnum if neccessary
     if (!music->lumpnum)
     {
+        char namebuf[9];
         M_snprintf(namebuf, sizeof(namebuf), "d_%s", music->name);
         music->lumpnum = W_GetNumForName(namebuf);
     }

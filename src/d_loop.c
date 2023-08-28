@@ -421,7 +421,6 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
 {
     boolean result = false;
     net_addr_t *addr = NULL;
-    int i;
 
     // Call D_QuitNetGame on exit:
 
@@ -453,7 +452,7 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
         // server and join it.
         //
 
-        i = M_CheckParm("-autojoin");
+        int i = M_CheckParm("-autojoin");
 
         if (i > 0)
         {
@@ -601,14 +600,13 @@ static void OldNetSync(void)
 static boolean PlayersInGame(void)
 {
     boolean result = false;
-    unsigned int i;
 
     // If we are connected to a server, check if there are any players
     // in the game.
 
     if (net_client_connected)
     {
-        for (i = 0; i < NET_MAXPLAYERS; ++i)
+        for (unsigned int i = 0; i < NET_MAXPLAYERS; ++i)
         {
             result = result || local_playeringame[i];
         }
@@ -630,12 +628,10 @@ static boolean PlayersInGame(void)
 
 static void TicdupSquash(ticcmd_set_t *set)
 {
-    ticcmd_t *cmd;
-    unsigned int i;
 
-    for (i = 0; i < NET_MAXPLAYERS; ++i)
+    for (unsigned int i = 0; i < NET_MAXPLAYERS; ++i)
     {
-        cmd = &set->cmds[i];
+        ticcmd_t *cmd = &set->cmds[i];
         cmd->chatchar = 0;
         if (cmd->buttons & BT_SPECIAL)
             cmd->buttons = 0;

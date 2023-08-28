@@ -305,13 +305,9 @@ static void BuildIWADDirList(void)
 
 char *D_FindWADByName(const char *name)
 {
-    char *path;
-    char *probe;
-    int i;
 
     // Absolute path?
-
-    probe = M_FileCaseExists(name);
+    char *probe = M_FileCaseExists(name);
     if (probe != NULL)
     {
         return probe;
@@ -321,7 +317,7 @@ char *D_FindWADByName(const char *name)
 
     // Search through all IWAD paths for a file with the given name.
 
-    for (i = 0; i < num_iwad_dirs; ++i)
+    for (int i = 0; i < num_iwad_dirs; ++i)
     {
         // As a special case, if this is in DOOMWADDIR or DOOMWADPATH,
         // the "directory" may actually refer directly to an IWAD
@@ -335,8 +331,7 @@ char *D_FindWADByName(const char *name)
         free(probe);
 
         // Construct a string for the full path
-
-        path = M_StringJoin(iwad_dirs[i], DIR_SEPARATOR_S, name, NULL);
+        char *path = M_StringJoin(iwad_dirs[i], DIR_SEPARATOR_S, name, NULL);
 
         probe = M_FileCaseExists(path);
         if (probe != NULL)
@@ -384,10 +379,6 @@ char *D_TryFindWADByName(const char *filename)
 
 char *D_FindIWAD(int mask, GameMission_t *mission)
 {
-    char *result;
-    const char *iwadfile;
-    int iwadparm;
-    int i;
 
     // Check for the -iwad parameter
 
@@ -396,14 +387,14 @@ char *D_FindIWAD(int mask, GameMission_t *mission)
     //
     // @arg <file>
     //
-
-    iwadparm = M_CheckParmWithArgs("-iwad", 1);
+    int iwadparm = M_CheckParmWithArgs("-iwad", 1);
+        
+    char *result;
 
     if (iwadparm)
     {
         // Search through IWAD dirs for an IWAD with the given name.
-
-        iwadfile = myargv[iwadparm + 1];
+        const char *iwadfile = myargv[iwadparm + 1];
 
         result = D_FindWADByName(iwadfile);
 
@@ -422,7 +413,7 @@ char *D_FindIWAD(int mask, GameMission_t *mission)
 
         BuildIWADDirList();
 
-        for (i = 0; result == NULL && i < num_iwad_dirs; ++i)
+        for (int i = 0; result == NULL && i < num_iwad_dirs; ++i)
         {
             result = SearchDirectoryForIWAD(iwad_dirs[i], mask, mission);
         }
