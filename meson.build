@@ -87,7 +87,6 @@ game_source_files = files(
     src_dir / 'w_file.c',
     src_dir / 'w_file_stdc.c',
     src_dir / 'w_file_posix.c',
-    src_dir / 'w_merge.c',
 
     src_dir / doom_source_dir / 'am_map.c',
     src_dir / doom_source_dir / 'd_items.c',
