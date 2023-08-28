@@ -17,6 +17,7 @@ common_source_files = files(
     src_dir / 'i_system.c',
     src_dir / 'm_argv.c',
     src_dir / 'm_misc.c',
+    src_dir / 'z_native.c',
   )
 
 # Source files only used by the server binary 
@@ -34,7 +35,6 @@ dedicated_server_source_files = files(
     src_dir / 'net_query.c', 
     src_dir / 'net_server.c', 
     src_dir / 'net_structrw.c',
-    src_dir / 'z_native.c' 
   )
 
 
@@ -88,7 +88,6 @@ game_source_files = files(
     src_dir / 'w_file_stdc.c',
     src_dir / 'w_file_posix.c',
     src_dir / 'w_merge.c',
-    src_dir / 'z_zone.c',
 
     src_dir / doom_source_dir / 'am_map.c',
     src_dir / doom_source_dir / 'd_items.c',
