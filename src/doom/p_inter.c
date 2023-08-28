@@ -363,18 +363,6 @@ void P_TouchSpecialThing(mobj_t *special, mobj_t *toucher)
             sound = sfx_getpow;
             break;
 
-        case SPR_MEGA:
-            if (gamemode != commercial)
-                return;
-            player->health = MEGASPHERE_HEALTH;
-            player->mo->health = player->health;
-            // We always give armor type 2 for the megasphere; dehacked only
-            // affects the MegaArmor.
-            P_GiveArmor(player, 2);
-            player->message = GOTMSPHERE;
-            sound = sfx_getpow;
-            break;
-
             // cards
             // leave cards for everyone
         case SPR_BKEY:

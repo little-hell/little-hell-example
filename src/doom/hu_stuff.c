@@ -47,9 +47,6 @@
 // Locally used constants, shortcuts.
 //
 #define HU_TITLE       (mapnames[(gameepisode - 1) * 9 + gamemap - 1])
-#define HU_TITLE2      (mapnames_commercial[gamemap - 1])
-#define HU_TITLEP      (mapnames_commercial[gamemap - 1 + 32])
-#define HU_TITLET      (mapnames_commercial[gamemap - 1 + 64])
 #define HU_TITLEHEIGHT 1
 #define HU_TITLEX      0
 #define HU_TITLEY      (167 - SHORT(hu_font[0]->height))

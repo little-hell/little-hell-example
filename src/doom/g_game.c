@@ -230,21 +230,6 @@ int G_CmdChecksum(ticcmd_t *cmd)
 
 static boolean WeaponSelectable(weapontype_t weapon)
 {
-    // Can't select the super shotgun in Doom 1.
-
-    if (weapon == wp_supershotgun && logical_gamemission == doom)
-    {
-        return false;
-    }
-
-    // These weapons aren't available in shareware.
-
-    if ((weapon == wp_plasma || weapon == wp_bfg) && gamemission == doom &&
-        gamemode == shareware)
-    {
-        return false;
-    }
-
     // Can't select a weapon if we don't own it.
 
     if (!players[consoleplayer].weaponowned[weapon])
@@ -1256,14 +1241,9 @@ void G_ExitLevel(void)
     gameaction = ga_completed;
 }
 
-// Here's for the german edition.
 void G_SecretExitLevel(void)
 {
-    // IF NO WOLF3D LEVELS, NO SECRET EXIT!
-    if ((gamemode == commercial) && (W_CheckNumForName("map31") < 0))
-        secretexit = false;
-    else
-        secretexit = true;
+    secretexit = true;
     gameaction = ga_completed;
 }
 
@@ -1575,16 +1555,14 @@ void G_InitNew(skill_t skill, int episode, int map)
         episode = 3;
     }
 
-    if (episode > 1 && gamemode == shareware)
-    {
-        episode = 1;
-    }
-
     if (map < 1)
+    {
         map = 1;
-
-    if ((map > 9) && (gamemode != commercial))
+    }
+    if (map > 9)
+    {
         map = 9;
+    }
 
     M_ClearRandom();
 

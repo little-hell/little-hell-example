@@ -777,10 +777,7 @@ void M_NewGame(int choice)
         return;
     }
 
-    if (gamemode == commercial)
-        M_SetupNextMenu(&NewDef);
-    else
-        M_SetupNextMenu(&EpiDef);
+    M_SetupNextMenu(&EpiDef);
 }
 
 
@@ -818,13 +815,6 @@ void M_ChooseSkill(int choice)
 
 void M_Episode(int choice)
 {
-    if ((gamemode == shareware) && choice)
-    {
-        M_StartMessage(SWSTRING, NULL, false);
-        M_SetupNextMenu(&ReadDef1);
-        return;
-    }
-
     epi = choice;
     M_SetupNextMenu(&NewDef);
 }
@@ -950,10 +940,7 @@ void M_QuitResponse(int key)
         return;
     if (!netgame)
     {
-        if (gamemode == commercial)
-            S_StartSound(NULL, quitsounds2[(gametic >> 2) & 7]);
-        else
-            S_StartSound(NULL, quitsounds[(gametic >> 2) & 7]);
+        S_StartSound(NULL, quitsounds[(gametic >> 2) & 7]);
         I_WaitVBL(105);
     }
     I_Quit();

@@ -50,25 +50,8 @@
 // Loads of by-pixel layout and placement, offsets etc.
 //
 
-
-//
-// Different vetween registered DOOM (1994) and
-//  Ultimate DOOM - Final edition (retail, 1995?).
-// This is supposedly ignored for commercial
-//  release (aka DOOM II), which had 34 maps
-//  in one episode. So there.
-#define NUMEPISODES 4
+#define NUMEPISODES 3
 #define NUMMAPS     9
-
-
-// in tics
-//U #define PAUSELEN		(TICRATE*2)
-//U #define SCORESTEP		100
-//U #define ANIMPERIOD		32
-// pixel distance from "(YOU)" to "PLAYER N"
-//U #define STARDIST		10
-//U #define WK 1
-
 
 // GLOBAL LOCATIONS
 #define WI_TITLEY   2

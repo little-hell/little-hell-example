@@ -38,10 +38,7 @@ typedef enum
 
 typedef enum
 {
-    shareware,   // Doom/Heretic shareware
-    registered,  // Doom/Heretic registered
-    commercial,  // Doom II/Hexen
-    retail,      // Ultimate Doom
+    registered,  // Doom registered
     indetermined // Unknown.
 } GameMode_t;
 

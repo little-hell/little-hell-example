@@ -1557,20 +1557,9 @@ void A_BossDeath(mobj_t *mo)
     line_t junk;
     int i;
 
-    if (gamemode == commercial)
+    if (!CheckBossEnd(mo->type))
     {
-        if (gamemap != 7)
-            return;
-
-        if ((mo->type != MT_FATSO) && (mo->type != MT_BABY))
-            return;
-    }
-    else
-    {
-        if (!CheckBossEnd(mo->type))
-        {
-            return;
-        }
+        return;
     }
 
     // make sure there is a player alive for victory
@@ -1596,52 +1585,29 @@ void A_BossDeath(mobj_t *mo)
         }
     }
 
-    // victory!
-    if (gamemode == commercial)
+    switch (gameepisode)
     {
-        if (gamemap == 7)
-        {
-            if (mo->type == MT_FATSO)
+        case 1:
+            junk.tag = 666;
+            EV_DoFloor(&junk, lowerFloorToLowest);
+            return;
+            break;
+
+        case 4:
+            switch (gamemap)
             {
-                junk.tag = 666;
-                EV_DoFloor(&junk, lowerFloorToLowest);
-                return;
+                case 6:
+                    junk.tag = 666;
+                    EV_DoDoor(&junk, vld_blazeOpen);
+                    return;
+                    break;
+
+                case 8:
+                    junk.tag = 666;
+                    EV_DoFloor(&junk, lowerFloorToLowest);
+                    return;
+                    break;
             }
-
-            if (mo->type == MT_BABY)
-            {
-                junk.tag = 667;
-                EV_DoFloor(&junk, raiseToTexture);
-                return;
-            }
-        }
-    }
-    else
-    {
-        switch (gameepisode)
-        {
-            case 1:
-                junk.tag = 666;
-                EV_DoFloor(&junk, lowerFloorToLowest);
-                return;
-                break;
-
-            case 4:
-                switch (gamemap)
-                {
-                    case 6:
-                        junk.tag = 666;
-                        EV_DoDoor(&junk, vld_blazeOpen);
-                        return;
-                        break;
-
-                    case 8:
-                        junk.tag = 666;
-                        EV_DoFloor(&junk, lowerFloorToLowest);
-                        return;
-                        break;
-                }
-        }
     }
 
     G_ExitLevel();
@@ -1874,11 +1840,11 @@ void A_PlayerScream(mobj_t *mo)
 {
     // Default death sound.
     int sound = sfx_pldeth;
-
-    if ((gamemode == commercial) && (mo->health < -50))
+    
+    // This is DOOM II feature but let's keep it :-)
+    // If the player dies with less than 50% health without gibbing 
+    if (mo->health < -50)
     {
-        // IF THE PLAYER DIES
-        // LESS THAN -50% WITHOUT GIBBING
         sound = sfx_pdiehi;
     }
 

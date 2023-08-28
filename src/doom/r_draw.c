@@ -800,13 +800,7 @@ void R_FillBackScreen (void)
     int		y; 
     patch_t*	patch;
 
-    // DOOM border patch.
-    const char *name1 = "FLOOR7_2";
-
-    // DOOM II border patch.
-    const char *name2 = "GRNROCK";
-
-    const char *name;
+    const char *name = "FLOOR7_2";
 
     // If we are running full screen, there is no need to do any of this,
     // and the background buffer can be freed if it was previously in use.
@@ -830,11 +824,6 @@ void R_FillBackScreen (void)
                                      PU_STATIC, NULL);
     }
 
-    if (gamemode == commercial)
-	name = name2;
-    else
-	name = name1;
-    
     src = W_CacheLumpName(name, PU_CACHE); 
     dest = background_buffer;
 	 

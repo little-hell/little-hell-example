@@ -31,7 +31,7 @@
 #include "z_zone.h"
 
 static const iwad_t iwads[] = {
-    {"doom.wad", doom, retail, "Doom"}
+    {"doom.wad", doom, registered, "Doom"}
 };
 
 boolean D_IsIWADName(const char *name)
@@ -271,11 +271,6 @@ static void AddXdgDirs(void)
     // XDG_DATA_DIRS mechanism, through which it can be overridden.
     AddIWADPath(env, "/games/doom");
     AddIWADPath(env, "/doom");
-
-    // The convention set by RBDOOM-3-BFG is to install Doom 3: BFG
-    // Edition into this directory, under which includes the Doom
-    // Classic WADs.
-    AddIWADPath(env, "/games/doom3bfg/base/wads");
 }
 
 #endif // !_WIN32

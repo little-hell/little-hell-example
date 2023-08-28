@@ -388,7 +388,6 @@ cheatseq_t cheat_god = CHEAT("iddqd", 0);
 cheatseq_t cheat_ammo = CHEAT("idkfa", 0);
 cheatseq_t cheat_ammonokey = CHEAT("idfa", 0);
 cheatseq_t cheat_noclip = CHEAT("idspispopd", 0);
-cheatseq_t cheat_commercial_noclip = CHEAT("idclip", 0);
 
 cheatseq_t cheat_powerup[7] = {
     CHEAT("idbeholdv", 0), CHEAT("idbeholds", 0), CHEAT("idbeholdi", 0),
@@ -520,14 +519,9 @@ boolean ST_Responder(event_t *ev)
                 else
                     S_ChangeMusic(musnum, 1);
             }
-            else if ((logical_gamemission == doom &&
-                      cht_CheckCheat(&cheat_noclip, ev->data2)) ||
-                     (logical_gamemission != doom &&
-                      cht_CheckCheat(&cheat_commercial_noclip, ev->data2)))
+            else if (cht_CheckCheat(&cheat_noclip, ev->data2))
             {
                 // Noclip cheat.
-                // For Doom 1, use the idspipsopd cheat; for all others, use
-                // idclip
 
                 plyr->cheats ^= CF_NOCLIP;
 
