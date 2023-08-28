@@ -97,6 +97,9 @@ button_t        buttonlist[MAXBUTTONS];
 //
 void P_InitSwitchList(void)
 {
+    //TODO: this function can be refactored if not removed altogether
+    //because we don't differentiate between shareware/registered in mindoom.
+
     int i, slindex, episode;
 
     // Note that this is called "episode" here but it's actually something
@@ -105,7 +108,6 @@ void P_InitSwitchList(void)
     switch (gamemode)
     {
         case registered:
-        case retail:
             episode = 2;
             break;
         default:

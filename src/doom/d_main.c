@@ -905,11 +905,13 @@ void D_DoomMain(void)
 
         // Check for fake IWAD with right name,
         // but w/o all the lumps of the registered version.
-        if (gamemode == registered)
-            for (i = 0; i < 23; i++)
-                if (W_CheckNumForName(name[i]) < 0)
-                    I_Error(
-                        "\nThis is not the registered version.");
+        for (i = 0; i < 23; i++) 
+        {
+            if (W_CheckNumForName(name[i]) < 0)
+            {
+                I_Error("\nThis is not the registered version.");
+            }
+        }
     }
 
     if (W_CheckNumForName("SS_START") >= 0 || W_CheckNumForName("FF_END") >= 0)
