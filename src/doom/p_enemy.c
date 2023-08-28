@@ -1840,9 +1840,9 @@ void A_PlayerScream(mobj_t *mo)
 {
     // Default death sound.
     int sound = sfx_pldeth;
-    
+
     // This is DOOM II feature but let's keep it :-)
-    // If the player dies with less than 50% health without gibbing 
+    // If the player dies with less than 50% health without gibbing
     if (mo->health < -50)
     {
         sound = sfx_pdiehi;

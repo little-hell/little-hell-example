@@ -35,14 +35,6 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
-// Convert multibyte string in system encoding to UTF8. The result is newly
-// allocated and must be freed by the caller after use.
-
-char *M_ConvertSysNativeMBToUtf8(const char *str)
-{
-    return M_StringDuplicate(str);
-}
-
 // Convert UTF8 string to multibyte string in system encoding. The result is
 // newly allocated and must be freed by the caller after use.
 
@@ -64,11 +56,6 @@ int M_remove(const char *path)
 int M_rename(const char *oldname, const char *newname)
 {
     return rename(oldname, newname);
-}
-
-int M_stat(const char *path, struct stat *buf)
-{
-    return stat(path, buf);
 }
 
 char *M_getenv(const char *name)
@@ -222,37 +209,6 @@ boolean M_WriteFile(const char *name, const void *source, int length)
 }
 
 
-//
-// M_ReadFile
-//
-
-int M_ReadFile(const char *name, byte **buffer)
-{
-    FILE *handle;
-    int count, length;
-    byte *buf;
-
-    handle = M_fopen(name, "rb");
-    if (handle == NULL)
-        I_Error("Couldn't read file %s", name);
-
-    // find the size of the file by seeking to the end and
-    // reading the current position
-
-    length = M_FileLength(handle);
-
-    buf = Z_Malloc(length + 1, PU_STATIC, NULL);
-    count = fread(buf, 1, length, handle);
-    fclose(handle);
-
-    if (count < length)
-        I_Error("Couldn't read file %s", name);
-
-    buf[length] = '\0';
-    *buffer = buf;
-    return length;
-}
-
 // Returns the path to a temporary file of the given name, stored
 // inside the system temporary directory.
 //
@@ -394,40 +350,6 @@ void M_ForceLowercase(char *text)
 }
 
 //
-// M_StrCaseStr
-//
-// Case-insensitive version of strstr()
-//
-
-const char *M_StrCaseStr(const char *haystack, const char *needle)
-{
-    unsigned int haystack_len;
-    unsigned int needle_len;
-    unsigned int len;
-    unsigned int i;
-
-    haystack_len = strlen(haystack);
-    needle_len = strlen(needle);
-
-    if (haystack_len < needle_len)
-    {
-        return NULL;
-    }
-
-    len = haystack_len - needle_len;
-
-    for (i = 0; i <= len; ++i)
-    {
-        if (!strncasecmp(haystack + i, needle, needle_len))
-        {
-            return haystack + i;
-        }
-    }
-
-    return NULL;
-}
-
-//
 // Safe version of strdup() that checks the string was successfully
 // allocated.
 //
@@ -449,67 +371,6 @@ char *M_StringDuplicate(const char *orig)
 //
 // String replace function.
 //
-
-char *M_StringReplace(const char *haystack, const char *needle,
-                      const char *replacement)
-{
-    char *result, *dst;
-    const char *p;
-    size_t needle_len = strlen(needle);
-    size_t result_len, dst_len;
-
-    // Iterate through occurrences of 'needle' and calculate the size of
-    // the new string.
-    result_len = strlen(haystack) + 1;
-    p = haystack;
-
-    for (;;)
-    {
-        p = strstr(p, needle);
-        if (p == NULL)
-        {
-            break;
-        }
-
-        p += needle_len;
-        result_len += strlen(replacement) - needle_len;
-    }
-
-    // Construct new string.
-
-    result = malloc(result_len);
-    if (result == NULL)
-    {
-        I_Error("M_StringReplace: Failed to allocate new string");
-        return NULL;
-    }
-
-    dst = result;
-    dst_len = result_len;
-    p = haystack;
-
-    while (*p != '\0')
-    {
-        if (!strncmp(p, needle, needle_len))
-        {
-            M_StringCopy(dst, replacement, dst_len);
-            p += needle_len;
-            dst += strlen(replacement);
-            dst_len -= strlen(replacement);
-        }
-        else
-        {
-            *dst = *p;
-            ++dst;
-            --dst_len;
-            ++p;
-        }
-    }
-
-    *dst = '\0';
-
-    return result;
-}
 
 // Safe string copy function that works like OpenBSD's strlcpy().
 // Returns true if the string was not truncated.
@@ -546,14 +407,6 @@ boolean M_StringConcat(char *dest, const char *src, size_t dest_size)
     }
 
     return M_StringCopy(dest + offset, src, dest_size - offset);
-}
-
-// Returns true if 's' begins with the specified prefix.
-
-boolean M_StringStartsWith(const char *s, const char *prefix)
-{
-    return strlen(s) >= strlen(prefix) &&
-           strncmp(s, prefix, strlen(prefix)) == 0;
 }
 
 // Returns true if 's' ends with the specified suffix.
@@ -650,48 +503,4 @@ int M_snprintf(char *buf, size_t buf_len, const char *s, ...)
     result = M_vsnprintf(buf, buf_len, s, args);
     va_end(args);
     return result;
-}
-
-//
-// M_NormalizeSlashes
-//
-// Remove trailing slashes, translate backslashes to slashes
-// The string to normalize is passed and returned in str
-//
-// killough 11/98: rewritten
-//
-// [STRIFE] - haleyjd 20110210: Borrowed from Eternity and adapted to respect
-// the DIR_SEPARATOR define used by Choco Doom. This routine originated in
-// BOOM.
-//
-void M_NormalizeSlashes(char *str)
-{
-    char *p;
-
-    // Convert all slashes/backslashes to DIR_SEPARATOR
-    for (p = str; *p; p++)
-    {
-        if ((*p == '/' || *p == '\\') && *p != DIR_SEPARATOR)
-        {
-            *p = DIR_SEPARATOR;
-        }
-    }
-
-    // Remove trailing slashes
-    while (p > str && *--p == DIR_SEPARATOR)
-    {
-        *p = 0;
-    }
-
-    // Collapse multiple slashes
-    for (p = str; (*str++ = *p);)
-    {
-        if (*p++ == DIR_SEPARATOR)
-        {
-            while (*p == DIR_SEPARATOR)
-            {
-                p++;
-            }
-        }
-    }
 }

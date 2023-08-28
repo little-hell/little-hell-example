@@ -67,10 +67,11 @@ typedef struct
     const char *text;
 } textscreen_t;
 
-static textscreen_t textscreens[] = {{doom, 1, 8, "FLOOR4_8", E1TEXT},
-                                     {doom, 2, 8, "SFLR6_1", E2TEXT},
-                                     {doom, 3, 8, "MFLR8_4", E3TEXT},
-                                    };
+static textscreen_t textscreens[] = {
+    {doom, 1, 8, "FLOOR4_8", E1TEXT},
+    {doom, 2, 8, "SFLR6_1", E2TEXT},
+    {doom, 3, 8, "MFLR8_4", E3TEXT},
+};
 
 const char *finaletext;
 const char *finaleflat;
@@ -135,8 +136,6 @@ boolean F_Responder(event_t *event)
 //
 void F_Ticker(void)
 {
-    size_t i;
-
     // advance animation
     finalecount++;
 
@@ -263,25 +262,6 @@ boolean castdeath;
 int castframes;
 int castonmelee;
 boolean castattacking;
-
-
-//
-// F_StartCast
-//
-void F_StartCast(void)
-{
-    wipegamestate = -1; // force a screen wipe
-    castnum = 0;
-    caststate = &states[mobjinfo[castorder[castnum].type].seestate];
-    casttics = caststate->tics;
-    castdeath = false;
-    finalestage = F_STAGE_CAST;
-    castframes = 0;
-    castonmelee = 0;
-    castattacking = false;
-    S_ChangeMusic(mus_evil, true);
-}
-
 
 //
 // F_CastTicker

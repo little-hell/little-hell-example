@@ -21,7 +21,7 @@
 
 // This is the initial health a player has when starting anew.
 // See G_PlayerReborn in g_game.c
-const uint8_t INITIAL_HEALTH = 100; 
+const uint8_t INITIAL_HEALTH = 100;
 
 // This is the number of bullets the player has when starting anew.
 // See G_PlayerReborn in g_game.c
@@ -33,13 +33,13 @@ const uint8_t MAX_HEALTH = 200;
 
 // This is the maximum armor which can be reached by picking up
 // armor helmets. See P_TouchSpecialThing in p_inter.c
-const uint8_t MAX_ARMOR  = 200;
+const uint8_t MAX_ARMOR = 200;
 
-// This is the armor class that is given when picking up the green 
+// This is the armor class that is given when picking up the green
 // armor or an armor helmet. See P_TouchSpecialThing in p_inter.c
 const uint8_t GREEN_ARMOR_CLASS = 1;
 
-// This is the armor class that is given when picking up the blue 
+// This is the armor class that is given when picking up the blue
 // armor or a megasphere. See P_TouchSpecialThing in p_inter.c
 const uint8_t BLUE_ARMOR_CLASS = 2;
 
@@ -51,7 +51,7 @@ const uint8_t MAX_SOULSPHERE = 200;
 // gives. See P_TouchSpecialThing in p_inter.c
 const uint8_t SOULSPHERE_HEALTH = 100;
 
-// This is what the health is set to after picking up a 
+// This is what the health is set to after picking up a
 // megasphere. See P_TouchSpecialThing in p_inter.c
 const uint8_t MEGASPHERE_HEALTH = 200;
 
@@ -79,7 +79,7 @@ const uint8_t IDKFA_ARMOR_CLASS = 2;
 // See P_CheckAmmo and A_FireBFG in p_pspr.c
 const uint8_t BFG_CELLS_PER_SHOT = 40;
 
-// This controls whether monsters can harm other monsters of the same 
+// This controls whether monsters can harm other monsters of the same
 // species.  For example, whether an imp fireball will damage other
 // imps.  The value of this in dehacked patches is weird - '202' means
 // off, while '221' means on.

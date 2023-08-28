@@ -82,9 +82,8 @@ static int joystick_look_dead_zone = 33;
 
 // Virtual to physical button joystick button mapping. By default this
 // is a straight mapping.
-static int joystick_physical_buttons[NUM_VIRTUAL_BUTTONS] = {
-    0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
-};
+static int joystick_physical_buttons[NUM_VIRTUAL_BUTTONS] = {0, 1, 2, 3, 4, 5,
+                                                             6, 7, 8, 9, 10};
 
 void I_ShutdownGamepad(void)
 {
@@ -438,10 +437,8 @@ void I_InitJoystick(void)
         return;
     }
 
-    if (!IsValidAxis(joystick_x_axis)
-     || !IsValidAxis(joystick_y_axis)
-     || !IsValidAxis(joystick_strafe_axis)
-     || !IsValidAxis(joystick_look_axis))
+    if (!IsValidAxis(joystick_x_axis) || !IsValidAxis(joystick_y_axis) ||
+        !IsValidAxis(joystick_strafe_axis) || !IsValidAxis(joystick_look_axis))
     {
         printf("I_InitJoystick: Invalid joystick axis for configured joystick "
                "(run joystick setup again)\n");
@@ -464,32 +461,32 @@ static boolean IsAxisButton(int physbutton)
 {
     if (IS_BUTTON_AXIS(joystick_x_axis))
     {
-        if (physbutton == BUTTON_AXIS_NEG(joystick_x_axis)
-         || physbutton == BUTTON_AXIS_POS(joystick_x_axis))
+        if (physbutton == BUTTON_AXIS_NEG(joystick_x_axis) ||
+            physbutton == BUTTON_AXIS_POS(joystick_x_axis))
         {
             return true;
         }
     }
     if (IS_BUTTON_AXIS(joystick_y_axis))
     {
-        if (physbutton == BUTTON_AXIS_NEG(joystick_y_axis)
-         || physbutton == BUTTON_AXIS_POS(joystick_y_axis))
+        if (physbutton == BUTTON_AXIS_NEG(joystick_y_axis) ||
+            physbutton == BUTTON_AXIS_POS(joystick_y_axis))
         {
             return true;
         }
     }
     if (IS_BUTTON_AXIS(joystick_strafe_axis))
     {
-        if (physbutton == BUTTON_AXIS_NEG(joystick_strafe_axis)
-         || physbutton == BUTTON_AXIS_POS(joystick_strafe_axis))
+        if (physbutton == BUTTON_AXIS_NEG(joystick_strafe_axis) ||
+            physbutton == BUTTON_AXIS_POS(joystick_strafe_axis))
         {
             return true;
         }
     }
     if (IS_BUTTON_AXIS(joystick_look_axis))
     {
-        if (physbutton == BUTTON_AXIS_NEG(joystick_look_axis)
-         || physbutton == BUTTON_AXIS_POS(joystick_look_axis))
+        if (physbutton == BUTTON_AXIS_NEG(joystick_look_axis) ||
+            physbutton == BUTTON_AXIS_POS(joystick_look_axis))
         {
             return true;
         }
@@ -650,19 +647,19 @@ void I_BindJoystickVariables(void)
 {
     int i;
 
-    M_BindIntVariable("use_joystick",          &usejoystick);
-    M_BindIntVariable("use_gamepad",           &use_gamepad);
-    M_BindIntVariable("gamepad_type",          &gamepad_type);
-    M_BindStringVariable("joystick_guid",      &joystick_guid);
-    M_BindIntVariable("joystick_index",        &joystick_index);
-    M_BindIntVariable("joystick_x_axis",       &joystick_x_axis);
-    M_BindIntVariable("joystick_y_axis",       &joystick_y_axis);
-    M_BindIntVariable("joystick_strafe_axis",  &joystick_strafe_axis);
-    M_BindIntVariable("joystick_x_invert",     &joystick_x_invert);
-    M_BindIntVariable("joystick_y_invert",     &joystick_y_invert);
-    M_BindIntVariable("joystick_strafe_invert",&joystick_strafe_invert);
-    M_BindIntVariable("joystick_look_axis",    &joystick_look_axis);
-    M_BindIntVariable("joystick_look_invert",  &joystick_look_invert);
+    M_BindIntVariable("use_joystick", &usejoystick);
+    M_BindIntVariable("use_gamepad", &use_gamepad);
+    M_BindIntVariable("gamepad_type", &gamepad_type);
+    M_BindStringVariable("joystick_guid", &joystick_guid);
+    M_BindIntVariable("joystick_index", &joystick_index);
+    M_BindIntVariable("joystick_x_axis", &joystick_x_axis);
+    M_BindIntVariable("joystick_y_axis", &joystick_y_axis);
+    M_BindIntVariable("joystick_strafe_axis", &joystick_strafe_axis);
+    M_BindIntVariable("joystick_x_invert", &joystick_x_invert);
+    M_BindIntVariable("joystick_y_invert", &joystick_y_invert);
+    M_BindIntVariable("joystick_strafe_invert", &joystick_strafe_invert);
+    M_BindIntVariable("joystick_look_axis", &joystick_look_axis);
+    M_BindIntVariable("joystick_look_invert", &joystick_look_invert);
     M_BindIntVariable("joystick_x_dead_zone", &joystick_x_dead_zone);
     M_BindIntVariable("joystick_y_dead_zone", &joystick_y_dead_zone);
     M_BindIntVariable("joystick_strafe_dead_zone", &joystick_strafe_dead_zone);
@@ -675,4 +672,3 @@ void I_BindJoystickVariables(void)
         M_BindIntVariable(name, &joystick_physical_buttons[i]);
     }
 }
-

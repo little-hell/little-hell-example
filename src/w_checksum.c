@@ -46,7 +46,7 @@ static int GetFileNumber(wad_file_t *handle)
     // Allocate another slot for this file.
 
     open_wadfiles = I_Realloc(open_wadfiles,
-                            sizeof(wad_file_t *) * (num_open_wadfiles + 1));
+                              sizeof(wad_file_t *) * (num_open_wadfiles + 1));
     open_wadfiles[num_open_wadfiles] = handle;
 
     result = num_open_wadfiles;
@@ -85,4 +85,3 @@ void W_Checksum(sha1_digest_t digest)
 
     SHA1_Final(digest, &sha1_context);
 }
-

@@ -8,7 +8,9 @@ pkgs.mkShell {
     pcre2
     glib
     pkg-config
+    cppcheck
     clang
+    clang-tools
     SDL2
     SDL2_mixer
     SDL2_net

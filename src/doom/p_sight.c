@@ -40,44 +40,6 @@ fixed_t t2y;
 int sightcounts[2];
 
 
-// PTR_SightTraverse() for Doom 1.2 sight calculations
-// taken from prboom-plus/src/p_sight.c:69-102
-boolean PTR_SightTraverse(intercept_t *in)
-{
-    line_t *li;
-    fixed_t slope;
-
-    li = in->d.line;
-
-    //
-    // crosses a two sided line
-    //
-    P_LineOpening(li);
-
-    if (openbottom >= opentop) // quick test for totally closed doors
-        return false;          // stop
-
-    if (li->frontsector->floorheight != li->backsector->floorheight)
-    {
-        slope = FixedDiv(openbottom - sightzstart, in->frac);
-        if (slope > bottomslope)
-            bottomslope = slope;
-    }
-
-    if (li->frontsector->ceilingheight != li->backsector->ceilingheight)
-    {
-        slope = FixedDiv(opentop - sightzstart, in->frac);
-        if (slope < topslope)
-            topslope = slope;
-    }
-
-    if (topslope <= bottomslope)
-        return false; // stop
-
-    return true; // keep going
-}
-
-
 //
 // P_DivlineSide
 // Returns side 0 (front), 1 (back), or 2 (on).

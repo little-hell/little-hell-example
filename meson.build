@@ -228,3 +228,12 @@ executable('mindoom',
 executable('mindoom-server', common_source_files, dedicated_server_source_files, dependencies:
   deps)
 
+run_target('clang-tidy',
+  command : 'scripts/clang-tidy.sh')
+
+#run_target('clang-format',
+#  command : 'scripts/clang-format.sh')
+
+run_target('cppcheck',
+  command : 'scripts/cppcheck.sh')
+

@@ -291,7 +291,8 @@ static void EnableLoadingDisk(void)
 {
     if (show_diskicon)
     {
-        V_EnableLoadingDisk("STDISK", SCREENWIDTH - LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
+        V_EnableLoadingDisk("STDISK", SCREENWIDTH - LOADING_DISK_W,
+                            SCREENHEIGHT - LOADING_DISK_H);
     }
 }
 
@@ -905,7 +906,7 @@ void D_DoomMain(void)
 
         // Check for fake IWAD with right name,
         // but w/o all the lumps of the registered version.
-        for (i = 0; i < 23; i++) 
+        for (i = 0; i < 23; i++)
         {
             if (W_CheckNumForName(name[i]) < 0)
             {

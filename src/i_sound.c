@@ -54,22 +54,20 @@ int snd_sfxdevice = SNDDEVICE_SB;
 static const sound_module_t *sound_module;
 static const music_module_t *music_module;
 
-// This is either equal to music_module or some other hypothetical module. 
+// This is either equal to music_module or some other hypothetical module.
 // depending on whether the current track is substituted.
 static const music_module_t *active_music_module;
 
 // Compiled-in sound modules:
 
-static const sound_module_t *sound_modules[] =
-{
+static const sound_module_t *sound_modules[] = {
     &sound_sdl_module,
     NULL,
 };
 
 // Compiled-in music modules:
 
-static const music_module_t *music_modules[] =
-{
+static const music_module_t *music_modules[] = {
     &music_opl_module,
     NULL,
 };
@@ -81,7 +79,7 @@ static boolean SndDeviceInList(snddevice_t device, const snddevice_t *list,
 {
     int i;
 
-    for (i=0; i<len; ++i)
+    for (i = 0; i < len; ++i)
     {
         if (device == list[i])
         {
@@ -101,13 +99,12 @@ static void InitSfxModule(boolean use_sfx_prefix)
 
     sound_module = NULL;
 
-    for (i=0; sound_modules[i] != NULL; ++i)
+    for (i = 0; sound_modules[i] != NULL; ++i)
     {
         // Is the sfx device in the list of devices supported by
         // this module?
 
-        if (SndDeviceInList(snd_sfxdevice, 
-                            sound_modules[i]->sound_devices,
+        if (SndDeviceInList(snd_sfxdevice, sound_modules[i]->sound_devices,
                             sound_modules[i]->num_sound_devices))
         {
             // Initialize the module
@@ -129,13 +126,12 @@ static void InitMusicModule(void)
 
     music_module = NULL;
 
-    for (i=0; music_modules[i] != NULL; ++i)
+    for (i = 0; music_modules[i] != NULL; ++i)
     {
         // Is the music device in the list of devices supported
         // by this module?
 
-        if (SndDeviceInList(snd_musicdevice, 
-                            music_modules[i]->sound_devices,
+        if (SndDeviceInList(snd_musicdevice, music_modules[i]->sound_devices,
                             music_modules[i]->num_sound_devices))
         {
             // Initialize the module
@@ -170,7 +166,7 @@ void I_InitSound(boolean use_sfx_prefix)
     //!
     // @vanilla
     //
-    // Disable sound effects. 
+    // Disable sound effects.
     //
 
     nosfx = M_CheckParm("-nosfx") > 0;
@@ -315,7 +311,6 @@ void I_InitMusic(void)
 
 void I_ShutdownMusic(void)
 {
-
 }
 
 void I_SetMusicVolume(int volume)
@@ -392,13 +387,12 @@ boolean I_MusicIsPlaying(void)
 
 void I_BindSoundVariables(void)
 {
-    M_BindIntVariable("snd_musicdevice",         &snd_musicdevice);
-    M_BindIntVariable("snd_maxslicetime_ms",     &snd_maxslicetime_ms);
-    M_BindIntVariable("snd_samplerate",          &snd_samplerate);
-    M_BindIntVariable("snd_cachesize",           &snd_cachesize);
-    M_BindIntVariable("snd_pitchshift",          &snd_pitchshift);
+    M_BindIntVariable("snd_musicdevice", &snd_musicdevice);
+    M_BindIntVariable("snd_maxslicetime_ms", &snd_maxslicetime_ms);
+    M_BindIntVariable("snd_samplerate", &snd_samplerate);
+    M_BindIntVariable("snd_cachesize", &snd_cachesize);
+    M_BindIntVariable("snd_pitchshift", &snd_pitchshift);
 
-    M_BindIntVariable("use_libsamplerate",       &use_libsamplerate);
-    M_BindFloatVariable("libsamplerate_scale",   &libsamplerate_scale);
+    M_BindIntVariable("use_libsamplerate", &use_libsamplerate);
+    M_BindFloatVariable("libsamplerate_scale", &libsamplerate_scale);
 }
-
