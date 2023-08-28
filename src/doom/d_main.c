@@ -27,7 +27,6 @@
 
 #include "config.h"
 #include "doomdef.h"
-#include "doom_icon.h"
 #include "doomstat.h"
 
 #include "dstrings.h"
@@ -74,8 +73,6 @@
 #include "statdump.h"
 
 #include "d_main.h"
-
-#include "doom_icon.c"
 
 //
 // D-DoomLoop()
@@ -167,7 +164,6 @@ boolean D_Display(void)
     static boolean fullscreen = false;
     static gamestate_t oldgamestate = -1;
     static int borderdrawcount;
-    int y;
     boolean wipe;
     boolean redrawsbar;
 
@@ -244,8 +240,7 @@ boolean D_Display(void)
     }
 
     // see if the border needs to be updated to the screen
-    if (gamestate == GS_LEVEL && !automapactive &&
-        scaledviewwidth != SCREENWIDTH)
+    if (gamestate == GS_LEVEL && !automapactive && scaledviewwidth != SCREENWIDTH)
     {
         if (menuactive || menuactivestate || !viewactivestate)
             borderdrawcount = 3;
@@ -256,13 +251,6 @@ boolean D_Display(void)
         }
     }
 
-    if (testcontrols)
-    {
-        // Box showing current mouse speed
-
-        V_DrawMouseSpeedBox(testcontrols_mousespeed);
-    }
-
     menuactivestate = menuactive;
     viewactivestate = viewactive;
     inhelpscreensstate = inhelpscreens;
@@ -271,6 +259,8 @@ boolean D_Display(void)
     // draw pause pic
     if (paused)
     {
+        int y;
+
         if (automapactive)
             y = 4;
         else
@@ -291,7 +281,8 @@ static void EnableLoadingDisk(void)
 {
     if (show_diskicon)
     {
-        V_EnableLoadingDisk("STDISK", SCREENWIDTH - LOADING_DISK_W, SCREENHEIGHT - LOADING_DISK_H);
+        V_EnableLoadingDisk("STDISK", SCREENWIDTH - LOADING_DISK_W,
+                            SCREENHEIGHT - LOADING_DISK_H);
     }
 }
 
@@ -357,23 +348,20 @@ boolean D_GrabMouseCallback(void)
 //
 void D_RunFrame()
 {
-    int nowtime;
-    int tics;
     static int wipestart;
     static boolean wipe;
 
     if (wipe)
     {
+        int nowtime = I_GetTime();
+        int tics = nowtime - wipestart;
         do
         {
-            nowtime = I_GetTime();
-            tics = nowtime - wipestart;
             I_Sleep(1);
         } while (tics <= 0);
 
         wipestart = nowtime;
-        wipe =
-            !wipe_ScreenWipe(wipe_Melt, 0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
+        wipe = !wipe_ScreenWipe(wipe_Melt, 0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
         I_UpdateNoBlit();
         M_Drawer();       // menu is drawn even on top of wipes
         I_FinishUpdate(); // page flip or blit buffer
@@ -418,7 +406,6 @@ void D_DoomLoop(void)
     I_SetWindowTitle(gamedescription);
     I_GraphicsCheckCommandLine();
     I_SetGrabMouseCallback(D_GrabMouseCallback);
-    I_RegisterWindowIcon(doom_icon_data, doom_icon_w, doom_icon_h);
     I_InitGraphics();
     EnableLoadingDisk();
 
@@ -896,16 +883,15 @@ void D_DoomMain(void)
     {
         // These are the lumps that will be checked in IWAD,
         // if any one is not present, execution will be aborted.
-        char name[23][8] = {"e2m1",   "e2m2",   "e2m3",    "e2m4",   "e2m5",
-                            "e2m6",   "e2m7",   "e2m8",    "e2m9",   "e3m1",
-                            "e3m3",   "e3m3",   "e3m4",    "e3m5",   "e3m6",
-                            "e3m7",   "e3m8",   "e3m9",    "dphoof", "bfgga0",
-                            "heada1", "cybra1", "spida1d1"};
+        char name[23][8] = {"e2m1",   "e2m2",   "e2m3",   "e2m4",   "e2m5",    "e2m6",
+                            "e2m7",   "e2m8",   "e2m9",   "e3m1",   "e3m3",    "e3m3",
+                            "e3m4",   "e3m5",   "e3m6",   "e3m7",   "e3m8",    "e3m9",
+                            "dphoof", "bfgga0", "heada1", "cybra1", "spida1d1"};
         int i;
 
         // Check for fake IWAD with right name,
         // but w/o all the lumps of the registered version.
-        for (i = 0; i < 23; i++) 
+        for (i = 0; i < 23; i++)
         {
             if (W_CheckNumForName(name[i]) < 0)
             {

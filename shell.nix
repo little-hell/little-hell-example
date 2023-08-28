@@ -1,16 +1,26 @@
 { pkgs ? import <nixpkgs> { } }:
-pkgs.mkShell {
+
+pkgs.clangStdenv.mkDerivation {
+  name = "mindoom-dev-shell";
+
   nativeBuildInputs = with pkgs.buildPackages; [
+    clangStdenv
+    clang
+    clang-tools
+    cloc
+    cppcheck
+    gcc
     gdb
+    gdbgui
+    glib
+    hotspot
     meson
     ninja
-    libsndfile
-    pcre2
-    glib
+    linuxKernel.packages.linux_6_1.perf
     pkg-config
-    clang
     SDL2
     SDL2_mixer
     SDL2_net
+    valgrind
   ];
 }

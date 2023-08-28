@@ -67,10 +67,11 @@ typedef struct
     const char *text;
 } textscreen_t;
 
-static textscreen_t textscreens[] = {{doom, 1, 8, "FLOOR4_8", E1TEXT},
-                                     {doom, 2, 8, "SFLR6_1", E2TEXT},
-                                     {doom, 3, 8, "MFLR8_4", E3TEXT},
-                                    };
+static textscreen_t textscreens[] = {
+    {doom, 1, 8, "FLOOR4_8", E1TEXT},
+    {doom, 2, 8, "SFLR6_1", E2TEXT},
+    {doom, 3, 8, "MFLR8_4", E3TEXT},
+};
 
 const char *finaletext;
 const char *finaleflat;
@@ -123,38 +124,7 @@ void F_StartFinale(void)
 
 boolean F_Responder(event_t *event)
 {
-    if (finalestage == F_STAGE_CAST)
-        return F_CastResponder(event);
-
     return false;
-}
-
-
-//
-// F_Ticker
-//
-void F_Ticker(void)
-{
-    size_t i;
-
-    // advance animation
-    finalecount++;
-
-    if (finalestage == F_STAGE_CAST)
-    {
-        F_CastTicker();
-        return;
-    }
-
-    if (finalestage == F_STAGE_TEXT &&
-        finalecount > strlen(finaletext) * TEXTSPEED + TEXTWAIT)
-    {
-        finalecount = 0;
-        finalestage = F_STAGE_ARTSCREEN;
-        wipegamestate = -1; // force a wipe
-        if (gameepisode == 3)
-            S_StartMusic(mus_bunny);
-    }
 }
 
 
@@ -173,7 +143,6 @@ void F_TextWrite(void)
     int x, y, w;
     signed int count;
     const char *ch;
-    int c;
     int cx;
     int cy;
 
@@ -207,7 +176,7 @@ void F_TextWrite(void)
         count = 0;
     for (; count; count--)
     {
-        c = *ch++;
+        int c = *ch++;
         if (!c)
             break;
         if (c == '\n')
@@ -264,25 +233,6 @@ int castframes;
 int castonmelee;
 boolean castattacking;
 
-
-//
-// F_StartCast
-//
-void F_StartCast(void)
-{
-    wipegamestate = -1; // force a screen wipe
-    castnum = 0;
-    caststate = &states[mobjinfo[castorder[castnum].type].seestate];
-    casttics = caststate->tics;
-    castdeath = false;
-    finalestage = F_STAGE_CAST;
-    castframes = 0;
-    castonmelee = 0;
-    castattacking = false;
-    S_ChangeMusic(mus_evil, true);
-}
-
-
 //
 // F_CastTicker
 //
@@ -327,28 +277,6 @@ void F_CastTicker(void)
             case S_SPOS_ATK2:
                 sfx = sfx_shotgn;
                 break;
-            case S_VILE_ATK2:
-                sfx = sfx_vilatk;
-                break;
-            case S_SKEL_FIST2:
-                sfx = sfx_skeswg;
-                break;
-            case S_SKEL_FIST4:
-                sfx = sfx_skepch;
-                break;
-            case S_SKEL_MISS2:
-                sfx = sfx_skeatk;
-                break;
-            case S_FATT_ATK8:
-            case S_FATT_ATK5:
-            case S_FATT_ATK2:
-                sfx = sfx_firsht;
-                break;
-            case S_CPOS_ATK2:
-            case S_CPOS_ATK3:
-            case S_CPOS_ATK4:
-                sfx = sfx_shotgn;
-                break;
             case S_TROO_ATK3:
                 sfx = sfx_claw;
                 break;
@@ -356,27 +284,17 @@ void F_CastTicker(void)
                 sfx = sfx_sgtatk;
                 break;
             case S_BOSS_ATK2:
-            case S_BOS2_ATK2:
             case S_HEAD_ATK2:
                 sfx = sfx_firsht;
-                break;
-            case S_SKULL_ATK2:
-                sfx = sfx_sklatk;
                 break;
             case S_SPID_ATK2:
             case S_SPID_ATK3:
                 sfx = sfx_shotgn;
                 break;
-            case S_BSPI_ATK2:
-                sfx = sfx_plasma;
-                break;
             case S_CYBER_ATK2:
             case S_CYBER_ATK4:
             case S_CYBER_ATK6:
                 sfx = sfx_rlaunc;
-                break;
-            case S_PAIN_ATK3:
-                sfx = sfx_sklatk;
                 break;
             default:
                 sfx = 0;
@@ -399,11 +317,9 @@ void F_CastTicker(void)
         if (caststate == &states[S_NULL])
         {
             if (castonmelee)
-                caststate =
-                    &states[mobjinfo[castorder[castnum].type].meleestate];
+                caststate = &states[mobjinfo[castorder[castnum].type].meleestate];
             else
-                caststate =
-                    &states[mobjinfo[castorder[castnum].type].missilestate];
+                caststate = &states[mobjinfo[castorder[castnum].type].missilestate];
         }
     }
 
@@ -537,20 +453,16 @@ void F_CastDrawer(void)
 void F_DrawPatchCol(int x, patch_t *patch, int col)
 {
     column_t *column;
-    byte *source;
-    pixel_t *dest;
-    pixel_t *desttop;
-    int count;
-
     column = (column_t *) ((byte *) patch + LONG(patch->columnofs[col]));
-    desttop = I_VideoBuffer + x;
+
+    pixel_t *desttop = desttop = I_VideoBuffer + x;
 
     // step through the posts in a column
     while (column->topdelta != 0xff)
     {
-        source = (byte *) column + 3;
-        dest = desttop + column->topdelta * SCREENWIDTH;
-        count = column->length;
+        byte *source = (byte *) column + 3;
+        pixel_t *dest = desttop + column->topdelta * SCREENWIDTH;
+        int count = column->length;
 
         while (count--)
         {
@@ -620,7 +532,6 @@ void F_BunnyScroll(void)
 
 static void F_ArtScreenDrawer(void)
 {
-    const char *lumpname;
 
     if (gameepisode == 3)
     {
@@ -628,6 +539,7 @@ static void F_ArtScreenDrawer(void)
     }
     else
     {
+        const char *lumpname;
         switch (gameepisode)
         {
             case 1:

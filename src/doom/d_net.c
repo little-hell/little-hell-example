@@ -48,8 +48,7 @@ static void PlayerQuitGame(player_t *player)
     // Do this the same way as Vanilla Doom does, to allow dehacked
     // replacements of this message
 
-    M_StringCopy(exitmsg, "Player 1 left the game",
-                 sizeof(exitmsg));
+    M_StringCopy(exitmsg, "Player 1 left the game", sizeof(exitmsg));
 
     exitmsg[7] += player_num;
 
@@ -58,9 +57,9 @@ static void PlayerQuitGame(player_t *player)
 
     // TODO: check if it is sensible to do this:
 
-    if (demorecording) 
+    if (demorecording)
     {
-        G_CheckDemoStatus ();
+        G_CheckDemoStatus();
     }
 }
 
@@ -84,17 +83,13 @@ static void RunTic(ticcmd_t *cmds, boolean *ingame)
     // run a tic.
 
     if (advancedemo)
-        D_DoAdvanceDemo ();
+        D_DoAdvanceDemo();
 
-    G_Ticker ();
+    G_Ticker();
 }
 
-static loop_interface_t doom_loop_interface = {
-    D_ProcessEvents,
-    G_BuildTiccmd,
-    RunTic,
-    M_Ticker
-};
+static loop_interface_t doom_loop_interface = {D_ProcessEvents, G_BuildTiccmd, RunTic,
+                                               M_Ticker};
 
 
 // Load game settings from the specified structure and
@@ -147,9 +142,8 @@ static void SaveGameSettings(net_gamesettings_t *settings)
     settings->respawn_monsters = respawnparm;
     settings->timelimit = timelimit;
 
-    settings->lowres_turn = (M_ParmExists("-record")
-                         && !M_ParmExists("-longtics"))
-                          || M_ParmExists("-shorttics");
+    settings->lowres_turn = (M_ParmExists("-record") && !M_ParmExists("-longtics")) ||
+                            M_ParmExists("-shorttics");
 }
 
 static void InitConnectData(net_connect_data_t *connect_data)
@@ -171,7 +165,7 @@ static void InitConnectData(net_connect_data_t *connect_data)
         connect_data->drone = true;
     }
 
-    //! 
+    //!
     // @category net
     //
     // Run as the right screen in three screen mode.
@@ -202,9 +196,8 @@ static void InitConnectData(net_connect_data_t *connect_data)
 
     // Are we recording a demo? Possibly set lowres turn mode
 
-    connect_data->lowres_turn = (M_ParmExists("-record")
-                             && !M_ParmExists("-longtics"))
-                              || shorttics;
+    connect_data->lowres_turn =
+        (M_ParmExists("-record") && !M_ParmExists("-longtics")) || shorttics;
 
     // Read checksums of our WAD directory
     W_Checksum(connect_data->wad_sha1sum);
@@ -235,7 +228,7 @@ void D_ConnectNetGame(void)
 // D_CheckNetGame
 // Works out player numbers among the net participants
 //
-void D_CheckNetGame (void)
+void D_CheckNetGame(void)
 {
     net_gamesettings_t settings;
 
@@ -250,11 +243,11 @@ void D_CheckNetGame (void)
     D_StartNetGame(&settings, NULL);
     LoadGameSettings(&settings);
 
-    printf("startskill %i  deathmatch: %i  startmap: %i  startepisode: %i\n",
-               startskill, deathmatch, startmap, startepisode);
+    printf("startskill %i  deathmatch: %i  startmap: %i  startepisode: %i\n", startskill,
+           deathmatch, startmap, startepisode);
 
-    printf("player %i of %i (%i nodes)\n",
-               consoleplayer+1, settings.num_players, settings.num_players);
+    printf("player %i of %i (%i nodes)\n", consoleplayer + 1, settings.num_players,
+           settings.num_players);
 
     // Show players here; the server might have specified a time limit
 
@@ -265,7 +258,7 @@ void D_CheckNetGame (void)
         if (timelimit == 20 && M_CheckParm("-avg"))
         {
             printf("Austin Virtual Gaming: Levels will end "
-                           "after 20 minutes\n");
+                   "after 20 minutes\n");
         }
         else
         {
@@ -276,4 +269,3 @@ void D_CheckNetGame (void)
         }
     }
 }
-

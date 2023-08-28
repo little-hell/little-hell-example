@@ -26,8 +26,7 @@
 #include "w_file.h"
 
 
-static wad_file_class_t *wad_file_classes[] = 
-{
+static wad_file_class_t *wad_file_classes[] = {
 #ifdef HAVE_MMAP
     &posix_wad_file,
 #endif
@@ -55,7 +54,7 @@ wad_file_t *W_OpenFile(const char *path)
 
     result = NULL;
 
-    for (i=0; i<arrlen(wad_file_classes); ++i)
+    for (i = 0; i < arrlen(wad_file_classes); ++i)
     {
         result = wad_file_classes[i]->OpenFile(path);
 
@@ -73,9 +72,7 @@ void W_CloseFile(wad_file_t *wad)
     wad->file_class->CloseFile(wad);
 }
 
-size_t W_Read(wad_file_t *wad, unsigned int offset,
-              void *buffer, size_t buffer_len)
+size_t W_Read(wad_file_t *wad, unsigned int offset, void *buffer, size_t buffer_len)
 {
     return wad->file_class->Read(wad, offset, buffer, buffer_len);
 }
-

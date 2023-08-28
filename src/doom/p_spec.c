@@ -170,8 +170,7 @@ void P_InitPicAnims(void)
         lastanim->numpics = lastanim->picnum - lastanim->basepic + 1;
 
         if (lastanim->numpics < 2)
-            I_Error("P_InitPicAnims: bad cycle from %s to %s", startname,
-                    endname);
+            I_Error("P_InitPicAnims: bad cycle from %s to %s", startname, endname);
 
         lastanim->speed = animdefs[i].speed;
         lastanim++;
@@ -474,9 +473,6 @@ void P_CrossSpecialLine(int linenum, int side, mobj_t *thing)
             case MT_BFG:
             case MT_TROOPSHOT:
             case MT_HEADSHOT:
-            case MT_BRUISERSHOT:
-                return;
-
             default:
                 break;
         }
@@ -1060,8 +1056,7 @@ void P_UpdateSpecials(void)
     {
         for (i = anim->basepic; i < anim->basepic + anim->numpics; i++)
         {
-            pic =
-                anim->basepic + ((leveltime / anim->speed + i) % anim->numpics);
+            pic = anim->basepic + ((leveltime / anim->speed + i) % anim->numpics);
             if (anim->istexture)
                 texturetranslation[i] = pic;
             else
@@ -1125,8 +1120,8 @@ void P_UpdateSpecials(void)
 #define DONUT_FLOORHEIGHT_DEFAULT 0x00000000
 #define DONUT_FLOORPIC_DEFAULT    0x16
 
-static void DonutOverrun(fixed_t *s3_floorheight, short *s3_floorpic,
-                         line_t *line, sector_t *pillar_sector)
+static void DonutOverrun(fixed_t *s3_floorheight, short *s3_floorpic, line_t *line,
+                         sector_t *pillar_sector)
 {
     static int first = 1;
     static int tmp_s3_floorheight;
@@ -1238,9 +1233,8 @@ int EV_DoDonut(line_t *line)
 
         if (s2 == NULL)
         {
-            fprintf(stderr,
-                    "EV_DoDonut: linedef had no second sidedef! "
-                    "Unexpected behavior may occur in Vanilla Doom. \n");
+            fprintf(stderr, "EV_DoDonut: linedef had no second sidedef! "
+                            "Unexpected behavior may occur in Vanilla Doom. \n");
             break;
         }
 
@@ -1259,10 +1253,9 @@ int EV_DoDonut(line_t *line)
                 // s3->floorpic is a short at 0000:0008
                 // Trying to emulate
 
-                fprintf(stderr,
-                        "EV_DoDonut: WARNING: emulating buffer overrun due to "
-                        "NULL back sector. "
-                        "Unexpected behavior may occur in Vanilla Doom.\n");
+                fprintf(stderr, "EV_DoDonut: WARNING: emulating buffer overrun due to "
+                                "NULL back sector. "
+                                "Unexpected behavior may occur in Vanilla Doom.\n");
 
                 DonutOverrun(&s3_floorheight, &s3_floorpic, line, s1);
             }

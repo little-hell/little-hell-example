@@ -27,11 +27,7 @@ static struct
 {
     GameMission_t mission;
     GameMode_t mode;
-    int episode;
-    int map;
-} valid_modes[] = {
-    {doom, registered, 3, 9}
-};
+} valid_modes[] = {{doom, registered}};
 
 // Check that a gamemode+gamemission received over the network is valid.
 
@@ -48,37 +44,4 @@ boolean D_ValidGameMode(GameMission_t mission, GameMode_t mode)
     }
 
     return false;
-}
-
-boolean D_ValidEpisodeMap(GameMission_t mission, GameMode_t mode, int episode,
-                          int map)
-{
-    int i;
-
-    // Find the table entry for this mission/mode combination.
-
-    for (i = 0; i < arrlen(valid_modes); ++i)
-    {
-        if (mission == valid_modes[i].mission && mode == valid_modes[i].mode)
-        {
-            return episode >= 1 && episode <= valid_modes[i].episode &&
-                   map >= 1 && map <= valid_modes[i].map;
-        }
-    }
-
-    // Unknown mode/mission combination
-
-    return false;
-}
-
-const char *D_GameModeString(GameMode_t mode)
-{
-    switch (mode)
-    {
-        case registered:
-            return "registered";
-        case indetermined:
-        default:
-            return "unknown";
-    }
 }

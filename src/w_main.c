@@ -67,12 +67,12 @@ boolean W_ParseCommandLine(void)
 
 void W_CheckCorrectIWAD(GameMission_t mission)
 {
-    // A lump name that is unique to a particular game type (DOOM). 
+    // A lump name that is unique to a particular game type (DOOM).
     // POSSA1 is the first frame of a zombie trooper.
     // If we don't see this in an IWAD, it is probably the wrong
     // type.
     // i.e mindoom -iwad hexen.wad
-    const char* unique_lump = "POSSA1";     
+    const char *unique_lump = "POSSA1";
 
     lumpindex_t lumpnum;
     lumpnum = W_CheckNumForName(unique_lump);

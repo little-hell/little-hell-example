@@ -49,19 +49,16 @@ void NET_AddModule(net_context_t *context, net_module_t *module)
     {
         I_Error("NET_AddModule: No more modules for context");
     }
-    
+
     context->modules[context->num_modules] = module;
     ++context->num_modules;
 }
 
 net_addr_t *NET_ResolveAddress(net_context_t *context, const char *addr)
 {
-    int i;
-    net_addr_t *result;
-
-    for (i=0; i<context->num_modules; ++i)
+    for (int i = 0; i < context->num_modules; ++i)
     {
-        result = context->modules[i]->ResolveAddress(addr);
+        net_addr_t *result = context->modules[i]->ResolveAddress(addr);
 
         if (result != NULL)
         {
@@ -82,21 +79,19 @@ void NET_SendBroadcast(net_context_t *context, net_packet_t *packet)
 {
     int i;
 
-    for (i=0; i<context->num_modules; ++i)
+    for (i = 0; i < context->num_modules; ++i)
     {
         context->modules[i]->SendPacket(&net_broadcast_addr, packet);
     }
 }
 
-boolean NET_RecvPacket(net_context_t *context, 
-                       net_addr_t **addr, 
-                       net_packet_t **packet)
+boolean NET_RecvPacket(net_context_t *context, net_addr_t **addr, net_packet_t **packet)
 {
     int i;
-    
+
     // check all modules for new packets
-    
-    for (i=0; i<context->num_modules; ++i)
+
+    for (i = 0; i < context->num_modules; ++i)
     {
         if (context->modules[i]->RecvPacket(addr, packet))
         {
@@ -144,4 +139,3 @@ void NET_ReleaseAddress(net_addr_t *addr)
         addr->module->FreeAddress(addr);
     }
 }
-

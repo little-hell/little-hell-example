@@ -140,8 +140,8 @@ void HU_Start(void)
     chat_on = false;
 
     // create the message widget
-    HUlib_initSText(&w_message, HU_MSGX, HU_MSGY, HU_MSGHEIGHT, hu_font,
-                    HU_FONTSTART, &message_on);
+    HUlib_initSText(&w_message, HU_MSGX, HU_MSGY, HU_MSGHEIGHT, hu_font, HU_FONTSTART,
+                    &message_on);
 
     // create the map title widget
     HUlib_initTextLine(&w_title, HU_TITLEX, HU_TITLEY, hu_font, HU_FONTSTART);
@@ -152,8 +152,7 @@ void HU_Start(void)
         HUlib_addCharToTextLine(&w_title, *(s++));
 
     // create the chat widget
-    HUlib_initIText(&w_chat, HU_INPUTX, HU_INPUTY, hu_font, HU_FONTSTART,
-                    &chat_on);
+    HUlib_initIText(&w_chat, HU_INPUTX, HU_INPUTY, hu_font, HU_FONTSTART, &chat_on);
 
     // create the inputbuffer widgets
     for (i = 0; i < MAXPLAYERS; i++)
@@ -181,10 +180,6 @@ void HU_Erase(void)
 
 void HU_Ticker(void)
 {
-
-    int i, rc;
-    char c;
-
     // tick down message counter if message is up
     if (message_counter && !--message_counter)
     {
@@ -212,8 +207,10 @@ void HU_Ticker(void)
     // check for incoming chat characters
     if (netgame)
     {
-        for (i = 0; i < MAXPLAYERS; i++)
+        for (int i = 0; i < MAXPLAYERS; i++)
         {
+            char c;
+
             if (!playeringame[i])
                 continue;
             if (i != consoleplayer && (c = players[i].cmd.chatchar))
@@ -222,15 +219,14 @@ void HU_Ticker(void)
                     chat_dest[i] = c;
                 else
                 {
-                    rc = HUlib_keyInIText(&w_inputbuffer[i], c);
+                    int rc = HUlib_keyInIText(&w_inputbuffer[i], c);
                     if (rc && c == KEY_ENTER)
                     {
                         if (w_inputbuffer[i].l.len &&
                             (chat_dest[i] == consoleplayer + 1 ||
                              chat_dest[i] == HU_BROADCAST))
                         {
-                            HUlib_addMessageToSText(&w_message,
-                                                    player_names[i],
+                            HUlib_addMessageToSText(&w_message, player_names[i],
                                                     w_inputbuffer[i].l.l);
 
                             message_nottobefuckedwith = true;

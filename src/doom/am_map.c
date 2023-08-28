@@ -181,8 +181,7 @@ mline_t triangle_guy[] = {
 mline_t thintriangle_guy[] = {
     {{(fixed_t)(-.5 * R), (fixed_t)(-.7 * R)}, {(fixed_t)(R), (fixed_t)(0)}},
     {{(fixed_t)(R), (fixed_t)(0)}, {(fixed_t)(-.5 * R), (fixed_t)(.7 * R)}},
-    {{(fixed_t)(-.5 * R), (fixed_t)(.7 * R)},
-     {(fixed_t)(-.5 * R), (fixed_t)(-.7 * R)}}};
+    {{(fixed_t)(-.5 * R), (fixed_t)(.7 * R)}, {(fixed_t)(-.5 * R), (fixed_t)(-.7 * R)}}};
 #undef R
 
 
@@ -207,9 +206,8 @@ static int lightlev; // used for funky strobing effect
 static pixel_t *fb;  // pseudo-frame buffer
 static int amclock;
 
-static mpoint_t m_paninc; // how far the window pans each tic (map coords)
-static fixed_t
-    mtof_zoommul; // how far the window zooms in each tic (map coords)
+static mpoint_t m_paninc;    // how far the window pans each tic (map coords)
+static fixed_t mtof_zoommul; // how far the window zooms in each tic (map coords)
 static fixed_t ftom_zoommul; // how far the window zooms in each tic (fb coords)
 
 static fixed_t m_x, m_y;   // LL x,y where the window is on the map (map coords)
@@ -252,7 +250,7 @@ static fixed_t scale_ftom;
 
 static player_t *plr; // the player represented by an arrow
 
-static patch_t *marknums[10]; // numbers used for marking by the automap
+static patch_t *marknums[10];                 // numbers used for marking by the automap
 static mpoint_t markpoints[AM_NUMMARKPOINTS]; // where the points are
 static int markpointnum = 0;                  // next point to be assigned
 
@@ -261,26 +259,6 @@ static int followplayer = 1; // specifies whether to follow the player around
 cheatseq_t cheat_amap = CHEAT("iddt", 0);
 
 static boolean stopped = true;
-
-// Calculates the slope and slope according to the x-axis of a line
-// segment in map coordinates (with the upright y-axis n' all) so
-// that it can be used with the brain-dead drawing stuff.
-
-void AM_getIslope(mline_t *ml, islope_t *is)
-{
-    int dx, dy;
-
-    dy = ml->a.y - ml->b.y;
-    dx = ml->b.x - ml->a.x;
-    if (!dy)
-        is->islp = (dx < 0 ? -INT_MAX : INT_MAX);
-    else
-        is->islp = FixedDiv(dx, dy);
-    if (!dx)
-        is->slp = (dy < 0 ? -INT_MAX : INT_MAX);
-    else
-        is->slp = FixedDiv(dy, dx);
-}
 
 //
 //
@@ -418,7 +396,6 @@ void AM_changeWindowLoc(void)
 //
 void AM_initVariables(void)
 {
-    int pnum;
     static event_t st_notify = {ev_keyup, AM_MSGENTERED, 0, 0};
 
     automapactive = true;
@@ -444,7 +421,7 @@ void AM_initVariables(void)
     {
         plr = &players[0];
 
-        for (pnum = 0; pnum < MAXPLAYERS; pnum++)
+        for (int pnum = 0; pnum < MAXPLAYERS; pnum++)
         {
             if (playeringame[pnum])
             {
@@ -701,8 +678,7 @@ boolean AM_Responder(event_t *ev)
         }
         else if (key == key_map_mark)
         {
-            M_snprintf(buffer, sizeof(buffer), "%s %d",
-                       AMSTR_MARKEDSPOT, markpointnum);
+            M_snprintf(buffer, sizeof(buffer), "%s %d", AMSTR_MARKEDSPOT, markpointnum);
             plr->message = buffer;
             AM_addMark();
         }
@@ -800,27 +776,6 @@ void AM_doFollowPlayer(void)
 }
 
 //
-//
-//
-void AM_updateLightLev(void)
-{
-    static int nexttic = 0;
-    //static int litelevels[] = { 0, 3, 5, 6, 6, 7, 7, 7 };
-    static int litelevels[] = {0, 4, 7, 10, 12, 14, 15, 15};
-    static int litelevelscnt = 0;
-
-    // Change light level
-    if (amclock > nexttic)
-    {
-        lightlev = litelevels[litelevelscnt++];
-        if (litelevelscnt == arrlen(litelevels))
-            litelevelscnt = 0;
-        nexttic = amclock + 6 - (amclock % 6);
-    }
-}
-
-
-//
 // Updates on Game Tick
 //
 void AM_Ticker(void)
@@ -882,15 +837,15 @@ boolean AM_clipMline(mline_t *ml, fline_t *fl)
     int dy;
 
 
-#define DOOUTCODE(oc, mx, my)                                                  \
-    (oc) = 0;                                                                  \
-    if ((my) < 0)                                                              \
-        (oc) |= TOP;                                                           \
-    else if ((my) >= f_h)                                                      \
-        (oc) |= BOTTOM;                                                        \
-    if ((mx) < 0)                                                              \
-        (oc) |= LEFT;                                                          \
-    else if ((mx) >= f_w)                                                      \
+#define DOOUTCODE(oc, mx, my)                                                            \
+    (oc) = 0;                                                                            \
+    if ((my) < 0)                                                                        \
+        (oc) |= TOP;                                                                     \
+    else if ((my) >= f_h)                                                                \
+        (oc) |= BOTTOM;                                                                  \
+    if ((mx) < 0)                                                                        \
+        (oc) |= LEFT;                                                                    \
+    else if ((mx) >= f_w)                                                                \
         (oc) |= RIGHT;
 
 
@@ -1012,12 +967,12 @@ void AM_drawFline(fline_t *fl, int color)
     register int ay;
     register int d;
 
-    static int fuck = 0;
 
     // For debugging only
-    if (fl->a.x < 0 || fl->a.x >= f_w || fl->a.y < 0 || fl->a.y >= f_h ||
-        fl->b.x < 0 || fl->b.x >= f_w || fl->b.y < 0 || fl->b.y >= f_h)
+    if (fl->a.x < 0 || fl->a.x >= f_w || fl->a.y < 0 || fl->a.y >= f_h || fl->b.x < 0 ||
+        fl->b.x >= f_w || fl->b.y < 0 || fl->b.y >= f_h)
     {
+        static int fuck = 0;
         fprintf(stderr, "fuck %d \r", fuck++);
         return;
     }
@@ -1173,8 +1128,7 @@ void AM_drawWalls(void)
                 else if (lines[i].backsector->ceilingheight !=
                          lines[i].frontsector->ceilingheight)
                 {
-                    AM_drawMline(&l, CDWALLCOLORS +
-                                         lightlev); // ceiling level change
+                    AM_drawMline(&l, CDWALLCOLORS + lightlev); // ceiling level change
                 }
                 else if (cheating)
                 {
@@ -1252,8 +1206,6 @@ void AM_drawLineCharacter(mline_t *lineguy, int lineguylines, fixed_t scale,
 
 void AM_drawPlayers(void)
 {
-    int i;
-    player_t *p;
     static int their_colors[] = {GREENS, GRAYS, BROWNS, REDS};
     int their_color = -1;
     int color;
@@ -1261,19 +1213,18 @@ void AM_drawPlayers(void)
     if (!netgame)
     {
         if (cheating)
-            AM_drawLineCharacter(cheat_player_arrow, arrlen(cheat_player_arrow),
-                                 0, plr->mo->angle, WHITE, plr->mo->x,
-                                 plr->mo->y);
-        else
-            AM_drawLineCharacter(player_arrow, arrlen(player_arrow), 0,
+            AM_drawLineCharacter(cheat_player_arrow, arrlen(cheat_player_arrow), 0,
                                  plr->mo->angle, WHITE, plr->mo->x, plr->mo->y);
+        else
+            AM_drawLineCharacter(player_arrow, arrlen(player_arrow), 0, plr->mo->angle,
+                                 WHITE, plr->mo->x, plr->mo->y);
         return;
     }
 
-    for (i = 0; i < MAXPLAYERS; i++)
+    for (int i = 0; i < MAXPLAYERS; i++)
     {
         their_color++;
-        p = &players[i];
+        player_t *p = &players[i];
 
         if ((deathmatch && !singledemo) && p != plr)
             continue;
@@ -1286,8 +1237,8 @@ void AM_drawPlayers(void)
         else
             color = their_colors[their_color];
 
-        AM_drawLineCharacter(player_arrow, arrlen(player_arrow), 0,
-                             p->mo->angle, color, p->mo->x, p->mo->y);
+        AM_drawLineCharacter(player_arrow, arrlen(player_arrow), 0, p->mo->angle, color,
+                             p->mo->x, p->mo->y);
     }
 }
 
@@ -1302,8 +1253,7 @@ void AM_drawThings(int colors, int colorrange)
         while (t)
         {
             AM_drawLineCharacter(thintriangle_guy, arrlen(thintriangle_guy),
-                                 16 << FRACBITS, t->angle, colors + lightlev,
-                                 t->x, t->y);
+                                 16 << FRACBITS, t->angle, colors + lightlev, t->x, t->y);
             t = t->snext;
         }
     }

@@ -121,7 +121,7 @@ typedef enum
     // Protocol introduced with Chocolate Doom v3.0. Each compatibility-
     // breaking change to the network protocol will produce a new protocol
     // number in this enum.
-    NET_PROTOCOL_CHOCOLATE_DOOM_0,
+    NET_PROTOCOL_MINDOOM_0,
 
     // Add your own protocol here; be sure to add a name for it to the list
     // in net_common.c too.

@@ -16,7 +16,6 @@
 //
 
 
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -116,7 +115,7 @@ static byte *AutoAllocMemory(int *size, int default_ram, int min_ram)
     return zonemem;
 }
 
-byte *I_ZoneBase (int *size)
+byte *I_ZoneBase(int *size)
 {
     byte *zonemem;
     int min_ram, default_ram;
@@ -133,7 +132,7 @@ byte *I_ZoneBase (int *size)
 
     if (p > 0)
     {
-        default_ram = atoi(myargv[p+1]);
+        default_ram = atoi(myargv[p + 1]);
         min_ram = default_ram;
     }
     else
@@ -144,8 +143,7 @@ byte *I_ZoneBase (int *size)
 
     zonemem = AutoAllocMemory(size, default_ram, min_ram);
 
-    printf("zone memory: %p, %x allocated for zone\n", 
-           zonemem, *size);
+    printf("zone memory: %p, %x allocated for zone\n", zonemem, *size);
 
     return zonemem;
 }
@@ -155,7 +153,7 @@ void I_PrintBanner(const char *msg)
     int i;
     int spaces = 35 - (strlen(msg) / 2);
 
-    for (i=0; i<spaces; ++i)
+    for (i = 0; i < spaces; ++i)
         putchar(' ');
 
     puts(msg);
@@ -165,7 +163,7 @@ void I_PrintDivider(void)
 {
     int i;
 
-    for (i=0; i<75; ++i)
+    for (i = 0; i < 75; ++i)
     {
         putchar('=');
     }
@@ -178,17 +176,18 @@ void I_PrintStartupBanner(const char *gamedescription)
     I_PrintDivider();
     I_PrintBanner(gamedescription);
     I_PrintDivider();
-    
-    printf(
-    " " PACKAGE_NAME " is free software, covered by the GNU General Public\n"
-    " License.  There is NO warranty; not even for MERCHANTABILITY or FITNESS\n"
-    " FOR A PARTICULAR PURPOSE. You are welcome to change and distribute\n"
-    " copies under certain conditions. See the source for more information.\n");
+
+    printf(" " PACKAGE_NAME " is free software, covered by the GNU General Public\n"
+           " License.  There is NO warranty; not even for MERCHANTABILITY or "
+           "FITNESS\n"
+           " FOR A PARTICULAR PURPOSE. You are welcome to change and distribute\n"
+           " copies under certain conditions. See the source for more "
+           "information.\n");
 
     I_PrintDivider();
 }
 
-// 
+//
 // I_ConsoleStdout
 //
 // Returns true if stdout is a real console, false if it is a file
@@ -203,13 +202,13 @@ boolean I_ConsoleStdout(void)
 // I_Quit
 //
 
-void I_Quit (void)
+void I_Quit(void)
 {
     atexit_listentry_t *entry;
 
     // Run through all exit functions
- 
-    entry = exit_funcs; 
+
+    entry = exit_funcs;
 
     while (entry != NULL)
     {
@@ -223,14 +222,13 @@ void I_Quit (void)
 }
 
 
-
 //
 // I_Error
 //
 
 static boolean already_quitting = false;
 
-void I_Error (const char *error, ...)
+void I_Error(const char *error, ...)
 {
     char msgbuf[512];
     va_list argptr;
@@ -288,8 +286,7 @@ void I_Error (const char *error, ...)
     // therefore be unable to otherwise see the message).
     if (exit_gui_popup && !I_ConsoleStdout())
     {
-        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR,
-                                 PACKAGE_STRING, msgbuf, NULL);
+        SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, PACKAGE_STRING, msgbuf, NULL);
     }
 
     // abort();
@@ -311,115 +308,8 @@ void *I_Realloc(void *ptr, size_t size)
 
     if (size != 0 && new_ptr == NULL)
     {
-        I_Error ("I_Realloc: failed on reallocation of %zu bytes", size);
+        I_Error("I_Realloc: failed on reallocation of %zu bytes", size);
     }
 
     return new_ptr;
 }
-
-//
-// Read Access Violation emulation.
-//
-// From PrBoom+, by entryway.
-//
-
-// C:\>debug
-// -d 0:0
-//
-// DOS 6.22:
-// 0000:0000  (57 92 19 00) F4 06 70 00-(16 00)
-// DOS 7.1:
-// 0000:0000  (9E 0F C9 00) 65 04 70 00-(16 00)
-// Win98:
-// 0000:0000  (9E 0F C9 00) 65 04 70 00-(16 00)
-// DOSBox under XP:
-// 0000:0000  (00 00 00 F1) ?? ?? ?? 00-(07 00)
-
-#define DOS_MEM_DUMP_SIZE 10
-
-static const unsigned char mem_dump_dos622[DOS_MEM_DUMP_SIZE] = {
-  0x57, 0x92, 0x19, 0x00, 0xF4, 0x06, 0x70, 0x00, 0x16, 0x00};
-static const unsigned char mem_dump_win98[DOS_MEM_DUMP_SIZE] = {
-  0x9E, 0x0F, 0xC9, 0x00, 0x65, 0x04, 0x70, 0x00, 0x16, 0x00};
-static const unsigned char mem_dump_dosbox[DOS_MEM_DUMP_SIZE] = {
-  0x00, 0x00, 0x00, 0xF1, 0x00, 0x00, 0x00, 0x00, 0x07, 0x00};
-static unsigned char mem_dump_custom[DOS_MEM_DUMP_SIZE];
-
-static const unsigned char *dos_mem_dump = mem_dump_dos622;
-
-boolean I_GetMemoryValue(unsigned int offset, void *value, int size)
-{
-    static boolean firsttime = true;
-
-    if (firsttime)
-    {
-        int p, i, val;
-
-        firsttime = false;
-        i = 0;
-
-        //!
-        // @category compat
-        // @arg <version>
-        //
-        // Specify DOS version to emulate for NULL pointer dereference
-        // emulation.  Supported versions are: dos622, dos71, dosbox.
-        // The default is to emulate DOS 7.1 (Windows 98).
-        //
-
-        p = M_CheckParmWithArgs("-setmem", 1);
-
-        if (p > 0)
-        {
-            if (!strcasecmp(myargv[p + 1], "dos622"))
-            {
-                dos_mem_dump = mem_dump_dos622;
-            }
-            if (!strcasecmp(myargv[p + 1], "dos71"))
-            {
-                dos_mem_dump = mem_dump_win98;
-            }
-            else if (!strcasecmp(myargv[p + 1], "dosbox"))
-            {
-                dos_mem_dump = mem_dump_dosbox;
-            }
-            else
-            {
-                for (i = 0; i < DOS_MEM_DUMP_SIZE; ++i)
-                {
-                    ++p;
-
-                    if (p >= myargc || myargv[p][0] == '-')
-                    {
-                        break;
-                    }
-
-                    M_StrToInt(myargv[p], &val);
-                    mem_dump_custom[i++] = (unsigned char) val;
-                }
-
-                dos_mem_dump = mem_dump_custom;
-            }
-        }
-    }
-
-    switch (size)
-    {
-    case 1:
-        *((unsigned char *) value) = dos_mem_dump[offset];
-        return true;
-    case 2:
-        *((unsigned short *) value) = dos_mem_dump[offset]
-                                    | (dos_mem_dump[offset + 1] << 8);
-        return true;
-    case 4:
-        *((unsigned int *) value) = dos_mem_dump[offset]
-                                  | (dos_mem_dump[offset + 1] << 8)
-                                  | (dos_mem_dump[offset + 2] << 16)
-                                  | (dos_mem_dump[offset + 3] << 24);
-        return true;
-    }
-
-    return false;
-}
-

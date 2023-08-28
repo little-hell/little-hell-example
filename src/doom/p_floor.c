@@ -39,8 +39,8 @@
 //
 // Move a plane (floor or ceiling) and check for crushing
 //
-result_e T_MovePlane(sector_t *sector, fixed_t speed, fixed_t dest,
-                     boolean crush, int floorOrCeiling, int direction)
+result_e T_MovePlane(sector_t *sector, fixed_t speed, fixed_t dest, boolean crush,
+                     int floorOrCeiling, int direction)
 {
     boolean flag;
     fixed_t lastpos;
@@ -197,8 +197,8 @@ void T_MoveFloor(floormove_t *floor)
 {
     result_e res;
 
-    res = T_MovePlane(floor->sector, floor->speed, floor->floordestheight,
-                      floor->crush, 0, floor->direction);
+    res = T_MovePlane(floor->sector, floor->speed, floor->floordestheight, floor->crush,
+                      0, floor->direction);
 
     if (!(leveltime & 7))
         S_StartSound(&floor->sector->soundorg, sfx_stnmov);
@@ -299,47 +299,41 @@ int EV_DoFloor(line_t *line, floor_e floortype)
                 floor->floordestheight = P_FindLowestCeilingSurrounding(sec);
                 if (floor->floordestheight > sec->ceilingheight)
                     floor->floordestheight = sec->ceilingheight;
-                floor->floordestheight -=
-                    (8 * FRACUNIT) * (floortype == raiseFloorCrush);
+                floor->floordestheight -= (8 * FRACUNIT) * (floortype == raiseFloorCrush);
                 break;
 
             case raiseFloorTurbo:
                 floor->direction = 1;
                 floor->sector = sec;
                 floor->speed = FLOORSPEED * 4;
-                floor->floordestheight =
-                    P_FindNextHighestFloor(sec, sec->floorheight);
+                floor->floordestheight = P_FindNextHighestFloor(sec, sec->floorheight);
                 break;
 
             case raiseFloorToNearest:
                 floor->direction = 1;
                 floor->sector = sec;
                 floor->speed = FLOORSPEED;
-                floor->floordestheight =
-                    P_FindNextHighestFloor(sec, sec->floorheight);
+                floor->floordestheight = P_FindNextHighestFloor(sec, sec->floorheight);
                 break;
 
             case raiseFloor24:
                 floor->direction = 1;
                 floor->sector = sec;
                 floor->speed = FLOORSPEED;
-                floor->floordestheight =
-                    floor->sector->floorheight + 24 * FRACUNIT;
+                floor->floordestheight = floor->sector->floorheight + 24 * FRACUNIT;
                 break;
             case raiseFloor512:
                 floor->direction = 1;
                 floor->sector = sec;
                 floor->speed = FLOORSPEED;
-                floor->floordestheight =
-                    floor->sector->floorheight + 512 * FRACUNIT;
+                floor->floordestheight = floor->sector->floorheight + 512 * FRACUNIT;
                 break;
 
             case raiseFloor24AndChange:
                 floor->direction = 1;
                 floor->sector = sec;
                 floor->speed = FLOORSPEED;
-                floor->floordestheight =
-                    floor->sector->floorheight + 24 * FRACUNIT;
+                floor->floordestheight = floor->sector->floorheight + 24 * FRACUNIT;
                 sec->floorpic = line->frontsector->floorpic;
                 sec->special = line->frontsector->special;
                 break;
