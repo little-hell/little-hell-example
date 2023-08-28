@@ -154,23 +154,6 @@ boolean NET_ReadSInt16(net_packet_t *packet, signed int *data)
     }
 }
 
-boolean NET_ReadSInt32(net_packet_t *packet, signed int *data)
-{
-    if (NET_ReadInt32(packet, (unsigned int *) data))
-    {
-        if (*data & (1U << 31))
-        {
-            *data &= ~(1U << 31);
-            *data -= (1U << 31);
-        }
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
 // Read a string from the packet.  Returns NULL if a terminating 
 // NUL character was not found before the end of the packet.
 
