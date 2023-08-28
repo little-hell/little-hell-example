@@ -34,9 +34,9 @@ static const int scancode_translate_table[] = SCANCODE_TO_KEYS_ARRAY;
 // shift is pressed on a US layout keyboard. This is the original table
 // as found in the Doom sources, comments and all.
 static const char shiftxform[] = {
-    0,    1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,
-    15,   16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,
-    30,   31,  ' ', '!', '"', '#', '$', '%', '&',
+    0,    1,   2,   3,   4,   5,   6,   7,   8,   9,   10,  11,  12,  13,  14,  15,
+    16,   17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27,  28,  29,  30,  31,
+    ' ',  '!', '"', '#', '$', '%', '&',
     '"', // shift-'
     '(',  ')', '*', '+',
     '<', // shift-,
@@ -57,16 +57,15 @@ static const char shiftxform[] = {
     ':', // shift-;
     '<',
     '+', // shift-=
-    '>',  '?', '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L',
-    'M',  'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
+    '>',  '?', '@', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+    'N',  'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     '[', // shift-[
     '!', // shift-backslash - OH MY GOD DOES WATCOM SUCK
     ']', // shift-]
     '"',  '_',
     '\'', // shift-`
-    'A',  'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',
-    'P',  'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~',
-    127};
+    'A',  'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+    'Q',  'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '{', '|', '}', '~', 127};
 
 // If true, I_StartTextInput() has been called, and we are populating
 // the data3 field of ev_keydown events.
@@ -420,8 +419,7 @@ static int AccelerateMouse(int val)
 
     if (val > mouse_threshold)
     {
-        return (int) ((val - mouse_threshold) * mouse_acceleration +
-                      mouse_threshold);
+        return (int) ((val - mouse_threshold) * mouse_acceleration + mouse_threshold);
     }
     else
     {

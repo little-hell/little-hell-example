@@ -97,13 +97,11 @@ static void PrintPercentage(FILE *stream, int amount, int total)
 
 /* Display statistics for a single player. */
 
-static void PrintPlayerStats(FILE *stream, const wbstartstruct_t *stats,
-                             int player_num)
+static void PrintPlayerStats(FILE *stream, const wbstartstruct_t *stats, int player_num)
 {
     const wbplayerstruct_t *player = &stats->plyr[player_num];
 
-    fprintf(stream, "Player %i (%s):\n", player_num + 1,
-            player_colors[player_num]);
+    fprintf(stream, "Player %i (%s):\n", player_num + 1, player_colors[player_num]);
 
     /* Kills percentage */
 
@@ -224,8 +222,7 @@ void StatCopy(const wbstartstruct_t *stats)
 {
     if (M_ParmExists("-statdump") && num_captured_stats < MAX_CAPTURES)
     {
-        memcpy(&captured_stats[num_captured_stats], stats,
-               sizeof(wbstartstruct_t));
+        memcpy(&captured_stats[num_captured_stats], stats, sizeof(wbstartstruct_t));
         ++num_captured_stats;
     }
 }
@@ -255,7 +252,7 @@ void StatDump(void)
         DiscoverGamemode(captured_stats, num_captured_stats);
 
         // Allow "-" as output file, for stdout.
-        
+
         FILE *dumpfile;
 
         if (strcmp(myargv[i + 1], "-") != 0)

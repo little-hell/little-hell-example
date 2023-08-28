@@ -324,8 +324,7 @@ static void BlockUntilStart(net_gamesettings_t *settings,
     }
 }
 
-void D_StartNetGame(net_gamesettings_t *settings,
-                    netgame_startup_callback_t callback)
+void D_StartNetGame(net_gamesettings_t *settings, netgame_startup_callback_t callback)
 {
     int i;
 

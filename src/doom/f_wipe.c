@@ -200,16 +200,16 @@ int wipe_exitMelt(int width, int height, int ticks)
 
 int wipe_StartScreen(int x, int y, int width, int height)
 {
-    wipe_scr_start = Z_Malloc(
-        SCREENWIDTH * SCREENHEIGHT * sizeof(*wipe_scr_start), PU_STATIC, NULL);
+    wipe_scr_start =
+        Z_Malloc(SCREENWIDTH * SCREENHEIGHT * sizeof(*wipe_scr_start), PU_STATIC, NULL);
     I_ReadScreen(wipe_scr_start);
     return 0;
 }
 
 int wipe_EndScreen(int x, int y, int width, int height)
 {
-    wipe_scr_end = Z_Malloc(SCREENWIDTH * SCREENHEIGHT * sizeof(*wipe_scr_end),
-                            PU_STATIC, NULL);
+    wipe_scr_end =
+        Z_Malloc(SCREENWIDTH * SCREENHEIGHT * sizeof(*wipe_scr_end), PU_STATIC, NULL);
     I_ReadScreen(wipe_scr_end);
     V_DrawBlock(x, y, width, height, wipe_scr_start); // restore start scr.
     return 0;
@@ -218,9 +218,9 @@ int wipe_EndScreen(int x, int y, int width, int height)
 int wipe_ScreenWipe(int wipeno, int x, int y, int width, int height, int ticks)
 {
     int rc;
-    static int (*wipes[])(int, int, int) = {
-        wipe_initColorXForm, wipe_doColorXForm, wipe_exitColorXForm,
-        wipe_initMelt,       wipe_doMelt,       wipe_exitMelt};
+    static int (*wipes[])(int, int, int) = {wipe_initColorXForm, wipe_doColorXForm,
+                                            wipe_exitColorXForm, wipe_initMelt,
+                                            wipe_doMelt,         wipe_exitMelt};
 
     // initial stuff
     if (!go)

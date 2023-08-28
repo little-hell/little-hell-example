@@ -120,7 +120,8 @@ void HUlib_eraseTextLine(hu_textline_t *l)
         int yoffset;
         int lh = SHORT(l->f[0]->height) + 1;
 
-        for (int y = l->y, yoffset = y * SCREENWIDTH; y < l->y + lh; y++, yoffset += SCREENWIDTH)
+        for (int y = l->y, yoffset = y * SCREENWIDTH; y < l->y + lh;
+             y++, yoffset += SCREENWIDTH)
         {
             if (y < viewwindowy || y >= viewwindowy + viewheight)
                 R_VideoErase(yoffset, SCREENWIDTH); // erase entire line
@@ -137,8 +138,8 @@ void HUlib_eraseTextLine(hu_textline_t *l)
         l->needsupdate--;
 }
 
-void HUlib_initSText(hu_stext_t *s, int x, int y, int h, patch_t **font,
-                     int startchar, boolean *on)
+void HUlib_initSText(hu_stext_t *s, int x, int y, int h, patch_t **font, int startchar,
+                     boolean *on)
 {
 
     int i;
@@ -148,8 +149,8 @@ void HUlib_initSText(hu_stext_t *s, int x, int y, int h, patch_t **font,
     s->laston = true;
     s->cl = 0;
     for (i = 0; i < h; i++)
-        HUlib_initTextLine(&s->l[i], x, y - i * (SHORT(font[0]->height) + 1),
-                           font, startchar);
+        HUlib_initTextLine(&s->l[i], x, y - i * (SHORT(font[0]->height) + 1), font,
+                           startchar);
 }
 
 void HUlib_addLineToSText(hu_stext_t *s)
@@ -212,8 +213,8 @@ void HUlib_eraseSText(hu_stext_t *s)
     s->laston = *s->on;
 }
 
-void HUlib_initIText(hu_itext_t *it, int x, int y, patch_t **font,
-                     int startchar, boolean *on)
+void HUlib_initIText(hu_itext_t *it, int x, int y, patch_t **font, int startchar,
+                     boolean *on)
 {
     it->lm = 0; // default left margin is start of text
     it->on = on;

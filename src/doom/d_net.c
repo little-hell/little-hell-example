@@ -88,8 +88,8 @@ static void RunTic(ticcmd_t *cmds, boolean *ingame)
     G_Ticker();
 }
 
-static loop_interface_t doom_loop_interface = {D_ProcessEvents, G_BuildTiccmd,
-                                               RunTic, M_Ticker};
+static loop_interface_t doom_loop_interface = {D_ProcessEvents, G_BuildTiccmd, RunTic,
+                                               M_Ticker};
 
 
 // Load game settings from the specified structure and
@@ -142,9 +142,8 @@ static void SaveGameSettings(net_gamesettings_t *settings)
     settings->respawn_monsters = respawnparm;
     settings->timelimit = timelimit;
 
-    settings->lowres_turn =
-        (M_ParmExists("-record") && !M_ParmExists("-longtics")) ||
-        M_ParmExists("-shorttics");
+    settings->lowres_turn = (M_ParmExists("-record") && !M_ParmExists("-longtics")) ||
+                            M_ParmExists("-shorttics");
 }
 
 static void InitConnectData(net_connect_data_t *connect_data)
@@ -244,11 +243,11 @@ void D_CheckNetGame(void)
     D_StartNetGame(&settings, NULL);
     LoadGameSettings(&settings);
 
-    printf("startskill %i  deathmatch: %i  startmap: %i  startepisode: %i\n",
-           startskill, deathmatch, startmap, startepisode);
+    printf("startskill %i  deathmatch: %i  startmap: %i  startepisode: %i\n", startskill,
+           deathmatch, startmap, startepisode);
 
-    printf("player %i of %i (%i nodes)\n", consoleplayer + 1,
-           settings.num_players, settings.num_players);
+    printf("player %i of %i (%i nodes)\n", consoleplayer + 1, settings.num_players,
+           settings.num_players);
 
     // Show players here; the server might have specified a time limit
 

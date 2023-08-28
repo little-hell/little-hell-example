@@ -248,8 +248,8 @@ void A_WeaponReady(player_t *player, pspdef_t *psp)
     //  the missile launcher and bfg do not auto fire
     if (player->cmd.buttons & BT_ATTACK)
     {
-        if (!player->attackdown || (player->readyweapon != wp_missile &&
-                                    player->readyweapon != wp_bfg))
+        if (!player->attackdown ||
+            (player->readyweapon != wp_missile && player->readyweapon != wp_bfg))
         {
             player->attackdown = true;
             P_FireWeapon(player);
@@ -277,8 +277,8 @@ void A_ReFire(player_t *player, pspdef_t *psp)
 
     // check for fire
     //  (if a weaponchange is pending, let it go through instead)
-    if ((player->cmd.buttons & BT_ATTACK) &&
-        player->pendingweapon == wp_nochange && player->health)
+    if ((player->cmd.buttons & BT_ATTACK) && player->pendingweapon == wp_nochange &&
+        player->health)
     {
         player->refire++;
         P_FireWeapon(player);
@@ -398,8 +398,8 @@ void A_Punch(player_t *player, pspdef_t *psp)
     if (linetarget)
     {
         S_StartSound(player->mo, sfx_punch);
-        player->mo->angle = R_PointToAngle2(player->mo->x, player->mo->y,
-                                            linetarget->x, linetarget->y);
+        player->mo->angle =
+            R_PointToAngle2(player->mo->x, player->mo->y, linetarget->x, linetarget->y);
     }
 }
 
@@ -429,8 +429,7 @@ void A_Saw(player_t *player, pspdef_t *psp)
     S_StartSound(player->mo, sfx_sawhit);
 
     // turn to face target
-    angle = R_PointToAngle2(player->mo->x, player->mo->y, linetarget->x,
-                            linetarget->y);
+    angle = R_PointToAngle2(player->mo->x, player->mo->y, linetarget->x, linetarget->y);
     if (angle - player->mo->angle > ANG180)
     {
         if ((signed int) (angle - player->mo->angle) < -ANG90 / 20)
@@ -482,8 +481,7 @@ void A_FireMissile(player_t *player, pspdef_t *psp)
 //
 void A_FireBFG(player_t *player, pspdef_t *psp)
 {
-    DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo,
-                 BFG_CELLS_PER_SHOT);
+    DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, BFG_CELLS_PER_SHOT);
     P_SpawnPlayerMissile(player->mo, MT_BFG);
 }
 
@@ -611,8 +609,8 @@ void A_FireShotgun2(player_t *player, pspdef_t *psp)
         damage = 5 * (P_Random() % 3 + 1);
         angle = player->mo->angle;
         angle += P_SubRandom() << ANGLETOFINESHIFT;
-        P_LineAttack(player->mo, angle, MISSILERANGE,
-                     bulletslope + (P_SubRandom() << 5), damage);
+        P_LineAttack(player->mo, angle, MISSILERANGE, bulletslope + (P_SubRandom() << 5),
+                     damage);
     }
 }
 

@@ -101,18 +101,16 @@ typedef struct
     const char *filename;
 } default_collection_t;
 
-#define CONFIG_VARIABLE_GENERIC(name, type)                                    \
-    {                                                                          \
-#name, {NULL }, type, 0, 0, false                                      \
+#define CONFIG_VARIABLE_GENERIC(name, type)                                              \
+    {                                                                                    \
+#name, {NULL }, type, 0, 0, false                                                \
     }
 
-#define CONFIG_VARIABLE_KEY(name) CONFIG_VARIABLE_GENERIC(name, DEFAULT_KEY)
-#define CONFIG_VARIABLE_INT(name) CONFIG_VARIABLE_GENERIC(name, DEFAULT_INT)
-#define CONFIG_VARIABLE_INT_HEX(name)                                          \
-    CONFIG_VARIABLE_GENERIC(name, DEFAULT_INT_HEX)
-#define CONFIG_VARIABLE_FLOAT(name) CONFIG_VARIABLE_GENERIC(name, DEFAULT_FLOAT)
-#define CONFIG_VARIABLE_STRING(name)                                           \
-    CONFIG_VARIABLE_GENERIC(name, DEFAULT_STRING)
+#define CONFIG_VARIABLE_KEY(name)     CONFIG_VARIABLE_GENERIC(name, DEFAULT_KEY)
+#define CONFIG_VARIABLE_INT(name)     CONFIG_VARIABLE_GENERIC(name, DEFAULT_INT)
+#define CONFIG_VARIABLE_INT_HEX(name) CONFIG_VARIABLE_GENERIC(name, DEFAULT_INT_HEX)
+#define CONFIG_VARIABLE_FLOAT(name)   CONFIG_VARIABLE_GENERIC(name, DEFAULT_FLOAT)
+#define CONFIG_VARIABLE_STRING(name)  CONFIG_VARIABLE_GENERIC(name, DEFAULT_STRING)
 
 //! @begin_config_file default
 
@@ -1435,8 +1433,7 @@ static default_collection_t extra_defaults = {
 
 // Search a collection for a variable
 
-static default_t *SearchCollection(default_collection_t *collection,
-                                   const char *name)
+static default_t *SearchCollection(default_collection_t *collection, const char *name)
 {
     int i;
 
@@ -1643,8 +1640,7 @@ static void SaveDefaultCollection(default_collection_t *collection)
 
                     v = 54;
                 }
-                else if (defaults[i].untranslated &&
-                         v == defaults[i].original_translated)
+                else if (defaults[i].untranslated && v == defaults[i].original_translated)
                 {
                     // Has not been changed since the last time we
                     // read the config file.
@@ -1890,8 +1886,7 @@ void M_LoadDefaults(void)
     }
     else
     {
-        doom_defaults.filename =
-            M_StringJoin(configdir, default_main_config, NULL);
+        doom_defaults.filename = M_StringJoin(configdir, default_main_config, NULL);
     }
 
     printf("saving config in %s\n", doom_defaults.filename);
@@ -1908,13 +1903,11 @@ void M_LoadDefaults(void)
     if (i)
     {
         extra_defaults.filename = myargv[i + 1];
-        printf("        extra configuration file: %s\n",
-               extra_defaults.filename);
+        printf("        extra configuration file: %s\n", extra_defaults.filename);
     }
     else
     {
-        extra_defaults.filename =
-            M_StringJoin(configdir, default_extra_config, NULL);
+        extra_defaults.filename = M_StringJoin(configdir, default_extra_config, NULL);
     }
 
     LoadDefaultCollection(&doom_defaults);

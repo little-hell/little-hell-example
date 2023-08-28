@@ -347,8 +347,7 @@ void R_DrawPlanes(void)
         I_Error("R_DrawPlanes: drawsegs overflow (%td)", ds_p - drawsegs);
 
     if (lastvisplane - visplanes > MAXVISPLANES)
-        I_Error("R_DrawPlanes: visplane overflow (%td)",
-                lastvisplane - visplanes);
+        I_Error("R_DrawPlanes: visplane overflow (%td)", lastvisplane - visplanes);
 
     if (lastopening - openings > MAXOPENINGS)
         I_Error("R_DrawPlanes: opening overflow (%td)", lastopening - openings);
@@ -409,8 +408,7 @@ void R_DrawPlanes(void)
 
         for (x = pl->minx; x <= stop; x++)
         {
-            R_MakeSpans(x, pl->top[x - 1], pl->bottom[x - 1], pl->top[x],
-                        pl->bottom[x]);
+            R_MakeSpans(x, pl->top[x - 1], pl->bottom[x - 1], pl->top[x], pl->bottom[x]);
         }
 
         W_ReleaseLumpNum(lumpnum);

@@ -51,8 +51,8 @@ void STlib_init(void)
 
 
 // ?
-void STlib_initNum(st_number_t *n, int x, int y, patch_t **pl, int *num,
-                   boolean *on, int width)
+void STlib_initNum(st_number_t *n, int x, int y, patch_t **pl, int *num, boolean *on,
+                   int width)
 {
     n->x = x;
     n->y = y;
@@ -136,8 +136,8 @@ void STlib_updateNum(st_number_t *n, boolean refresh)
 
 
 //
-void STlib_initPercent(st_percent_t *p, int x, int y, patch_t **pl, int *num,
-                       boolean *on, patch_t *percent)
+void STlib_initPercent(st_percent_t *p, int x, int y, patch_t **pl, int *num, boolean *on,
+                       patch_t *percent)
 {
     STlib_initNum(&p->n, x, y, pl, num, on, 3);
     p->p = percent;

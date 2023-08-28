@@ -56,8 +56,7 @@ static void AddIWADDir(const char *dir)
 
 static boolean DirIsFile(const char *path, const char *filename)
 {
-    return strchr(path, DIR_SEPARATOR) != NULL &&
-           !strcasecmp(M_BaseName(path), filename);
+    return strchr(path, DIR_SEPARATOR) != NULL && !strcasecmp(M_BaseName(path), filename);
 }
 
 // Check if the specified directory contains the specified IWAD
@@ -104,8 +103,7 @@ static char *CheckDirectoryHasIWAD(const char *dir, const char *iwadname)
 // Search a directory to try to find an IWAD
 // Returns the location of the IWAD if found, otherwise NULL.
 
-static char *SearchDirectoryForIWAD(const char *dir, int mask,
-                                    GameMission_t *mission)
+static char *SearchDirectoryForIWAD(const char *dir, int mask, GameMission_t *mission)
 {
     char *filename;
     size_t i;
@@ -388,7 +386,7 @@ char *D_FindIWAD(int mask, GameMission_t *mission)
     // @arg <file>
     //
     int iwadparm = M_CheckParmWithArgs("-iwad", 1);
-        
+
     char *result;
 
     if (iwadparm)

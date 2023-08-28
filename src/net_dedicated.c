@@ -37,12 +37,11 @@
 //
 
 static const char *not_dedicated_options[] = {
-    "-deh",       "-iwad",     "-cdrom",    "-gameversion", "-nomonsters",
-    "-respawn",   "-fast",     "-altdeath", "-deathmatch",  "-turbo",
-    "-merge",     "-af",       "-as",       "-aa",          "-file",
-    "-wart",      "-skill",    "-episode",  "-timer",       "-avg",
-    "-warp",      "-loadgame", "-longtics", "-extratics",   "-dup",
-    "-shorttics", NULL,
+    "-deh",   "-iwad",      "-cdrom",      "-gameversion", "-nomonsters", "-respawn",
+    "-fast",  "-altdeath",  "-deathmatch", "-turbo",       "-merge",      "-af",
+    "-as",    "-aa",        "-file",       "-wart",        "-skill",      "-episode",
+    "-timer", "-avg",       "-warp",       "-loadgame",    "-longtics",   "-extratics",
+    "-dup",   "-shorttics", NULL,
 };
 
 static void CheckForClientOptions(void)

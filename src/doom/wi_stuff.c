@@ -192,10 +192,9 @@ static point_t lnodes[NUMEPISODES][NUMMAPS] = {
 //  as they replace 320x200 full screen frames.
 //
 
-#define ANIM(type, period, nanims, x, y, nexttic)                              \
-    {                                                                          \
-        (type), (period), (nanims), {(x), (y)}, (nexttic), 0,                  \
-            {NULL, NULL, NULL}, 0, 0,                                          \
+#define ANIM(type, period, nanims, x, y, nexttic)                                        \
+    {                                                                                    \
+        (type), (period), (nanims), {(x), (y)}, (nexttic), 0, {NULL, NULL, NULL}, 0, 0,  \
     }
 
 
@@ -239,8 +238,7 @@ static int NUMANIMS[NUMEPISODES] = {
     arrlen(epsd2animinfo),
 };
 
-static anim_t *anims[NUMEPISODES] = {epsd0animinfo, epsd1animinfo,
-                                     epsd2animinfo};
+static anim_t *anims[NUMEPISODES] = {epsd0animinfo, epsd1animinfo, epsd2animinfo};
 
 
 //
@@ -411,8 +409,7 @@ void WI_drawOnLnode(int n, patch_t *c[])
         int right = left + SHORT(c[i]->width);
         int bottom = top + SHORT(c[i]->height);
 
-        if (left >= 0 && right < SCREENWIDTH && top >= 0 &&
-            bottom < SCREENHEIGHT)
+        if (left >= 0 && right < SCREENWIDTH && top >= 0 && bottom < SCREENHEIGHT)
         {
             fits = true;
         }
@@ -489,8 +486,7 @@ void WI_updateAnimatedBack(void)
 
                 case ANIM_LEVEL:
                     // gawd-awful hack for level anims
-                    if (!(state == StatCount && i == 7) &&
-                        wbs->next == a->data1)
+                    if (!(state == StatCount && i == 7) && wbs->next == a->data1)
                     {
                         a->ctr++;
                         if (a->ctr == a->nanims)
@@ -877,8 +873,8 @@ void WI_drawDeathmatchStats(void)
     WI_drawLF();
 
     // draw stat titles (top line)
-    V_DrawPatch(DM_TOTALSX - SHORT(total->width) / 2,
-                DM_MATRIXY - WI_SPACINGY + 10, total);
+    V_DrawPatch(DM_TOTALSX - SHORT(total->width) / 2, DM_MATRIXY - WI_SPACINGY + 10,
+                total);
 
     V_DrawPatch(DM_KILLERSX, DM_KILLERSY, killers);
     V_DrawPatch(DM_VICTIMSX, DM_VICTIMSY, victims);
@@ -891,15 +887,13 @@ void WI_drawDeathmatchStats(void)
     {
         if (playeringame[i])
         {
-            V_DrawPatch(x - SHORT(p[i]->width) / 2, DM_MATRIXY - WI_SPACINGY,
-                        p[i]);
+            V_DrawPatch(x - SHORT(p[i]->width) / 2, DM_MATRIXY - WI_SPACINGY, p[i]);
 
             V_DrawPatch(DM_MATRIXX - SHORT(p[i]->width) / 2, y, p[i]);
 
             if (i == me)
             {
-                V_DrawPatch(x - SHORT(p[i]->width) / 2,
-                            DM_MATRIXY - WI_SPACINGY, bstar);
+                V_DrawPatch(x - SHORT(p[i]->width) / 2, DM_MATRIXY - WI_SPACINGY, bstar);
 
                 V_DrawPatch(DM_MATRIXX - SHORT(p[i]->width) / 2, y, star);
             }
@@ -1135,18 +1129,14 @@ void WI_drawNetgameStats(void)
     WI_drawLF();
 
     // draw stat titles (top line)
-    V_DrawPatch(NG_STATSX + NG_SPACINGX - SHORT(kills->width), NG_STATSY,
-                kills);
+    V_DrawPatch(NG_STATSX + NG_SPACINGX - SHORT(kills->width), NG_STATSY, kills);
 
-    V_DrawPatch(NG_STATSX + 2 * NG_SPACINGX - SHORT(items->width), NG_STATSY,
-                items);
+    V_DrawPatch(NG_STATSX + 2 * NG_SPACINGX - SHORT(items->width), NG_STATSY, items);
 
-    V_DrawPatch(NG_STATSX + 3 * NG_SPACINGX - SHORT(secret->width), NG_STATSY,
-                secret);
+    V_DrawPatch(NG_STATSX + 3 * NG_SPACINGX - SHORT(secret->width), NG_STATSY, secret);
 
     if (dofrags)
-        V_DrawPatch(NG_STATSX + 4 * NG_SPACINGX - SHORT(frags->width),
-                    NG_STATSY, frags);
+        V_DrawPatch(NG_STATSX + 4 * NG_SPACINGX - SHORT(frags->width), NG_STATSY, frags);
 
     // draw stats
     y = NG_STATSY + SHORT(kills->height);
@@ -1535,8 +1525,7 @@ static void WI_loadCallback(const char *name, patch_t **variable)
 
 void WI_loadData(void)
 {
-    lnames =
-        (patch_t **) Z_Malloc(sizeof(patch_t *) * NUMMAPS, PU_STATIC, NULL);
+    lnames = (patch_t **) Z_Malloc(sizeof(patch_t *) * NUMMAPS, PU_STATIC, NULL);
 
     WI_loadUnloadData(WI_loadCallback);
 

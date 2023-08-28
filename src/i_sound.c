@@ -74,8 +74,7 @@ static const music_module_t *music_modules[] = {
 
 // Check if a sound device is in the given list of devices
 
-static boolean SndDeviceInList(snddevice_t device, const snddevice_t *list,
-                               int len)
+static boolean SndDeviceInList(snddevice_t device, const snddevice_t *list, int len)
 {
     int i;
 

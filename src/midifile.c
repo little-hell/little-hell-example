@@ -97,8 +97,8 @@ static boolean CheckChunkHeader(chunk_header_t *chunk, const char *expected_id)
         fprintf(stderr,
                 "CheckChunkHeader: Expected '%s' chunk header, "
                 "got '%c%c%c%c'\n",
-                expected_id, chunk->chunk_id[0], chunk->chunk_id[1],
-                chunk->chunk_id[2], chunk->chunk_id[3]);
+                expected_id, chunk->chunk_id[0], chunk->chunk_id[1], chunk->chunk_id[2],
+                chunk->chunk_id[3]);
     }
 
     return result;
@@ -185,8 +185,7 @@ static void *ReadByteSequence(unsigned int num_bytes, FILE *stream)
     {
         if (!ReadByte(&result[i], stream))
         {
-            fprintf(stderr, "ReadByteSequence: Error while reading byte %u\n",
-                    i);
+            fprintf(stderr, "ReadByteSequence: Error while reading byte %u\n", i);
             free(result);
             return NULL;
         }
@@ -199,8 +198,8 @@ static void *ReadByteSequence(unsigned int num_bytes, FILE *stream)
 // two_param indicates that the event type takes two parameters
 // (three byte) otherwise it is single parameter (two byte)
 
-static boolean ReadChannelEvent(midi_event_t *event, byte event_type,
-                                boolean two_param, FILE *stream)
+static boolean ReadChannelEvent(midi_event_t *event, byte event_type, boolean two_param,
+                                FILE *stream)
 {
     byte b = 0;
 
@@ -303,8 +302,7 @@ static boolean ReadMetaEvent(midi_event_t *event, FILE *stream)
     return true;
 }
 
-static boolean ReadEvent(midi_event_t *event, unsigned int *last_event_type,
-                         FILE *stream)
+static boolean ReadEvent(midi_event_t *event, unsigned int *last_event_type, FILE *stream)
 {
     byte event_type = 0;
 
@@ -453,8 +451,8 @@ static boolean ReadTrack(midi_track_t *track, FILE *stream)
     {
         // Resize the track slightly larger to hold another event:
 
-        new_events = I_Realloc(track->events,
-                               sizeof(midi_event_t) * (track->num_events + 1));
+        new_events =
+            I_Realloc(track->events, sizeof(midi_event_t) * (track->num_events + 1));
         track->events = new_events;
 
         // Read the next event:

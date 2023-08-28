@@ -251,14 +251,13 @@ void R_DrawColumnLow(void)
 
 
 int fuzzoffset[FUZZTABLE] = {
-    FUZZOFF,  -FUZZOFF, FUZZOFF,  -FUZZOFF, FUZZOFF,  FUZZOFF,  -FUZZOFF,
-    FUZZOFF,  FUZZOFF,  -FUZZOFF, FUZZOFF,  FUZZOFF,  FUZZOFF,  -FUZZOFF,
-    FUZZOFF,  FUZZOFF,  FUZZOFF,  -FUZZOFF, -FUZZOFF, -FUZZOFF, -FUZZOFF,
-    FUZZOFF,  -FUZZOFF, -FUZZOFF, FUZZOFF,  FUZZOFF,  FUZZOFF,  FUZZOFF,
-    -FUZZOFF, FUZZOFF,  -FUZZOFF, FUZZOFF,  FUZZOFF,  -FUZZOFF, -FUZZOFF,
-    FUZZOFF,  FUZZOFF,  -FUZZOFF, -FUZZOFF, -FUZZOFF, -FUZZOFF, FUZZOFF,
-    FUZZOFF,  FUZZOFF,  FUZZOFF,  -FUZZOFF, FUZZOFF,  FUZZOFF,  -FUZZOFF,
-    FUZZOFF};
+    FUZZOFF,  -FUZZOFF, FUZZOFF,  -FUZZOFF, FUZZOFF,  FUZZOFF,  -FUZZOFF, FUZZOFF,
+    FUZZOFF,  -FUZZOFF, FUZZOFF,  FUZZOFF,  FUZZOFF,  -FUZZOFF, FUZZOFF,  FUZZOFF,
+    FUZZOFF,  -FUZZOFF, -FUZZOFF, -FUZZOFF, -FUZZOFF, FUZZOFF,  -FUZZOFF, -FUZZOFF,
+    FUZZOFF,  FUZZOFF,  FUZZOFF,  FUZZOFF,  -FUZZOFF, FUZZOFF,  -FUZZOFF, FUZZOFF,
+    FUZZOFF,  -FUZZOFF, -FUZZOFF, FUZZOFF,  FUZZOFF,  -FUZZOFF, -FUZZOFF, -FUZZOFF,
+    -FUZZOFF, FUZZOFF,  FUZZOFF,  FUZZOFF,  FUZZOFF,  -FUZZOFF, FUZZOFF,  FUZZOFF,
+    -FUZZOFF, FUZZOFF};
 
 int fuzzpos = 0;
 
@@ -824,8 +823,7 @@ void R_FillBackScreen(void)
         V_DrawPatch(viewwindowx + scaledviewwidth, viewwindowy + y, patch);
 
     // Draw beveled edge.
-    V_DrawPatch(viewwindowx - 8, viewwindowy - 8,
-                W_CacheLumpName("brdr_tl", PU_CACHE));
+    V_DrawPatch(viewwindowx - 8, viewwindowy - 8, W_CacheLumpName("brdr_tl", PU_CACHE));
 
     V_DrawPatch(viewwindowx + scaledviewwidth, viewwindowy - 8,
                 W_CacheLumpName("brdr_tr", PU_CACHE));

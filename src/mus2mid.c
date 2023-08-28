@@ -85,9 +85,8 @@ static unsigned int queuedtime = 0;
 
 static unsigned int tracksize;
 
-static const byte controller_map[] = {0x00, 0x20, 0x01, 0x07, 0x0A,
-                                      0x0B, 0x5B, 0x5D, 0x40, 0x43,
-                                      0x78, 0x7B, 0x7E, 0x7F, 0x79};
+static const byte controller_map[] = {0x00, 0x20, 0x01, 0x07, 0x0A, 0x0B, 0x5B, 0x5D,
+                                      0x40, 0x43, 0x78, 0x7B, 0x7E, 0x7F, 0x79};
 
 static int channel_map[NUM_CHANNELS];
 
@@ -148,8 +147,7 @@ static boolean WriteEndTrack(MEMFILE *midioutput)
 }
 
 // Write a key press event
-static boolean WritePressKey(byte channel, byte key, byte velocity,
-                             MEMFILE *midioutput)
+static boolean WritePressKey(byte channel, byte key, byte velocity, MEMFILE *midioutput)
 {
     byte working = midi_presskey | channel;
 
@@ -278,8 +276,8 @@ static boolean WriteChangePatch(byte channel, byte patch, MEMFILE *midioutput)
 
 // Write a valued controller change event
 
-static boolean WriteChangeController_Valued(byte channel, byte control,
-                                            byte value, MEMFILE *midioutput)
+static boolean WriteChangeController_Valued(byte channel, byte control, byte value,
+                                            MEMFILE *midioutput)
 {
     byte working = midi_changecontroller | channel;
 
@@ -390,8 +388,7 @@ static int GetMIDIChannel(int mus_channel, MEMFILE *midioutput)
             // First time using the channel, send an "all notes off"
             // event. This fixes "The D_DDTBLU disease" described here:
             // https://www.doomworld.com/vb/source-ports/66802-the
-            WriteChangeController_Valueless(channel_map[mus_channel], 0x7b,
-                                            midioutput);
+            WriteChangeController_Valueless(channel_map[mus_channel], 0x7b, midioutput);
         }
 
         return channel_map[mus_channel];
@@ -402,13 +399,12 @@ static boolean ReadMusHeader(MEMFILE *file, musheader *header)
 {
     boolean result;
 
-    result =
-        mem_fread(&header->id, sizeof(byte), 4, file) == 4 &&
-        mem_fread(&header->scorelength, sizeof(short), 1, file) == 1 &&
-        mem_fread(&header->scorestart, sizeof(short), 1, file) == 1 &&
-        mem_fread(&header->primarychannels, sizeof(short), 1, file) == 1 &&
-        mem_fread(&header->secondarychannels, sizeof(short), 1, file) == 1 &&
-        mem_fread(&header->instrumentcount, sizeof(short), 1, file) == 1;
+    result = mem_fread(&header->id, sizeof(byte), 4, file) == 4 &&
+             mem_fread(&header->scorelength, sizeof(short), 1, file) == 1 &&
+             mem_fread(&header->scorestart, sizeof(short), 1, file) == 1 &&
+             mem_fread(&header->primarychannels, sizeof(short), 1, file) == 1 &&
+             mem_fread(&header->secondarychannels, sizeof(short), 1, file) == 1 &&
+             mem_fread(&header->instrumentcount, sizeof(short), 1, file) == 1;
 
     if (result)
     {
@@ -530,8 +526,7 @@ boolean mus2mid(MEMFILE *musinput, MEMFILE *midioutput)
 
                     if (key & 0x80)
                     {
-                        if (mem_fread(&channelvelocities[channel], 1, 1,
-                                      musinput) != 1)
+                        if (mem_fread(&channelvelocities[channel], 1, 1, musinput) != 1)
                         {
                             return true;
                         }
@@ -552,8 +547,7 @@ boolean mus2mid(MEMFILE *musinput, MEMFILE *midioutput)
                     {
                         break;
                     }
-                    if (WritePitchWheel(channel, (short) (key * 64),
-                                        midioutput))
+                    if (WritePitchWheel(channel, (short) (key * 64), midioutput))
                     {
                         return true;
                     }
@@ -571,8 +565,7 @@ boolean mus2mid(MEMFILE *musinput, MEMFILE *midioutput)
                     }
 
                     if (WriteChangeController_Valueless(
-                            channel, controller_map[controllernumber],
-                            midioutput))
+                            channel, controller_map[controllernumber], midioutput))
                     {
                         return true;
                     }
@@ -592,8 +585,7 @@ boolean mus2mid(MEMFILE *musinput, MEMFILE *midioutput)
 
                     if (controllernumber == 0)
                     {
-                        if (WriteChangePatch(channel, controllervalue,
-                                             midioutput))
+                        if (WriteChangePatch(channel, controllervalue, midioutput))
                         {
                             return true;
                         }
@@ -605,9 +597,9 @@ boolean mus2mid(MEMFILE *musinput, MEMFILE *midioutput)
                             return true;
                         }
 
-                        if (WriteChangeController_Valued(
-                                channel, controller_map[controllernumber],
-                                controllervalue, midioutput))
+                        if (WriteChangeController_Valued(channel,
+                                                         controller_map[controllernumber],
+                                                         controllervalue, midioutput))
                         {
                             return true;
                         }

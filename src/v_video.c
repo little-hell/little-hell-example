@@ -83,17 +83,16 @@ void V_MarkRect(int x, int y, int width, int height)
 //
 // V_CopyRect
 //
-void V_CopyRect(int srcx, int srcy, pixel_t *source, int width, int height,
-                int destx, int desty)
+void V_CopyRect(int srcx, int srcy, pixel_t *source, int width, int height, int destx,
+                int desty)
 {
     pixel_t *src;
     pixel_t *dest;
 
 #ifdef RANGECHECK
     if (srcx < 0 || srcx + width > SCREENWIDTH || srcy < 0 ||
-        srcy + height > SCREENHEIGHT || destx < 0 ||
-        destx + width > SCREENWIDTH || desty < 0 ||
-        desty + height > SCREENHEIGHT)
+        srcy + height > SCREENHEIGHT || destx < 0 || destx + width > SCREENWIDTH ||
+        desty < 0 || desty + height > SCREENHEIGHT)
     {
         I_Error("Bad V_CopyRect");
     }
@@ -216,8 +215,7 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
 
     for (; col < w; x++, col++, desttop++)
     {
-        column =
-            (column_t *) ((byte *) patch + LONG(patch->columnofs[w - 1 - col]));
+        column = (column_t *) ((byte *) patch + LONG(patch->columnofs[w - 1 - col]));
 
         // step through the posts in a column
         while (column->topdelta != 0xff)
@@ -371,8 +369,7 @@ static void warning_fn(png_structp p, png_const_charp s)
     printf("libpng warning: %s\n", s);
 }
 
-void WritePNGfile(char *filename, pixel_t *data, int width, int height,
-                  byte *palette)
+void WritePNGfile(char *filename, pixel_t *data, int width, int height, byte *palette)
 {
     png_structp ppng;
     png_infop pinfo;
@@ -402,8 +399,7 @@ void WritePNGfile(char *filename, pixel_t *data, int width, int height,
         return;
     }
 
-    ppng = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, error_fn,
-                                   warning_fn);
+    ppng = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, error_fn, warning_fn);
     if (!ppng)
     {
         fclose(handle);
@@ -453,8 +449,7 @@ void WritePNGfile(char *filename, pixel_t *data, int width, int height,
             // expand the row 5x
             for (int j = 0; j < SCREENWIDTH; j++)
             {
-                memset(rowbuf + j * w_factor, *(data + i * SCREENWIDTH + j),
-                       w_factor);
+                memset(rowbuf + j * w_factor, *(data + i * SCREENWIDTH + j), w_factor);
             }
 
             // write the row 6 times
@@ -502,7 +497,8 @@ void V_ScreenShot(const char *format)
         I_Error("V_ScreenShot: Couldn't create a PNG");
     }
 
-    WritePNGfile(lbmname, I_VideoBuffer, SCREENWIDTH, SCREENHEIGHT, W_CacheLumpName("PLAYPAL", PU_CACHE));
+    WritePNGfile(lbmname, I_VideoBuffer, SCREENWIDTH, SCREENHEIGHT,
+                 W_CacheLumpName("PLAYPAL", PU_CACHE));
 #endif
 }
 
@@ -553,14 +549,12 @@ static void DrawAcceleratingBox(int speed)
     if (linelen < redline_x)
     {
         V_DrawHorizLine(MOUSE_SPEED_BOX_X + 1,
-                        MOUSE_SPEED_BOX_Y + MOUSE_SPEED_BOX_HEIGHT / 2, linelen,
-                        white);
+                        MOUSE_SPEED_BOX_Y + MOUSE_SPEED_BOX_HEIGHT / 2, linelen, white);
     }
     else
     {
         V_DrawHorizLine(MOUSE_SPEED_BOX_X + 1,
-                        MOUSE_SPEED_BOX_Y + MOUSE_SPEED_BOX_HEIGHT / 2,
-                        redline_x, white);
+                        MOUSE_SPEED_BOX_Y + MOUSE_SPEED_BOX_HEIGHT / 2, redline_x, white);
         V_DrawHorizLine(MOUSE_SPEED_BOX_X + redline_x,
                         MOUSE_SPEED_BOX_Y + MOUSE_SPEED_BOX_HEIGHT / 2,
                         linelen - redline_x, yellow);
@@ -591,9 +585,8 @@ static void DrawNonAcceleratingBox(int speed)
     // Draw horizontal "thermometer":
     linelen = speed * (MOUSE_SPEED_BOX_WIDTH - 1) / max_seen_speed;
 
-    V_DrawHorizLine(MOUSE_SPEED_BOX_X + 1,
-                    MOUSE_SPEED_BOX_Y + MOUSE_SPEED_BOX_HEIGHT / 2, linelen,
-                    white);
+    V_DrawHorizLine(MOUSE_SPEED_BOX_X + 1, MOUSE_SPEED_BOX_Y + MOUSE_SPEED_BOX_HEIGHT / 2,
+                    linelen, white);
 }
 
 void V_DrawMouseSpeedBox(int speed)

@@ -58,9 +58,8 @@ typedef enum
 //
 // P_NewChaseDir related LUT.
 //
-dirtype_t opposite[] = {DI_WEST,      DI_SOUTHWEST, DI_SOUTH,
-                        DI_SOUTHEAST, DI_EAST,      DI_NORTHEAST,
-                        DI_NORTH,     DI_NORTHWEST, DI_NODIR};
+dirtype_t opposite[] = {DI_WEST,      DI_SOUTHWEST, DI_SOUTH,     DI_SOUTHEAST, DI_EAST,
+                        DI_NORTHEAST, DI_NORTH,     DI_NORTHWEST, DI_NODIR};
 
 dirtype_t diags[] = {DI_NORTHWEST, DI_NORTHEAST, DI_SOUTHWEST, DI_SOUTHEAST};
 
@@ -188,8 +187,7 @@ boolean P_CheckMissileRange(mobj_t *actor)
         return false; // do not attack yet
 
     // OPTIMIZE: get this from a global checksight
-    dist = P_AproxDistance(actor->x - actor->target->x,
-                           actor->y - actor->target->y) -
+    dist = P_AproxDistance(actor->x - actor->target->x, actor->y - actor->target->y) -
            64 * FRACUNIT;
 
     if (!actor->info->meleestate)
@@ -197,8 +195,7 @@ boolean P_CheckMissileRange(mobj_t *actor)
 
     dist >>= FRACBITS;
 
-    if (actor->type == MT_CYBORG || actor->type == MT_SPIDER ||
-        actor->type == MT_SKULL)
+    if (actor->type == MT_CYBORG || actor->type == MT_SPIDER || actor->type == MT_SKULL)
     {
         dist >>= 1;
     }
@@ -471,14 +468,13 @@ boolean P_LookForPlayers(mobj_t *actor, boolean allaround)
 
         if (!allaround)
         {
-            an = R_PointToAngle2(actor->x, actor->y, player->mo->x,
-                                 player->mo->y) -
+            an = R_PointToAngle2(actor->x, actor->y, player->mo->x, player->mo->y) -
                  actor->angle;
 
             if (an > ANG90 && an < ANG270)
             {
-                dist = P_AproxDistance(player->mo->x - actor->x,
-                                       player->mo->y - actor->y);
+                dist =
+                    P_AproxDistance(player->mo->x - actor->x, player->mo->y - actor->y);
                 // if real close, react anyway
                 if (dist > MELEERANGE)
                     continue; // behind back
@@ -838,8 +834,7 @@ void A_Tracer(mobj_t *actor)
     // spawn a puff of smoke behind the rocket
     P_SpawnPuff(actor->x, actor->y, actor->z);
 
-    th = P_SpawnMobj(actor->x - actor->momx, actor->y - actor->momy, actor->z,
-                     MT_SMOKE);
+    th = P_SpawnMobj(actor->x - actor->momx, actor->y - actor->momy, actor->z, MT_SMOKE);
 
     th->momz = FRACUNIT;
     th->tics -= P_Random() & 3;

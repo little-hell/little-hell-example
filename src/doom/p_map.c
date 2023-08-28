@@ -197,10 +197,8 @@ static void SpechitOverrun(line_t *ld);
 //
 boolean PIT_CheckLine(line_t *ld)
 {
-    if (tmbbox[BOXRIGHT] <= ld->bbox[BOXLEFT] ||
-        tmbbox[BOXLEFT] >= ld->bbox[BOXRIGHT] ||
-        tmbbox[BOXTOP] <= ld->bbox[BOXBOTTOM] ||
-        tmbbox[BOXBOTTOM] >= ld->bbox[BOXTOP])
+    if (tmbbox[BOXRIGHT] <= ld->bbox[BOXLEFT] || tmbbox[BOXLEFT] >= ld->bbox[BOXRIGHT] ||
+        tmbbox[BOXTOP] <= ld->bbox[BOXBOTTOM] || tmbbox[BOXBOTTOM] >= ld->bbox[BOXTOP])
         return true;
 
     if (P_BoxOnLineSide(tmbbox, ld) != -1)
@@ -477,12 +475,10 @@ boolean P_TryMove(mobj_t *thing, fixed_t x, fixed_t y)
 
         floatok = true;
 
-        if (!(thing->flags & MF_TELEPORT) &&
-            tmceilingz - thing->z < thing->height)
+        if (!(thing->flags & MF_TELEPORT) && tmceilingz - thing->z < thing->height)
             return false; // mobj must lower itself to fit
 
-        if (!(thing->flags & MF_TELEPORT) &&
-            tmfloorz - thing->z > 24 * FRACUNIT)
+        if (!(thing->flags & MF_TELEPORT) && tmfloorz - thing->z > 24 * FRACUNIT)
             return false; // too big a step up
 
         if (!(thing->flags & (MF_DROPOFF | MF_FLOAT)) &&
@@ -739,12 +735,12 @@ retry:
 
     bestslidefrac = FRACUNIT + 1;
 
-    P_PathTraverse(leadx, leady, leadx + mo->momx, leady + mo->momy,
-                   PT_ADDLINES, PTR_SlideTraverse);
-    P_PathTraverse(trailx, leady, trailx + mo->momx, leady + mo->momy,
-                   PT_ADDLINES, PTR_SlideTraverse);
-    P_PathTraverse(leadx, traily, leadx + mo->momx, traily + mo->momy,
-                   PT_ADDLINES, PTR_SlideTraverse);
+    P_PathTraverse(leadx, leady, leadx + mo->momx, leady + mo->momy, PT_ADDLINES,
+                   PTR_SlideTraverse);
+    P_PathTraverse(trailx, leady, trailx + mo->momx, leady + mo->momy, PT_ADDLINES,
+                   PTR_SlideTraverse);
+    P_PathTraverse(leadx, traily, leadx + mo->momx, traily + mo->momy, PT_ADDLINES,
+                   PTR_SlideTraverse);
 
     // move up to the wall
     if (bestslidefrac == FRACUNIT + 1)
@@ -1056,8 +1052,7 @@ fixed_t P_AimLineAttack(mobj_t *t1, angle_t angle, fixed_t distance)
     attackrange = distance;
     linetarget = NULL;
 
-    P_PathTraverse(t1->x, t1->y, x2, y2, PT_ADDLINES | PT_ADDTHINGS,
-                   PTR_AimTraverse);
+    P_PathTraverse(t1->x, t1->y, x2, y2, PT_ADDLINES | PT_ADDTHINGS, PTR_AimTraverse);
 
     if (linetarget)
         return aimslope;
@@ -1071,8 +1066,7 @@ fixed_t P_AimLineAttack(mobj_t *t1, angle_t angle, fixed_t distance)
 // If damage == 0, it is just a test trace
 // that will leave linetarget set.
 //
-void P_LineAttack(mobj_t *t1, angle_t angle, fixed_t distance, fixed_t slope,
-                  int damage)
+void P_LineAttack(mobj_t *t1, angle_t angle, fixed_t distance, fixed_t slope, int damage)
 {
     fixed_t x2;
     fixed_t y2;
@@ -1086,8 +1080,7 @@ void P_LineAttack(mobj_t *t1, angle_t angle, fixed_t distance, fixed_t slope,
     attackrange = distance;
     aimslope = slope;
 
-    P_PathTraverse(t1->x, t1->y, x2, y2, PT_ADDLINES | PT_ADDTHINGS,
-                   PTR_ShootTraverse);
+    P_PathTraverse(t1->x, t1->y, x2, y2, PT_ADDLINES | PT_ADDTHINGS, PTR_ShootTraverse);
 }
 
 
@@ -1298,8 +1291,7 @@ boolean PIT_ChangeSector(mobj_t *thing)
         P_DamageMobj(thing, NULL, NULL, 10);
 
         // spray blood in a random direction
-        mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2,
-                         MT_BLOOD);
+        mo = P_SpawnMobj(thing->x, thing->y, thing->z + thing->height / 2, MT_BLOOD);
 
         mo->momx = P_SubRandom() << 12;
         mo->momy = P_SubRandom() << 12;
@@ -1323,8 +1315,7 @@ boolean P_ChangeSector(sector_t *sector, boolean crunch)
 
     // re-check heights for all things near the moving sector
     for (x = sector->blockbox[BOXLEFT]; x <= sector->blockbox[BOXRIGHT]; x++)
-        for (y = sector->blockbox[BOXBOTTOM]; y <= sector->blockbox[BOXTOP];
-             y++)
+        for (y = sector->blockbox[BOXBOTTOM]; y <= sector->blockbox[BOXTOP]; y++)
             P_BlockThingsIterator(x, y, PIT_ChangeSector);
 
 

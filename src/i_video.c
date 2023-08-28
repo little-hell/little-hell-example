@@ -187,11 +187,6 @@ int usegamma = 0;
 // Joystick/gamepad hysteresis
 unsigned int joywait = 0;
 
-// Icon RGB data and dimensions
-static const unsigned int *icon_data;
-static int icon_w;
-static int icon_h;
-
 static boolean MouseShouldBeGrabbed()
 {
     // never grab the mouse when in screensaver mode
@@ -287,8 +282,7 @@ static void AdjustWindowSize(void)
         {
             // We round up window_height if the ratio is not exact; this leaves
             // the result stable.
-            window_height =
-                (window_width * actualheight + SCREENWIDTH - 1) / SCREENWIDTH;
+            window_height = (window_width * actualheight + SCREENWIDTH - 1) / SCREENWIDTH;
         }
         else
         {
@@ -663,9 +657,8 @@ static void CreateUpscaledTexture(boolean force)
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 
-    new_texture =
-        SDL_CreateTexture(renderer, pixel_format, SDL_TEXTUREACCESS_TARGET,
-                          w_upscale * SCREENWIDTH, h_upscale * SCREENHEIGHT);
+    new_texture = SDL_CreateTexture(renderer, pixel_format, SDL_TEXTUREACCESS_TARGET,
+                                    w_upscale * SCREENWIDTH, h_upscale * SCREENHEIGHT);
 
     old_texture = texture_upscaled;
     texture_upscaled = new_texture;
@@ -757,8 +750,8 @@ void I_FinishUpdate(void)
         {
             // "flash" the pillars/letterboxes with palette changes, emulating
             // VGA "porch" behaviour (GitHub issue #832)
-            SDL_SetRenderDrawColor(renderer, palette[0].r, palette[0].g,
-                                   palette[0].b, SDL_ALPHA_OPAQUE);
+            SDL_SetRenderDrawColor(renderer, palette[0].r, palette[0].g, palette[0].b,
+                                   SDL_ALPHA_OPAQUE);
         }
     }
 
@@ -876,27 +869,6 @@ void I_InitWindowTitle(void)
     buf = M_StringJoin(window_title, " - ", PACKAGE_STRING, NULL);
     SDL_SetWindowTitle(screen, buf);
     free(buf);
-}
-
-void I_RegisterWindowIcon(const unsigned int *icon, int width, int height)
-{
-    icon_data = icon;
-    icon_w = width;
-    icon_h = height;
-}
-
-// Set the application icon
-
-void I_InitWindowIcon(void)
-{
-    SDL_Surface *surface;
-
-    surface = SDL_CreateRGBSurfaceFrom((void *) icon_data, icon_w, icon_h, 32,
-                                       icon_w * 4, 0xffu << 24, 0xffu << 16,
-                                       0xffu << 8, 0xffu << 0);
-
-    SDL_SetWindowIcon(screen, surface);
-    SDL_FreeSurface(surface);
 }
 
 // Set video size to a particular scale factor (1x, 2x, 3x, etc.)
@@ -1123,11 +1095,10 @@ void I_GetWindowPosition(int *x, int *y, int w, int h)
     // and if it doesn't, reset it.
     if (video_display < 0 || video_display >= SDL_GetNumVideoDisplays())
     {
-        fprintf(
-            stderr,
-            "I_GetWindowPosition: We were configured to run on display #%d, "
-            "but it no longer exists (max %d). Moving to display 0.\n",
-            video_display, SDL_GetNumVideoDisplays() - 1);
+        fprintf(stderr,
+                "I_GetWindowPosition: We were configured to run on display #%d, "
+                "but it no longer exists (max %d). Moving to display 0.\n",
+                video_display, SDL_GetNumVideoDisplays() - 1);
         video_display = 0;
     }
 
@@ -1157,8 +1128,7 @@ void I_GetWindowPosition(int *x, int *y, int w, int h)
     else if (sscanf(window_position, "%i,%i", x, y) != 2)
     {
         // invalid format: revert to default
-        fprintf(stderr,
-                "I_GetWindowPosition: invalid window_position setting\n");
+        fprintf(stderr, "I_GetWindowPosition: invalid window_position setting\n");
         *x = *y = SDL_WINDOWPOS_UNDEFINED;
     }
 }
@@ -1222,8 +1192,7 @@ static void SetVideoMode(void)
 
         if (screen == NULL)
         {
-            I_Error("Error creating window for video startup: %s",
-                    SDL_GetError());
+            I_Error("Error creating window for video startup: %s", SDL_GetError());
         }
 
         pixel_format = SDL_GetWindowPixelFormat(screen);
@@ -1240,8 +1209,8 @@ static void SetVideoMode(void)
 
     if (SDL_GetCurrentDisplayMode(video_display, &mode) != 0)
     {
-        I_Error("Could not get display mode for video display #%d: %s",
-                video_display, SDL_GetError());
+        I_Error("Could not get display mode for video display #%d: %s", video_display,
+                SDL_GetError());
     }
 
     // Turn on vsync if we aren't in a -timedemo
@@ -1285,8 +1254,7 @@ static void SetVideoMode(void)
 
     if (renderer == NULL)
     {
-        I_Error("Error creating renderer for screen window: %s",
-                SDL_GetError());
+        I_Error("Error creating renderer for screen window: %s", SDL_GetError());
     }
 
     // Important: Set the "logical size" of the rendering context. At the same
@@ -1319,8 +1287,7 @@ static void SetVideoMode(void)
 
     if (screenbuffer == NULL)
     {
-        screenbuffer =
-            SDL_CreateRGBSurface(0, SCREENWIDTH, SCREENHEIGHT, 8, 0, 0, 0, 0);
+        screenbuffer = SDL_CreateRGBSurface(0, SCREENWIDTH, SCREENHEIGHT, 8, 0, 0, 0, 0);
         SDL_FillRect(screenbuffer, NULL, 0);
     }
 
@@ -1335,10 +1302,9 @@ static void SetVideoMode(void)
 
     if (argbbuffer == NULL)
     {
-        SDL_PixelFormatEnumToMasks(pixel_format, &bpp, &rmask, &gmask, &bmask,
-                                   &amask);
-        argbbuffer = SDL_CreateRGBSurface(0, SCREENWIDTH, SCREENHEIGHT, bpp,
-                                          rmask, gmask, bmask, amask);
+        SDL_PixelFormatEnumToMasks(pixel_format, &bpp, &rmask, &gmask, &bmask, &amask);
+        argbbuffer = SDL_CreateRGBSurface(0, SCREENWIDTH, SCREENHEIGHT, bpp, rmask, gmask,
+                                          bmask, amask);
         SDL_FillRect(argbbuffer, NULL, 0);
     }
 
@@ -1357,9 +1323,8 @@ static void SetVideoMode(void)
     // The SDL_TEXTUREACCESS_STREAMING flag means that this texture's content
     // is going to change frequently.
 
-    texture =
-        SDL_CreateTexture(renderer, pixel_format, SDL_TEXTUREACCESS_STREAMING,
-                          SCREENWIDTH, SCREENHEIGHT);
+    texture = SDL_CreateTexture(renderer, pixel_format, SDL_TEXTUREACCESS_STREAMING,
+                                SCREENWIDTH, SCREENHEIGHT);
 
     // Initially create the upscaled texture for rendering to screen
 
@@ -1451,8 +1416,7 @@ void I_InitGraphics(void)
 
     // Clear the screen to black.
 
-    memset(I_VideoBuffer, 0,
-           SCREENWIDTH * SCREENHEIGHT * sizeof(*I_VideoBuffer));
+    memset(I_VideoBuffer, 0, SCREENWIDTH * SCREENHEIGHT * sizeof(*I_VideoBuffer));
 
     // clear out any events waiting at the start and center the mouse
 

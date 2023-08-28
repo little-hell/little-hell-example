@@ -79,24 +79,23 @@ boolean NET_ReadSettings(net_packet_t *packet, net_gamesettings_t *settings)
 {
     boolean success;
 
-    success =
-        NET_ReadInt8(packet, (unsigned int *) &settings->ticdup) &&
-        NET_ReadInt8(packet, (unsigned int *) &settings->extratics) &&
-        NET_ReadInt8(packet, (unsigned int *) &settings->deathmatch) &&
-        NET_ReadInt8(packet, (unsigned int *) &settings->nomonsters) &&
-        NET_ReadInt8(packet, (unsigned int *) &settings->fast_monsters) &&
-        NET_ReadInt8(packet, (unsigned int *) &settings->respawn_monsters) &&
-        NET_ReadInt8(packet, (unsigned int *) &settings->episode) &&
-        NET_ReadInt8(packet, (unsigned int *) &settings->map) &&
-        NET_ReadSInt8(packet, &settings->skill) &&
-        NET_ReadInt8(packet, (unsigned int *) &settings->gameversion) &&
-        NET_ReadInt8(packet, (unsigned int *) &settings->lowres_turn) &&
-        NET_ReadInt8(packet, (unsigned int *) &settings->new_sync) &&
-        NET_ReadInt32(packet, (unsigned int *) &settings->timelimit) &&
-        NET_ReadSInt8(packet, (signed int *) &settings->loadgame) &&
-        NET_ReadInt8(packet, (unsigned int *) &settings->random) &&
-        NET_ReadInt8(packet, (unsigned int *) &settings->num_players) &&
-        NET_ReadSInt8(packet, (signed int *) &settings->consoleplayer);
+    success = NET_ReadInt8(packet, (unsigned int *) &settings->ticdup) &&
+              NET_ReadInt8(packet, (unsigned int *) &settings->extratics) &&
+              NET_ReadInt8(packet, (unsigned int *) &settings->deathmatch) &&
+              NET_ReadInt8(packet, (unsigned int *) &settings->nomonsters) &&
+              NET_ReadInt8(packet, (unsigned int *) &settings->fast_monsters) &&
+              NET_ReadInt8(packet, (unsigned int *) &settings->respawn_monsters) &&
+              NET_ReadInt8(packet, (unsigned int *) &settings->episode) &&
+              NET_ReadInt8(packet, (unsigned int *) &settings->map) &&
+              NET_ReadSInt8(packet, &settings->skill) &&
+              NET_ReadInt8(packet, (unsigned int *) &settings->gameversion) &&
+              NET_ReadInt8(packet, (unsigned int *) &settings->lowres_turn) &&
+              NET_ReadInt8(packet, (unsigned int *) &settings->new_sync) &&
+              NET_ReadInt32(packet, (unsigned int *) &settings->timelimit) &&
+              NET_ReadSInt8(packet, (signed int *) &settings->loadgame) &&
+              NET_ReadInt8(packet, (unsigned int *) &settings->random) &&
+              NET_ReadInt8(packet, (unsigned int *) &settings->num_players) &&
+              NET_ReadSInt8(packet, (signed int *) &settings->consoleplayer);
 
     if (!success)
     {
@@ -150,8 +149,7 @@ void NET_WriteQueryData(net_packet_t *packet, net_querydata_t *query)
     NET_WriteProtocolList(packet);
 }
 
-void NET_WriteTiccmdDiff(net_packet_t *packet, net_ticdiff_t *diff,
-                         boolean lowres_turn)
+void NET_WriteTiccmdDiff(net_packet_t *packet, net_ticdiff_t *diff, boolean lowres_turn)
 {
     // Header
 
@@ -192,8 +190,7 @@ void NET_WriteTiccmdDiff(net_packet_t *packet, net_ticdiff_t *diff,
     }
 }
 
-boolean NET_ReadTiccmdDiff(net_packet_t *packet, net_ticdiff_t *diff,
-                           boolean lowres_turn)
+boolean NET_ReadTiccmdDiff(net_packet_t *packet, net_ticdiff_t *diff, boolean lowres_turn)
 {
     unsigned int val;
     signed int sval;

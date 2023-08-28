@@ -75,8 +75,7 @@ const char *spritename;
 // R_InstallSpriteLump
 // Local function for R_InitSprites.
 //
-void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation,
-                         boolean flipped)
+void R_InstallSpriteLump(int lump, unsigned frame, unsigned rotation, boolean flipped)
 {
     if (frame >= 29 || rotation > 8)
         I_Error("R_InstallSpriteLump: "
@@ -243,8 +242,7 @@ void R_InitSpriteDefs(const char **namelist)
         sprites[i].numframes = maxframe;
         sprites[i].spriteframes =
             Z_Malloc(maxframe * sizeof(spriteframe_t), PU_STATIC, NULL);
-        memcpy(sprites[i].spriteframes, sprtemp,
-               maxframe * sizeof(spriteframe_t));
+        memcpy(sprites[i].spriteframes, sprtemp, maxframe * sizeof(spriteframe_t));
     }
 }
 
@@ -373,9 +371,8 @@ void R_DrawVisSprite(vissprite_t *vis, int x1, int x2)
     else if (vis->mobjflags & MF_TRANSLATION)
     {
         colfunc = transcolfunc;
-        dc_translation =
-            translationtables - 256 +
-            ((vis->mobjflags & MF_TRANSLATION) >> (MF_TRANSSHIFT - 8));
+        dc_translation = translationtables - 256 +
+                         ((vis->mobjflags & MF_TRANSLATION) >> (MF_TRANSSHIFT - 8));
     }
 
     dc_iscale = abs(vis->xiscale) >> detailshift;
@@ -391,8 +388,7 @@ void R_DrawVisSprite(vissprite_t *vis, int x1, int x2)
         if (texturecolumn < 0 || texturecolumn >= SHORT(patch->width))
             I_Error("R_DrawSpriteRange: bad texturecolumn");
 #endif
-        column = (column_t *) ((byte *) patch +
-                               LONG(patch->columnofs[texturecolumn]));
+        column = (column_t *) ((byte *) patch + LONG(patch->columnofs[texturecolumn]));
         R_DrawMaskedColumn(column);
     }
 
@@ -611,14 +607,13 @@ void R_DrawPSprite(pspdef_t *psp)
     // decide which patch to use
 #ifdef RANGECHECK
     if ((unsigned) psp->state->sprite >= (unsigned int) numsprites)
-        I_Error("R_ProjectSprite: invalid sprite number %i ",
-                psp->state->sprite);
+        I_Error("R_ProjectSprite: invalid sprite number %i ", psp->state->sprite);
 #endif
     sprdef = &sprites[psp->state->sprite];
 #ifdef RANGECHECK
     if ((psp->state->frame & FF_FRAMEMASK) >= sprdef->numframes)
-        I_Error("R_ProjectSprite: invalid sprite frame %i : %i ",
-                psp->state->sprite, psp->state->frame);
+        I_Error("R_ProjectSprite: invalid sprite frame %i : %i ", psp->state->sprite,
+                psp->state->frame);
 #endif
     sprframe = &sprdef->spriteframes[psp->state->frame & FF_FRAMEMASK];
 
@@ -645,8 +640,8 @@ void R_DrawPSprite(pspdef_t *psp)
     // store information in a vissprite
     vis = &avis;
     vis->mobjflags = 0;
-    vis->texturemid = (BASEYCENTER << FRACBITS) + FRACUNIT / 2 -
-                      (psp->sy - spritetopoffset[lump]);
+    vis->texturemid =
+        (BASEYCENTER << FRACBITS) + FRACUNIT / 2 - (psp->sy - spritetopoffset[lump]);
     vis->x1 = x1 < 0 ? 0 : x1;
     vis->x2 = x2 >= viewwidth ? viewwidth - 1 : x2;
     vis->scale = pspritescale << detailshift;
@@ -704,8 +699,7 @@ void R_DrawPlayerSprites(void)
 
     // get light level
     lightnum =
-        (viewplayer->mo->subsector->sector->lightlevel >> LIGHTSEGSHIFT) +
-        extralight;
+        (viewplayer->mo->subsector->sector->lightlevel >> LIGHTSEGSHIFT) + extralight;
 
     if (lightnum < 0)
         spritelights = scalelight[0];
@@ -831,8 +825,7 @@ void R_DrawSprite(vissprite_t *spr)
         }
 
         if (scale < spr->scale ||
-            (lowscale < spr->scale &&
-             !R_PointOnSegSide(spr->gx, spr->gy, ds->curline)))
+            (lowscale < spr->scale && !R_PointOnSegSide(spr->gx, spr->gy, ds->curline)))
         {
             // masked mid texture?
             if (ds->maskedtexturecol)

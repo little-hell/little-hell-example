@@ -327,8 +327,7 @@ enum
 
 menuitem_t ReadMenu1[] = {{1, "", M_ReadThis2, 0}};
 
-menu_t ReadDef1 = {read1_end, &MainDef, ReadMenu1, M_DrawReadThis1,
-                   280,       185,      0};
+menu_t ReadDef1 = {read1_end, &MainDef, ReadMenu1, M_DrawReadThis1, 280, 185, 0};
 
 enum
 {
@@ -338,8 +337,7 @@ enum
 
 menuitem_t ReadMenu2[] = {{1, "", M_FinishReadThis, 0}};
 
-menu_t ReadDef2 = {read2_end, &ReadDef1, ReadMenu2, M_DrawReadThis2,
-                   330,       175,       0};
+menu_t ReadDef2 = {read2_end, &ReadDef1, ReadMenu2, M_DrawReadThis2, 330, 175, 0};
 
 //
 // SOUND VOLUME MENU
@@ -374,20 +372,18 @@ enum
     load_end
 } load_e;
 
-menuitem_t LoadMenu[] = {
-    {1, "", M_LoadSelect, '1'}, {1, "", M_LoadSelect, '2'},
-    {1, "", M_LoadSelect, '3'}, {1, "", M_LoadSelect, '4'},
-    {1, "", M_LoadSelect, '5'}, {1, "", M_LoadSelect, '6'}};
+menuitem_t LoadMenu[] = {{1, "", M_LoadSelect, '1'}, {1, "", M_LoadSelect, '2'},
+                         {1, "", M_LoadSelect, '3'}, {1, "", M_LoadSelect, '4'},
+                         {1, "", M_LoadSelect, '5'}, {1, "", M_LoadSelect, '6'}};
 
 menu_t LoadDef = {load_end, &MainDef, LoadMenu, M_DrawLoad, 80, 54, 0};
 
 //
 // SAVE GAME MENU
 //
-menuitem_t SaveMenu[] = {
-    {1, "", M_SaveSelect, '1'}, {1, "", M_SaveSelect, '2'},
-    {1, "", M_SaveSelect, '3'}, {1, "", M_SaveSelect, '4'},
-    {1, "", M_SaveSelect, '5'}, {1, "", M_SaveSelect, '6'}};
+menuitem_t SaveMenu[] = {{1, "", M_SaveSelect, '1'}, {1, "", M_SaveSelect, '2'},
+                         {1, "", M_SaveSelect, '3'}, {1, "", M_SaveSelect, '4'},
+                         {1, "", M_SaveSelect, '5'}, {1, "", M_SaveSelect, '6'}};
 
 menu_t SaveDef = {load_end, &MainDef, SaveMenu, M_DrawSave, 80, 54, 0};
 
@@ -526,8 +522,7 @@ static void SetDefaultSaveName(int slot)
     // map from IWAD or PWAD?
     if (W_IsIWADLump(maplumpinfo) && strcmp(savegamedir, ""))
     {
-        M_snprintf(savegamestrings[itemOn], SAVESTRINGSIZE, "%s",
-                   maplumpinfo->name);
+        M_snprintf(savegamestrings[itemOn], SAVESTRINGSIZE, "%s", maplumpinfo->name);
     }
     else
     {
@@ -539,8 +534,8 @@ static void SetDefaultSaveName(int slot)
             *ext = '\0';
         }
 
-        M_snprintf(savegamestrings[itemOn], SAVESTRINGSIZE, "%s (%s)",
-                   maplumpinfo->name, wadname);
+        M_snprintf(savegamestrings[itemOn], SAVESTRINGSIZE, "%s (%s)", maplumpinfo->name,
+                   wadname);
         free(wadname);
     }
     M_ForceUppercase(savegamestrings[itemOn]);
@@ -628,8 +623,7 @@ void M_QuickSave(void)
         quickSaveSlot = -2; // means to pick a slot now
         return;
     }
-    M_snprintf(tempstring, sizeof(tempstring), QSPROMPT,
-               savegamestrings[quickSaveSlot]);
+    M_snprintf(tempstring, sizeof(tempstring), QSPROMPT, savegamestrings[quickSaveSlot]);
     M_StartMessage(tempstring, M_QuickSaveResponse, true);
 }
 
@@ -660,8 +654,7 @@ void M_QuickLoad(void)
         M_StartMessage(QSAVESPOT, NULL, false);
         return;
     }
-    M_snprintf(tempstring, sizeof(tempstring), QLPROMPT,
-               savegamestrings[quickSaveSlot]);
+    M_snprintf(tempstring, sizeof(tempstring), QLPROMPT, savegamestrings[quickSaveSlot]);
     M_StartMessage(tempstring, M_QuickLoadResponse, true);
 }
 
@@ -698,11 +691,9 @@ void M_DrawSound(void)
 {
     V_DrawPatchDirect(60, 38, W_CacheLumpName("M_SVOL", PU_CACHE));
 
-    M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (sfx_vol + 1), 16,
-                 sfxVolume);
+    M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (sfx_vol + 1), 16, sfxVolume);
 
-    M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (music_vol + 1), 16,
-                 musicVolume);
+    M_DrawThermo(SoundDef.x, SoundDef.y + LINEHEIGHT * (music_vol + 1), 16, musicVolume);
 }
 
 void M_Sound(int choice)
@@ -832,8 +823,7 @@ void M_DrawOptions(void)
     M_DrawThermo(OptionsDef.x, OptionsDef.y + LINEHEIGHT * (mousesens + 1), 10,
                  mouseSensitivity);
 
-    M_DrawThermo(OptionsDef.x, OptionsDef.y + LINEHEIGHT * (scrnsize + 1), 9,
-                 screenSize);
+    M_DrawThermo(OptionsDef.x, OptionsDef.y + LINEHEIGHT * (scrnsize + 1), 9, screenSize);
 }
 
 void M_Options(int choice)
@@ -944,8 +934,7 @@ static const char *M_SelectEndMessage(void)
 
 void M_QuitDOOM(int choice)
 {
-    M_snprintf(endstring, sizeof(endstring), "%s\n\n" DOSY,
-               M_SelectEndMessage());
+    M_snprintf(endstring, sizeof(endstring), "%s\n\n" DOSY, M_SelectEndMessage());
 
     M_StartMessage(endstring, M_QuitResponse, true);
 }
@@ -1024,8 +1013,7 @@ void M_DrawThermo(int x, int y, int thermWidth, int thermDot)
     }
     V_DrawPatchDirect(xx, y, W_CacheLumpName("M_THERMR", PU_CACHE));
 
-    V_DrawPatchDirect((x + 8) + thermDot * 8, y,
-                      W_CacheLumpName("M_THERMO", PU_CACHE));
+    V_DrawPatchDirect((x + 8) + thermDot * 8, y, W_CacheLumpName("M_THERMO", PU_CACHE));
 }
 
 
@@ -1216,9 +1204,8 @@ boolean M_Responder(event_t *ev)
                 joywait = I_GetTime() + 2;
             }
 
-#define JOY_BUTTON_MAPPED(x) ((x) >= 0)
-#define JOY_BUTTON_PRESSED(x)                                                  \
-    (JOY_BUTTON_MAPPED(x) && (ev->data1 & (1 << (x))) != 0)
+#define JOY_BUTTON_MAPPED(x)  ((x) >= 0)
+#define JOY_BUTTON_PRESSED(x) (JOY_BUTTON_MAPPED(x) && (ev->data1 & (1 << (x))) != 0)
 
             if (JOY_BUTTON_PRESSED(joybfire))
             {
@@ -1341,8 +1328,7 @@ boolean M_Responder(event_t *ev)
             case KEY_ESCAPE:
                 saveStringEnter = 0;
                 I_StopTextInput();
-                M_StringCopy(savegamestrings[saveSlot], saveOldString,
-                             SAVESTRINGSIZE);
+                M_StringCopy(savegamestrings[saveSlot], saveOldString, SAVESTRINGSIZE);
                 break;
 
             case KEY_ENTER:
@@ -1382,10 +1368,8 @@ boolean M_Responder(event_t *ev)
                     break;
                 }
 
-                if (ch >= 32 && ch <= 127 &&
-                    saveCharIndex < SAVESTRINGSIZE - 1 &&
-                    M_StringWidth(savegamestrings[saveSlot]) <
-                        (SAVESTRINGSIZE - 2) * 8)
+                if (ch >= 32 && ch <= 127 && saveCharIndex < SAVESTRINGSIZE - 1 &&
+                    M_StringWidth(savegamestrings[saveSlot]) < (SAVESTRINGSIZE - 2) * 8)
                 {
                     savegamestrings[saveSlot][saveCharIndex++] = ch;
                     savegamestrings[saveSlot][saveCharIndex] = 0;
@@ -1417,8 +1401,7 @@ boolean M_Responder(event_t *ev)
         return true;
     }
 
-    if ((devparm && key == key_menu_help) ||
-        (key != 0 && key == key_menu_screenshot))
+    if ((devparm && key == key_menu_help) || (key != 0 && key == key_menu_screenshot))
     {
         G_ScreenShot();
         return true;

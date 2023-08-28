@@ -492,8 +492,7 @@ void R_InitTextureMapping(void)
     //
     // Calc focallength
     //  so FIELDOFVIEW angles covers SCREENWIDTH.
-    focallength =
-        FixedDiv(centerxfrac, finetangent[FINEANGLES / 4 + FIELDOFVIEW / 2]);
+    focallength = FixedDiv(centerxfrac, finetangent[FINEANGLES / 4 + FIELDOFVIEW / 2]);
 
     for (i = 0; i < FINEANGLES / 2; i++)
     {
@@ -562,8 +561,7 @@ void R_InitLightTables(void)
         int startmap = ((LIGHTLEVELS - 1 - i) * 2) * NUMCOLORMAPS / LIGHTLEVELS;
         for (j = 0; j < MAXLIGHTZ; j++)
         {
-            scale =
-                FixedDiv((SCREENWIDTH / 2 * FRACUNIT), (j + 1) << LIGHTZSHIFT);
+            scale = FixedDiv((SCREENWIDTH / 2 * FRACUNIT), (j + 1) << LIGHTZSHIFT);
             scale >>= LIGHTSCALESHIFT;
             level = startmap - scale / DISTMAP;
 
@@ -677,8 +675,7 @@ void R_ExecuteSetViewSize(void)
         int startmap = ((LIGHTLEVELS - 1 - i) * 2) * NUMCOLORMAPS / LIGHTLEVELS;
         for (int j = 0; j < MAXLIGHTSCALE; j++)
         {
-            level = startmap -
-                    j * SCREENWIDTH / (viewwidth << detailshift) / DISTMAP;
+            level = startmap - j * SCREENWIDTH / (viewwidth << detailshift) / DISTMAP;
 
             if (level < 0)
                 level = 0;

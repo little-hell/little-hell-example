@@ -312,13 +312,12 @@ void I_UpdateGamepad(void)
 
         ev.type = ev_joystick;
         ev.data1 = GetButtonsStateGamepad();
-        ev.data2 = GetAxisStateGamepad(joystick_x_axis, joystick_x_invert,
-                                       joystick_x_dead_zone);
-        ev.data3 = GetAxisStateGamepad(joystick_y_axis, joystick_y_invert,
-                                       joystick_y_dead_zone);
-        ev.data4 =
-            GetAxisStateGamepad(joystick_strafe_axis, joystick_strafe_invert,
-                                joystick_strafe_dead_zone);
+        ev.data2 =
+            GetAxisStateGamepad(joystick_x_axis, joystick_x_invert, joystick_x_dead_zone);
+        ev.data3 =
+            GetAxisStateGamepad(joystick_y_axis, joystick_y_invert, joystick_y_dead_zone);
+        ev.data4 = GetAxisStateGamepad(joystick_strafe_axis, joystick_strafe_invert,
+                                       joystick_strafe_dead_zone);
         ev.data5 = GetAxisStateGamepad(joystick_look_axis, joystick_look_invert,
                                        joystick_look_dead_zone);
 
@@ -630,10 +629,8 @@ void I_UpdateJoystick(void)
 
         ev.type = ev_joystick;
         ev.data1 = GetButtonsState();
-        ev.data2 = GetAxisState(joystick_x_axis, joystick_x_invert,
-                                joystick_x_dead_zone);
-        ev.data3 = GetAxisState(joystick_y_axis, joystick_y_invert,
-                                joystick_y_dead_zone);
+        ev.data2 = GetAxisState(joystick_x_axis, joystick_x_invert, joystick_x_dead_zone);
+        ev.data3 = GetAxisState(joystick_y_axis, joystick_y_invert, joystick_y_dead_zone);
         ev.data4 = GetAxisState(joystick_strafe_axis, joystick_strafe_invert,
                                 joystick_strafe_dead_zone);
         ev.data5 = GetAxisState(joystick_look_axis, joystick_look_invert,

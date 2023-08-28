@@ -652,9 +652,8 @@ static void PadRejectArray(byte *array, unsigned int len)
 
     if (len > sizeof(rejectpad))
     {
-        fprintf(stderr,
-                "PadRejectArray: REJECT lump too short to pad! (%u > %i)\n",
-                len, (int) sizeof(rejectpad));
+        fprintf(stderr, "PadRejectArray: REJECT lump too short to pad! (%u > %i)\n", len,
+                (int) sizeof(rejectpad));
 
         // Pad remaining space with 0 (or 0xff, if specified on command line).
 
@@ -715,8 +714,7 @@ void P_SetupLevel(int episode, int map, int playermask, skill_t skill)
     wminfo.partime = 180;
     for (i = 0; i < MAXPLAYERS; i++)
     {
-        players[i].killcount = players[i].secretcount = players[i].itemcount =
-            0;
+        players[i].killcount = players[i].secretcount = players[i].itemcount = 0;
     }
 
     // Initial height of PointOfView

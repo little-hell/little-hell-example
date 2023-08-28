@@ -243,8 +243,7 @@ boolean D_Display(void)
     }
 
     // see if the border needs to be updated to the screen
-    if (gamestate == GS_LEVEL && !automapactive &&
-        scaledviewwidth != SCREENWIDTH)
+    if (gamestate == GS_LEVEL && !automapactive && scaledviewwidth != SCREENWIDTH)
     {
         if (menuactive || menuactivestate || !viewactivestate)
             borderdrawcount = 3;
@@ -365,8 +364,7 @@ void D_RunFrame()
         } while (tics <= 0);
 
         wipestart = nowtime;
-        wipe =
-            !wipe_ScreenWipe(wipe_Melt, 0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
+        wipe = !wipe_ScreenWipe(wipe_Melt, 0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
         I_UpdateNoBlit();
         M_Drawer();       // menu is drawn even on top of wipes
         I_FinishUpdate(); // page flip or blit buffer
@@ -411,7 +409,6 @@ void D_DoomLoop(void)
     I_SetWindowTitle(gamedescription);
     I_GraphicsCheckCommandLine();
     I_SetGrabMouseCallback(D_GrabMouseCallback);
-    I_RegisterWindowIcon(doom_icon_data, doom_icon_w, doom_icon_h);
     I_InitGraphics();
     EnableLoadingDisk();
 
@@ -889,11 +886,10 @@ void D_DoomMain(void)
     {
         // These are the lumps that will be checked in IWAD,
         // if any one is not present, execution will be aborted.
-        char name[23][8] = {"e2m1",   "e2m2",   "e2m3",    "e2m4",   "e2m5",
-                            "e2m6",   "e2m7",   "e2m8",    "e2m9",   "e3m1",
-                            "e3m3",   "e3m3",   "e3m4",    "e3m5",   "e3m6",
-                            "e3m7",   "e3m8",   "e3m9",    "dphoof", "bfgga0",
-                            "heada1", "cybra1", "spida1d1"};
+        char name[23][8] = {"e2m1",   "e2m2",   "e2m3",   "e2m4",   "e2m5",    "e2m6",
+                            "e2m7",   "e2m8",   "e2m9",   "e3m1",   "e3m3",    "e3m3",
+                            "e3m4",   "e3m5",   "e3m6",   "e3m7",   "e3m8",    "e3m9",
+                            "dphoof", "bfgga0", "heada1", "cybra1", "spida1d1"};
         int i;
 
         // Check for fake IWAD with right name,

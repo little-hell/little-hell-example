@@ -86,8 +86,7 @@ static net_addr_t *NET_SDL_FindAddress(IPaddress *addr)
 
     for (i = 0; i < addr_table_size; ++i)
     {
-        if (addr_table[i] != NULL &&
-            AddressesEqual(addr, &addr_table[i]->sdl_addr))
+        if (addr_table[i] != NULL && AddressesEqual(addr, &addr_table[i]->sdl_addr))
         {
             return &addr_table[i]->net_addr;
         }
@@ -117,8 +116,7 @@ static net_addr_t *NET_SDL_FindAddress(IPaddress *addr)
         new_addr_table =
             Z_Malloc(sizeof(addrpair_t *) * new_addr_table_size, PU_STATIC, 0);
         memset(new_addr_table, 0, sizeof(addrpair_t *) * new_addr_table_size);
-        memcpy(new_addr_table, addr_table,
-               sizeof(addrpair_t *) * addr_table_size);
+        memcpy(new_addr_table, addr_table, sizeof(addrpair_t *) * addr_table_size);
         Z_Free(addr_table);
         addr_table = new_addr_table;
         addr_table_size = new_addr_table_size;
@@ -267,8 +265,7 @@ static void NET_SDL_SendPacket(net_addr_t *addr, net_packet_t *packet)
 
     if (!SDLNet_UDP_Send(udpsocket, -1, &sdl_packet))
     {
-        I_Error("NET_SDL_SendPacket: Error transmitting packet: %s",
-                SDLNet_GetError());
+        I_Error("NET_SDL_SendPacket: Error transmitting packet: %s", SDLNet_GetError());
     }
 }
 
@@ -280,8 +277,7 @@ static boolean NET_SDL_RecvPacket(net_addr_t **addr, net_packet_t **packet)
 
     if (result < 0)
     {
-        I_Error("NET_SDL_RecvPacket: Error receiving packet: %s",
-                SDLNet_GetError());
+        I_Error("NET_SDL_RecvPacket: Error receiving packet: %s", SDLNet_GetError());
     }
 
     // no packets received
@@ -367,9 +363,8 @@ net_addr_t *NET_SDL_ResolveAddress(const char *address)
 // Complete module
 
 net_module_t net_sdl_module = {
-    NET_SDL_InitClient,     NET_SDL_InitServer,   NET_SDL_SendPacket,
-    NET_SDL_RecvPacket,     NET_SDL_AddrToString, NET_SDL_FreeAddress,
-    NET_SDL_ResolveAddress,
+    NET_SDL_InitClient,   NET_SDL_InitServer,  NET_SDL_SendPacket,     NET_SDL_RecvPacket,
+    NET_SDL_AddrToString, NET_SDL_FreeAddress, NET_SDL_ResolveAddress,
 };
 
 
@@ -401,8 +396,7 @@ static boolean NET_NULL_RecvPacket(net_addr_t **addr, net_packet_t **packet)
 }
 
 
-static void NET_NULL_AddrToString(net_addr_t *addr, char *buffer,
-                                  int buffer_len)
+static void NET_NULL_AddrToString(net_addr_t *addr, char *buffer, int buffer_len)
 {
 }
 

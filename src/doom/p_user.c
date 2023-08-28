@@ -145,8 +145,7 @@ void P_MovePlayer(player_t *player)
     if (cmd->sidemove && onground)
         P_Thrust(player, player->mo->angle - ANG90, cmd->sidemove * 2048);
 
-    if ((cmd->forwardmove || cmd->sidemove) &&
-        player->mo->state == &states[S_PLAY])
+    if ((cmd->forwardmove || cmd->sidemove) && player->mo->state == &states[S_PLAY])
     {
         P_SetMobjState(player->mo, S_PLAY_RUN1);
     }
@@ -180,8 +179,8 @@ void P_DeathThink(player_t *player)
 
     if (player->attacker && player->attacker != player->mo)
     {
-        angle = R_PointToAngle2(player->mo->x, player->mo->y,
-                                player->attacker->x, player->attacker->y);
+        angle = R_PointToAngle2(player->mo->x, player->mo->y, player->attacker->x,
+                                player->attacker->y);
 
         delta = angle - player->mo->angle;
 
@@ -266,8 +265,7 @@ void P_PlayerThink(player_t *player)
         newweapon = (cmd->buttons & BT_WEAPONMASK) >> BT_WEAPONSHIFT;
 
         if (newweapon == wp_fist && player->weaponowned[wp_chainsaw] &&
-            !(player->readyweapon == wp_chainsaw &&
-              player->powers[pw_strength]))
+            !(player->readyweapon == wp_chainsaw && player->powers[pw_strength]))
         {
             newweapon = wp_chainsaw;
         }
@@ -330,8 +328,7 @@ void P_PlayerThink(player_t *player)
     }
     else if (player->powers[pw_infrared])
     {
-        if (player->powers[pw_infrared] > 4 * 32 ||
-            (player->powers[pw_infrared] & 8))
+        if (player->powers[pw_infrared] > 4 * 32 || (player->powers[pw_infrared] & 8))
         {
             // almost full bright
             player->fixedcolormap = 1;

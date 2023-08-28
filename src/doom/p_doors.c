@@ -106,9 +106,8 @@ void T_VerticalDoor(vldoor_t *door)
 
         case -1:
             // DOWN
-            res = T_MovePlane(door->sector, door->speed,
-                              door->sector->floorheight, false, 1,
-                              door->direction);
+            res = T_MovePlane(door->sector, door->speed, door->sector->floorheight, false,
+                              1, door->direction);
             if (res == pastdest)
             {
                 switch (door->type)
@@ -153,8 +152,8 @@ void T_VerticalDoor(vldoor_t *door)
 
         case 1:
             // UP
-            res = T_MovePlane(door->sector, door->speed, door->topheight, false,
-                              1, door->direction);
+            res = T_MovePlane(door->sector, door->speed, door->topheight, false, 1,
+                              door->direction);
 
             if (res == pastdest)
             {
@@ -398,13 +397,11 @@ void EV_VerticalDoor(line_t *line, mobj_t *thing)
                     // In Vanilla, door->direction is set, even though
                     // "specialdata" might not actually point at a door.
 
-                    if (door->thinker.function.acp1 ==
-                        (actionf_p1) T_VerticalDoor)
+                    if (door->thinker.function.acp1 == (actionf_p1) T_VerticalDoor)
                     {
                         door->direction = -1; // start going down immediately
                     }
-                    else if (door->thinker.function.acp1 ==
-                             (actionf_p1) T_PlatRaise)
+                    else if (door->thinker.function.acp1 == (actionf_p1) T_PlatRaise)
                     {
                         // Erm, this is a plat, not a door.
                         // This notably causes a problem in ep1-0500.lmp where

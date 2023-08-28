@@ -317,8 +317,7 @@ static int S_GetChannel(mobj_t *origin, sfxinfo_t *sfxinfo)
 // Otherwise, modifies parameters and returns 1.
 //
 
-static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source, int *vol,
-                               int *sep)
+static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source, int *vol, int *sep)
 {
     fixed_t approx_dist;
     fixed_t adx;
@@ -367,9 +366,9 @@ static int S_AdjustSoundParams(mobj_t *listener, mobj_t *source, int *vol,
             approx_dist = S_CLIPPING_DIST;
         }
 
-        *vol = 15 + ((snd_SfxVolume - 15) *
-                     ((S_CLIPPING_DIST - approx_dist) >> FRACBITS)) /
-                        S_ATTENUATOR;
+        *vol =
+            15 + ((snd_SfxVolume - 15) * ((S_CLIPPING_DIST - approx_dist) >> FRACBITS)) /
+                     S_ATTENUATOR;
     }
     else
     {
@@ -439,8 +438,7 @@ void S_StartSound(void *origin_p, int sfx_id)
     //  and if not, modify the params
     if (origin && origin != players[consoleplayer].mo)
     {
-        int rc = S_AdjustSoundParams(players[consoleplayer].mo, origin, &volume,
-                                 &sep);
+        int rc = S_AdjustSoundParams(players[consoleplayer].mo, origin, &volume, &sep);
 
         if (origin->x == players[consoleplayer].mo->x &&
             origin->y == players[consoleplayer].mo->y)
@@ -492,8 +490,7 @@ void S_StartSound(void *origin_p, int sfx_id)
     }
 
     channels[cnum].pitch = pitch;
-    channels[cnum].handle =
-        I_StartSound(sfx, cnum, volume, sep, channels[cnum].pitch);
+    channels[cnum].handle = I_StartSound(sfx, cnum, volume, sep, channels[cnum].pitch);
 }
 
 //
@@ -563,8 +560,7 @@ void S_UpdateSounds(mobj_t *listener)
                 //  or modify their params
                 if (c->origin && listener != c->origin)
                 {
-                    audible =
-                        S_AdjustSoundParams(listener, c->origin, &volume, &sep);
+                    audible = S_AdjustSoundParams(listener, c->origin, &volume, &sep);
 
                     if (!audible)
                     {

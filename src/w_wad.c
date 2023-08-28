@@ -177,8 +177,7 @@ wad_file_t *W_AddFile(const char *filename)
 
         // Vanilla Doom doesn't like WADs with more than 4046 lumps
         // https://www.doomworld.com/vb/post/1010985
-        if (!strncmp(header.identification, "PWAD", 4) &&
-            header.numlumps > 4046)
+        if (!strncmp(header.identification, "PWAD", 4) && header.numlumps > 4046)
         {
             W_CloseFile(wad_file);
             I_Error("Error: Vanilla limit for lumps in a WAD is 4046, "

@@ -144,9 +144,8 @@ static net_addr_t *NET_CL_ResolveAddress(const char *address)
 }
 
 net_module_t net_loop_client_module = {
-    NET_CL_InitClient,     NET_CL_InitServer,   NET_CL_SendPacket,
-    NET_CL_RecvPacket,     NET_CL_AddrToString, NET_CL_FreeAddress,
-    NET_CL_ResolveAddress,
+    NET_CL_InitClient,   NET_CL_InitServer,  NET_CL_SendPacket,     NET_CL_RecvPacket,
+    NET_CL_AddrToString, NET_CL_FreeAddress, NET_CL_ResolveAddress,
 };
 
 //-----------------------------------------------------------------------------
@@ -215,7 +214,6 @@ static net_addr_t *NET_SV_ResolveAddress(const char *address)
 }
 
 net_module_t net_loop_server_module = {
-    NET_SV_InitClient,     NET_SV_InitServer,   NET_SV_SendPacket,
-    NET_SV_RecvPacket,     NET_SV_AddrToString, NET_SV_FreeAddress,
-    NET_SV_ResolveAddress,
+    NET_SV_InitClient,   NET_SV_InitServer,  NET_SV_SendPacket,     NET_SV_RecvPacket,
+    NET_SV_AddrToString, NET_SV_FreeAddress, NET_SV_ResolveAddress,
 };

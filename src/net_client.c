@@ -210,8 +210,8 @@ static void UpdateClockSync(unsigned int seq, unsigned int remote_latency)
     last_error = error;
     last_latency = latency;
 
-    NET_Log("client: latency %d, remote %d -> offset=%dms, cumul_error=%d",
-            latency, remote_latency, offsetms / FRACUNIT, cumul_error);
+    NET_Log("client: latency %d, remote %d -> offset=%dms, cumul_error=%d", latency,
+            remote_latency, offsetms / FRACUNIT, cumul_error);
 }
 
 // Expand a net_full_ticcmd_t, applying the diffs in cmd->cmds as
@@ -266,8 +266,7 @@ static void NET_CL_AdvanceWindow(void)
 
         // Advance the window
 
-        memmove(recvwindow, recvwindow + 1,
-                sizeof(net_server_recv_t) * (BACKUPTICS - 1));
+        memmove(recvwindow, recvwindow + 1, sizeof(net_server_recv_t) * (BACKUPTICS - 1));
         memset(&recvwindow[BACKUPTICS - 1], 0, sizeof(net_server_recv_t));
 
         ++recvwindow_start;
@@ -305,8 +304,7 @@ void NET_CL_StartGame(net_gamesettings_t *settings)
 
     // Send packet
 
-    packet =
-        NET_Conn_NewReliable(&client_connection, NET_PACKET_TYPE_GAMESTART);
+    packet = NET_Conn_NewReliable(&client_connection, NET_PACKET_TYPE_GAMESTART);
 
     NET_WriteSettings(packet, settings);
 }
@@ -410,8 +408,7 @@ void NET_CL_SendTiccmd(ticcmd_t *ticcmd, int maketic)
     if (starttic < 0)
         starttic = 0;
 
-    NET_Log("client: generated tic %d, sending %d-%d", maketic, starttic,
-            endtic);
+    NET_Log("client: generated tic %d, sending %d-%d", maketic, starttic, endtic);
     NET_CL_SendTics(starttic, endtic);
 }
 
@@ -576,8 +573,7 @@ static void NET_CL_ParseGameStart(net_packet_t *packet)
         return;
     }
 
-    if ((drone && settings.consoleplayer >= 0) ||
-        (!drone && settings.consoleplayer < 0))
+    if ((drone && settings.consoleplayer >= 0) || (!drone && settings.consoleplayer < 0))
     {
         // Invalid player number: must be positive for real players,
         // negative for drones
@@ -665,8 +661,7 @@ static void NET_CL_CheckResends(void)
         // we've stopped generating any more, so the server isn't sending us
         // any, so we don't get any to trigger a resend request. So force the
         // first few tics in the receive window to be requested.
-        if (i == 0 && !recvobj->active && recvobj->resend_time == 0 &&
-            maybe_deadlocked)
+        if (i == 0 && !recvobj->active && recvobj->resend_time == 0 && maybe_deadlocked)
         {
             need_resend = true;
         }
@@ -686,8 +681,7 @@ static void NET_CL_CheckResends(void)
         {
             // End of a run of resend tics
             NET_Log("client: resend request timed out for %d-%d (%d)",
-                    recvwindow_start + resend_start,
-                    recvwindow_start + resend_end,
+                    recvwindow_start + resend_start, recvwindow_start + resend_end,
                     recvwindow[resend_start].resend_time);
             NET_CL_SendResendRequest(recvwindow_start + resend_start,
                                      recvwindow_start + resend_end);
@@ -834,8 +828,7 @@ static void NET_CL_ParseGameData(net_packet_t *packet)
     if (resend_start < resend_end)
     {
         NET_Log("client: request resend for %d-%d before %d",
-                recvwindow_start + resend_start,
-                recvwindow_start + resend_end - 1, seq);
+                recvwindow_start + resend_start, recvwindow_start + resend_end - 1, seq);
         NET_CL_SendResendRequest(recvwindow_start + resend_start,
                                  recvwindow_start + resend_end - 1);
     }
@@ -923,8 +916,7 @@ static void NET_CL_ParsePacket(net_packet_t *packet)
         return;
     }
 
-    NET_Log("client: packet from server, type %d",
-            packet_type & ~NET_RELIABLE_PACKET);
+    NET_Log("client: packet from server, type %d", packet_type & ~NET_RELIABLE_PACKET);
     NET_LogPacket(packet);
 
     if (NET_Conn_Packet(&client_connection, packet, &packet_type))
@@ -1011,9 +1003,8 @@ void NET_CL_Run(void)
         NET_CL_Shutdown();
     }
 
-    net_waiting_for_launch =
-        client_connection.state == NET_CONN_STATE_CONNECTED &&
-        client_state == CLIENT_STATE_WAITING_LAUNCH;
+    net_waiting_for_launch = client_connection.state == NET_CONN_STATE_CONNECTED &&
+                             client_state == CLIENT_STATE_WAITING_LAUNCH;
 
     if (client_state == CLIENT_STATE_IN_GAME)
     {

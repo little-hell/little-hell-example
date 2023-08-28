@@ -296,8 +296,7 @@ void M_ExtractFileBase(const char *path, char *dest)
     {
         if (length >= 8)
         {
-            printf("Warning: Truncated '%s' lump name to '%.8s'.\n", filename,
-                   dest);
+            printf("Warning: Truncated '%s' lump name to '%.8s'.\n", filename, dest);
             break;
         }
 

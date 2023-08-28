@@ -326,8 +326,7 @@ void Z_FreeTags(int lowtag, int hightag)
     memblock_t *block;
     memblock_t *next;
 
-    for (block = mainzone->blocklist.next; block != &mainzone->blocklist;
-         block = next)
+    for (block = mainzone->blocklist.next; block != &mainzone->blocklist; block = next)
     {
         // get link before freeing
         next = block->next;

@@ -44,8 +44,7 @@ weaponinfo_t weaponinfo[NUMWEAPONS] = {
     {// chaingun
      am_clip, S_CHAINUP, S_CHAINDOWN, S_CHAIN, S_CHAIN1, S_CHAINFLASH1},
     {// missile launcher
-     am_misl, S_MISSILEUP, S_MISSILEDOWN, S_MISSILE, S_MISSILE1,
-     S_MISSILEFLASH1},
+     am_misl, S_MISSILEUP, S_MISSILEDOWN, S_MISSILE, S_MISSILE1, S_MISSILEFLASH1},
     {// plasma rifle
      am_cell, S_PLASMAUP, S_PLASMADOWN, S_PLASMA, S_PLASMA1, S_PLASMAFLASH1},
     {// bfg 9000

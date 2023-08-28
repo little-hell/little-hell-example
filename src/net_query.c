@@ -135,8 +135,7 @@ void NET_Query_AddResponse(net_packet_t *packet)
 
         if (!registered_with_master)
         {
-            printf("Registered with master server at %s\n",
-                   MASTER_SERVER_ADDRESS);
+            printf("Registered with master server at %s\n", MASTER_SERVER_ADDRESS);
             registered_with_master = true;
         }
     }
@@ -144,8 +143,7 @@ void NET_Query_AddResponse(net_packet_t *packet)
     {
         // Always show rejections.
 
-        printf("Failed to register with master server at %s\n",
-               MASTER_SERVER_ADDRESS);
+        printf("Failed to register with master server at %s\n", MASTER_SERVER_ADDRESS);
     }
 
     got_master_response = true;
@@ -275,8 +273,7 @@ static void NET_Query_SendQuery(net_addr_t *addr)
 }
 
 static void NET_Query_ParseResponse(net_addr_t *addr, net_packet_t *packet,
-                                    net_query_callback_t callback,
-                                    void *user_data)
+                                    net_query_callback_t callback, void *user_data)
 {
     unsigned int packet_type;
     net_querydata_t querydata;
@@ -314,8 +311,7 @@ static void NET_Query_ParseResponse(net_addr_t *addr, net_packet_t *packet,
         // Not in broadcast mode, unexpected response that came out
         // of nowhere. Ignore.
 
-        if (broadcast_target == NULL ||
-            broadcast_target->state != QUERY_TARGET_QUERIED)
+        if (broadcast_target == NULL || broadcast_target->state != QUERY_TARGET_QUERIED)
         {
             return;
         }
@@ -344,8 +340,7 @@ static void NET_Query_ParseResponse(net_addr_t *addr, net_packet_t *packet,
 
 // Parse a response packet from the master server.
 
-static void NET_Query_ParseMasterResponse(net_addr_t *master_addr,
-                                          net_packet_t *packet)
+static void NET_Query_ParseMasterResponse(net_addr_t *master_addr, net_packet_t *packet)
 {
     unsigned int packet_type;
     query_target_t *target;
@@ -388,8 +383,7 @@ static void NET_Query_ParseMasterResponse(net_addr_t *master_addr,
 }
 
 static void NET_Query_ParsePacket(net_addr_t *addr, net_packet_t *packet,
-                                  net_query_callback_t callback,
-                                  void *user_data)
+                                  net_query_callback_t callback, void *user_data)
 {
     query_target_t *target;
 
@@ -407,8 +401,7 @@ static void NET_Query_ParsePacket(net_addr_t *addr, net_packet_t *packet,
     }
 }
 
-static void NET_Query_GetResponse(net_query_callback_t callback,
-                                  void *user_data)
+static void NET_Query_GetResponse(net_query_callback_t callback, void *user_data)
 {
     net_addr_t *addr;
     net_packet_t *packet;
