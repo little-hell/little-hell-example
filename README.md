@@ -5,7 +5,7 @@ Mindoom is the [MINIX](https://en.wikipedia.org/wiki/Minix) of Doom ports. It's 
 - Peel back 30+ years of source port additions and scope creep until we can finally study what's happening under the hood (the bug fixes along the way are ok though!)
 - Make exploring the core principles of the Doom engine as zen-like as possible.
 - Integrate an embedded scripting language (such as Lua or Guile) to allow experimentation with the engine in a higher-level language.
-- **Flagrantly lack support for Windows**, a platform antithetic to the spirit of open-source software and the goals of this project. "But DOOM can run on anything!" Mindoom is defiant and supports UNIX-esque operating systems only. The smaller and easier to understand codebase means you can still quite easily port it to a bespoke operating system or console, however.
+- Mindoom doesn't support Windows (a platform antithetic to the spirit of open-source software and the goals of this project).
 
 One could argue that this completely guts and kills the soul of DOOM. And you probably wouldn't even be wrong, but this is for science and John Carmack released Doom under the GPL.
 
@@ -31,35 +31,30 @@ One could argue that this completely guts and kills the soul of DOOM. And you pr
 ## Motivation
 
 ### Minimalism in the build system
-Build systems for C can be awfully yucky and not very Zen. Mindoom supports one build system: Meson. There aren't a dozen nested `CMakeLists.txt` and `Makefile.am` files. There is one build file, 99% of which is just listing the source files to be compiled. It's _great_. This means:
+Mindoom does away with having dozens of nested `CMakeLists.txt` or `Makefile.am` files. You get a _single_ `meson.build` file, and that's all you need. There's also a Nix shell (`shell.nix`) in the project root. With a single command you can have all the project dependencies managed and an isolated development environment to work and build in.
 
-- [x] Add Nix shell for Zen-like, project dependency management and an isolated development environment. _Your system package manager is not Zen._
-- [x] Add Meson build 
-- [x] Remove CMake build
-- [x] Remove GNU autotools build
+- [x] Use the Meson build system, and a Nix shell for frictionless dependency management.
+- [x] Removal of CMake and GNU Autotools
 
 ### Minimalism in platform support, packaging and distribution
 `mindoom` simply does not care about Windows. We're killing it. We also don't care about packaging and distribution. The project is about exploring the code, binary distributions are useless to us. This means: 
-- [x] Removal of packages for Win32 and macOS.
-- [x] Removal of Linux packages as well. No `.rpm` or `.deb` files. 
-
+- [x] Removal of code that provides platform support for Windows
+- [x] Removal all packaging code for Win32, macOS, and Linux
+      
 It's a project built around exploration of an _open-source_ codebase - build the code yourself on an _open-source_ platform.
 
 ### Minimalism in sound emulation support
-- [x] Remove GUS emulation
-- [x] Remove PC speaker emulation
-- [x] Remove PAS 
-- [x] Remove MIDI music via Fluidsynth, Timidity, and SDL.
-- [x] Remove music packs
+`mindoom` is not interested in emulating half a dozen different sound cards from the 90's. We drop support for everything except for `OPL`, because it sounds good and plays nice, except we don't support _any_ physical OPL hardware on _any_ OS, it's just software emulation.
 
-All we use is the OPL emulation. And we drop the hardware support for using a real OPL chip.
+- [x] Remove emulation for GUS, PAS, PC Speaker, MIDI via Fluidsynth/Timidity/Windows, and music packs.
+- [x] Retain OPL emulation in software only. Nice and simple. 
 
 ### Minimalism in features and legacy support
 A vast majority of the wonderful features added to source ports are extraneous to our goal of understanding the Doom engine. To that end, an awful lot has been removed:
 
-- [x] Remove DOOM II, Strife, Heretic, and Hexen support - we're talking about _Doom_ and _Doom_ only.
-- [ ] Remove emulation and handling of various DOOM 1 minor version releases - we do Doom v1.9 only. 
-- [ ] No hacks. No DeHackEd, no wad-merging like DeuTex. Just the vanilla stuff.
+- [x] Remove DOOM II, Plutonia/TNT, Ultimate Doom, Final Doom, Strife, Heretic, and Hexen support
+- [x] Remove emulation of bugs and quirks of Doom v1.2, v1.666, etc - we do Doom v1.9 (Registered) only. 
+- [x] No DeHackEd, no wad-merging like DeuTex. Just the vanilla stuff.
 - [x] Remove the `setup` application. Edit the `.cfg` by hand. Minimalism, baby.
 
 The only features it _adds_ are to change the default controls to utilize the `WASD` key cluster, with `E` for interaction. Because anything else would not be Zen.
@@ -141,14 +136,15 @@ Then your build steps are exactly the same as the steps above, minus the `nix` c
 Don't.
 
 ## Release Roadmap
-- v0.0.6: The refactor, comment, and log release
+- v0.0.7: The refactor, comment, and log release
    - [ ] Start doing static analysis and get to cleaning. This will be a huge undertaking, likely spanning multiple releases.
    - [ ] Add comments and documentation to whatever we refactor.
    - [ ] Add debug logging to whatever we refactor.
-- v0.0.5:
-   - [ ] Remove DeHackEd
+- v0.0.6:
    - [ ] Remove WAD merging (a la DeuTex)
    - [ ] Remove `textscreen` and endoom.
+- [v0.0.5](https://github.com/ranguli/mindoom/releases/tag/v0.0.5):
+   - [x] Remove DeHackEd
 - [v0.0.4](https://github.com/ranguli/mindoom/releases/tag/v0.0.4):
    - [x] Remove all references to non-DOOM v1.9 in the code.
 - [v0.0.3](https://github.com/ranguli/mindoom/releases/tag/v0.0.3):
