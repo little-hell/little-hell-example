@@ -1,6 +1,6 @@
 project('mindoom', 'c',
-       default_options: ['default_library=static', 'buildtype=debugoptimized'])
-add_project_arguments('-DDISABLE_SDL_MIXER', language: 'c')
+       default_options: ['default_library=static', 'buildtype=debug'])
+add_project_arguments(language: 'c')
 
 sdl2 = dependency('SDL2')
 sdl2_net = dependency('SDL2_net')
@@ -41,7 +41,6 @@ dedicated_server_source_files = files(
 # Source files only used by the game binary 
 doom_source_dir = 'doom'
 game_source_files = files(
-    src_dir / 'aes_prng.c',
     src_dir / 'd_event.c',
     src_dir / 'doomtype.h',
     src_dir / 'd_iwad.c',
@@ -96,7 +95,6 @@ game_source_files = files(
     src_dir / doom_source_dir / 'd_main.c',
     src_dir / doom_source_dir / 'd_net.c',
     src_dir / doom_source_dir / 'doomdef.c',
-    src_dir / doom_source_dir / 'doom_icon.c',
     src_dir / doom_source_dir / 'doomstat.c',
     src_dir / doom_source_dir / 'dstrings.c',
     src_dir / doom_source_dir / 'f_finale.c',
@@ -227,4 +225,13 @@ executable('mindoom',
 # Build the server binary
 executable('mindoom-server', common_source_files, dedicated_server_source_files, dependencies:
   deps)
+
+run_target('clang-tidy',
+  command : 'scripts/clang-tidy.sh')
+
+run_target('clang-format',
+  command : 'scripts/clang-format.sh')
+
+run_target('cppcheck',
+  command : 'scripts/cppcheck.sh')
 
