@@ -592,4 +592,3 @@ static const uint32_t crypto_fl_tab[4][256] = {
         f_rl(bo, bi, 2, k);                                                    \
         f_rl(bo, bi, 3, k);                                                    \
     } while (0)
-

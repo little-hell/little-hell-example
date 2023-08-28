@@ -373,18 +373,6 @@ void I_StopSong(void)
     }
 }
 
-boolean I_MusicIsPlaying(void)
-{
-    if (active_music_module != NULL)
-    {
-        return active_music_module->MusicIsPlaying();
-    }
-    else
-    {
-        return false;
-    }
-}
-
 void I_BindSoundVariables(void)
 {
     M_BindIntVariable("snd_musicdevice", &snd_musicdevice);

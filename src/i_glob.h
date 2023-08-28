@@ -24,10 +24,5 @@
 
 typedef struct glob_s glob_t;
 
-// Same as I_StartGlob but multiple glob patterns can be provided. The list
-// of patterns must be terminated with NULL.
-glob_t *I_StartMultiGlob(const char *directory, int flags,
-                         const char *glob, ...);
-
 #endif
 

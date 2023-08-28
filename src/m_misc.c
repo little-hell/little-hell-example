@@ -35,14 +35,6 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
-// Convert UTF8 string to multibyte string in system encoding. The result is
-// newly allocated and must be freed by the caller after use.
-
-char *M_ConvertUtf8ToSysNativeMB(const char *str)
-{
-    return M_StringDuplicate(str);
-}
-
 FILE *M_fopen(const char *filename, const char *mode)
 {
     return fopen(filename, mode);

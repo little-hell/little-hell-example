@@ -39,14 +39,8 @@ typedef enum
 
 typedef struct
 {
-    lumpinfo_t **lumps;
-    int numlumps;
 } searchlist_t;
 
 typedef struct
 {
-    char sprname[4];
-    char frame;
-    lumpinfo_t *angle_lumps[8];
 } sprite_frame_t;
-

@@ -247,7 +247,6 @@ void V_DrawPatchDirect(int x, int y, patch_t *patch)
     V_DrawPatch(x, y, patch);
 }
 
-
 //
 // V_DrawBlock
 // Draw a linear block of pixels into the view buffer.
@@ -385,63 +384,6 @@ typedef PACKED_STRUCT({
 }) pcx_t;
 
 
-//
-// WritePCXfile
-//
-
-void WritePCXfile(char *filename, pixel_t *data, int width, int height,
-                  byte *palette)
-{
-    int i;
-    int length;
-    pcx_t *pcx;
-    byte *pack;
-
-    pcx = Z_Malloc(width * height * 2 + 1000, PU_STATIC, NULL);
-
-    pcx->manufacturer = 0x0a; // PCX id
-    pcx->version = 5;         // 256 color
-    pcx->encoding = 1;        // uncompressed
-    pcx->bits_per_pixel = 8;  // 256 color
-    pcx->xmin = 0;
-    pcx->ymin = 0;
-    pcx->xmax = SHORT(width - 1);
-    pcx->ymax = SHORT(height - 1);
-    pcx->hres = SHORT(1);
-    pcx->vres = SHORT(1);
-    memset(pcx->palette, 0, sizeof(pcx->palette));
-    pcx->reserved = 0;     // PCX spec: reserved byte must be zero
-    pcx->color_planes = 1; // chunky image
-    pcx->bytes_per_line = SHORT(width);
-    pcx->palette_type = SHORT(2); // not a grey scale
-    memset(pcx->filler, 0, sizeof(pcx->filler));
-
-    // pack the image
-    pack = &pcx->data;
-
-    for (i = 0; i < width * height; i++)
-    {
-        if ((*data & 0xc0) != 0xc0)
-            *pack++ = *data++;
-        else
-        {
-            *pack++ = 0xc1;
-            *pack++ = *data++;
-        }
-    }
-
-    // write the palette
-    *pack++ = 0x0c; // palette ID byte
-    for (i = 0; i < 768; i++)
-        *pack++ = *palette++;
-
-    // write output file
-    length = pack - (byte *) pcx;
-    M_WriteFile(filename, pcx, length);
-
-    Z_Free(pcx);
-}
-
 #ifdef HAVE_LIBPNG
 //
 // WritePNGfile
@@ -566,22 +508,13 @@ void WritePNGfile(char *filename, pixel_t *data, int width, int height,
 
 void V_ScreenShot(const char *format)
 {
+// No op if we don't have libpng
+#ifdef HAVE_LIBPNG
     int i;
     char lbmname[16]; // haleyjd 20110213: BUG FIX - 12 is too small!
-    const char *ext;
+    const char *ext = "png";
 
     // find a file name to save it to
-
-#ifdef HAVE_LIBPNG
-    if (png_screenshots)
-    {
-        ext = "png";
-    }
-    else
-#endif
-    {
-        ext = "pcx";
-    }
 
     for (i = 0; i <= 99; i++)
     {
@@ -595,31 +528,11 @@ void V_ScreenShot(const char *format)
 
     if (i == 100)
     {
-#ifdef HAVE_LIBPNG
-        if (png_screenshots)
-        {
-            I_Error("V_ScreenShot: Couldn't create a PNG");
-        }
-        else
-#endif
-        {
-            I_Error("V_ScreenShot: Couldn't create a PCX");
-        }
+        I_Error("V_ScreenShot: Couldn't create a PNG");
     }
 
-#ifdef HAVE_LIBPNG
-    if (png_screenshots)
-    {
-        WritePNGfile(lbmname, I_VideoBuffer, SCREENWIDTH, SCREENHEIGHT,
-                     W_CacheLumpName("PLAYPAL", PU_CACHE));
-    }
-    else
+    WritePNGfile(lbmname, I_VideoBuffer, SCREENWIDTH, SCREENHEIGHT, W_CacheLumpName("PLAYPAL", PU_CACHE));
 #endif
-    {
-        // save the pcx file
-        WritePCXfile(lbmname, I_VideoBuffer, SCREENWIDTH, SCREENHEIGHT,
-                     W_CacheLumpName("PLAYPAL", PU_CACHE));
-    }
 }
 
 #define MOUSE_SPEED_BOX_WIDTH  120

@@ -56,10 +56,7 @@ void V_CopyRect(int srcx, int srcy, pixel_t *source,
 
 void V_DrawPatch(int x, int y, patch_t *patch);
 void V_DrawPatchFlipped(int x, int y, patch_t *patch);
-void V_DrawTLPatch(int x, int y, patch_t *patch);
 void V_DrawAltTLPatch(int x, int y, patch_t * patch);
-void V_DrawShadowedPatch(int x, int y, patch_t *patch);
-void V_DrawXlaPatch(int x, int y, patch_t * patch);     // villsa [STRIFE]
 void V_DrawPatchDirect(int x, int y, patch_t *patch);
 
 // Draw a linear block of pixels into the view buffer.
@@ -93,14 +90,6 @@ void V_ScreenShot(const char *format);
 
 // Load the lookup table for translucency calculations from the TINTTAB
 // lump.
-
-void V_LoadTintTable(void);
-
-// villsa [STRIFE]
-// Load the lookup table for translucency calculations from the XLATAB
-// lump.
-
-void V_LoadXlaTable(void);
 
 void V_DrawMouseSpeedBox(int speed);
 
