@@ -220,13 +220,5 @@ int MIDI_GetNextEvent(midi_track_iter_t *iter, midi_event_t **event);
 
 void MIDI_RestartIterator(midi_track_iter_t *iter);
 
-// Set loop point to current position.
-
-void MIDI_SetLoopPoint(midi_track_iter_t *iter);
-
-// Set position to saved loop point.
-
-void MIDI_RestartAtLoopPoint(midi_track_iter_t *iter);
-
 #endif /* #ifndef MIDIFILE_H */
 
