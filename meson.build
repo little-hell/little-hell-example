@@ -41,7 +41,6 @@ dedicated_server_source_files = files(
 # Source files only used by the game binary 
 doom_source_dir = 'doom'
 game_source_files = files(
-    src_dir / 'aes_prng.c',
     src_dir / 'd_event.c',
     src_dir / 'doomtype.h',
     src_dir / 'd_iwad.c',

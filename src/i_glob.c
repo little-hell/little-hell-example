@@ -33,22 +33,4 @@
 
 #ifndef NO_DIRENT_IMPLEMENTATION
 
-// Only the fields d_name and (as an XSI extension) d_ino are specified
-// in POSIX.1.  Other than Linux, the d_type field is available mainly
-// only on BSD systems.  The remaining fields are available on many, but
-// not all systems.
-struct glob_s
-{
-    char **globs;
-    int num_globs;
-    int flags;
-    DIR *dir;
-    char *directory;
-    char *last_filename;
-    // These fields are only used when the GLOB_FLAG_SORTED flag is set:
-    char **filenames;
-    int filenames_len;
-    int next_index;
-};
-
 #endif /* #ifdef NO_DIRENT_IMPLEMENTATION */

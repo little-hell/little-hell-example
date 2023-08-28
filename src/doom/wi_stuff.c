@@ -137,14 +137,8 @@ typedef struct
     // next value of bcnt (used in conjunction with period)
     int nexttic;
 
-    // last drawn animation frame
-    int lastdrawn;
-
     // next frame number to animate
     int ctr;
-
-    // used by RANDOM and LEVEL when animating
-    int state;
 
 } anim_t;
 
@@ -201,7 +195,7 @@ static point_t lnodes[NUMEPISODES][NUMMAPS] = {
 #define ANIM(type, period, nanims, x, y, nexttic)                              \
     {                                                                          \
         (type), (period), (nanims), {(x), (y)}, (nexttic), 0,                  \
-            {NULL, NULL, NULL}, 0, 0, 0, 0                                     \
+            {NULL, NULL, NULL}, 0, 0,                                          \
     }
 
 
