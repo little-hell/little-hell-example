@@ -21,8 +21,6 @@
 #include "doomdef.h"
 #include "d_event.h"
 
-#include "deh_misc.h"
-
 #include "m_random.h"
 #include "p_local.h"
 #include "s_sound.h"
@@ -158,7 +156,7 @@ boolean P_CheckAmmo (player_t* player)
 
     // Minimal amount for one shot varies.
     if (player->readyweapon == wp_bfg)
-	count = deh_bfg_cells_per_shot;
+	count = BFG_CELLS_PER_SHOT;
     else if (player->readyweapon == wp_supershotgun)
 	count = 2;	// Double barrel.
     else
@@ -173,17 +171,9 @@ boolean P_CheckAmmo (player_t* player)
     // Preferences are set here.
     do
     {
-	if (player->weaponowned[wp_plasma]
-	    && player->ammo[am_cell]
-	    && (gamemode != shareware) )
+	if (player->weaponowned[wp_plasma] && player->ammo[am_cell])
 	{
 	    player->pendingweapon = wp_plasma;
-	}
-	else if (player->weaponowned[wp_supershotgun] 
-		 && player->ammo[am_shell]>2
-		 && (gamemode == commercial) )
-	{
-	    player->pendingweapon = wp_supershotgun;
 	}
 	else if (player->weaponowned[wp_chaingun]
 		 && player->ammo[am_clip])
@@ -208,9 +198,7 @@ boolean P_CheckAmmo (player_t* player)
 	{
 	    player->pendingweapon = wp_missile;
 	}
-	else if (player->weaponowned[wp_bfg]
-		 && player->ammo[am_cell]>40
-		 && (gamemode != shareware) )
+	else if (player->weaponowned[wp_bfg] && player->ammo[am_cell]>40)
 	{
 	    player->pendingweapon = wp_bfg;
 	}
@@ -574,7 +562,7 @@ A_FireBFG
   pspdef_t*	psp ) 
 {
     DecreaseAmmo(player, weaponinfo[player->readyweapon].ammo, 
-                 deh_bfg_cells_per_shot);
+                 BFG_CELLS_PER_SHOT);
     P_SpawnPlayerMissile (player->mo, MT_BFG);
 }
 

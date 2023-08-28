@@ -24,7 +24,6 @@
 
 #include "z_zone.h"
 
-#include "deh_main.h"
 #include "i_input.h"
 #include "i_swap.h"
 #include "i_video.h"
@@ -48,9 +47,6 @@
 // Locally used constants, shortcuts.
 //
 #define HU_TITLE       (mapnames[(gameepisode - 1) * 9 + gamemap - 1])
-#define HU_TITLE2      (mapnames_commercial[gamemap - 1])
-#define HU_TITLEP      (mapnames_commercial[gamemap - 1 + 32])
-#define HU_TITLET      (mapnames_commercial[gamemap - 1 + 64])
 #define HU_TITLEHEIGHT 1
 #define HU_TITLEX      0
 #define HU_TITLEY      (167 - SHORT(hu_font[0]->height))
@@ -118,7 +114,7 @@ void HU_Init(void)
     j = HU_FONTSTART;
     for (i = 0; i < HU_FONTSIZE; i++)
     {
-        DEH_snprintf(buffer, 9, "STCFN%.3d", j++);
+        M_snprintf(buffer, 9, "STCFN%.3d", j++);
         hu_font[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
     }
 }
@@ -151,10 +147,6 @@ void HU_Start(void)
     HUlib_initTextLine(&w_title, HU_TITLEX, HU_TITLEY, hu_font, HU_FONTSTART);
 
     s = HU_TITLE;
-
-    // dehacked substitution to get modified level name
-
-    s = DEH_String(s);
 
     while (*s)
         HUlib_addCharToTextLine(&w_title, *(s++));
@@ -238,7 +230,7 @@ void HU_Ticker(void)
                              chat_dest[i] == HU_BROADCAST))
                         {
                             HUlib_addMessageToSText(&w_message,
-                                                    DEH_String(player_names[i]),
+                                                    player_names[i],
                                                     w_inputbuffer[i].l.l);
 
                             message_nottobefuckedwith = true;
@@ -266,7 +258,7 @@ void HU_queueChatChar(char c)
 {
     if (((head + 1) & (QUEUESIZE - 1)) == tail)
     {
-        plr->message = DEH_String(HUSTR_MSGU);
+        plr->message = HUSTR_MSGU;
     }
     else
     {
@@ -366,15 +358,15 @@ boolean HU_Responder(event_t *ev)
                     {
                         num_nobrainers++;
                         if (num_nobrainers < 3)
-                            plr->message = DEH_String(HUSTR_TALKTOSELF1);
+                            plr->message = HUSTR_TALKTOSELF1;
                         else if (num_nobrainers < 6)
-                            plr->message = DEH_String(HUSTR_TALKTOSELF2);
+                            plr->message = HUSTR_TALKTOSELF2;
                         else if (num_nobrainers < 9)
-                            plr->message = DEH_String(HUSTR_TALKTOSELF3);
+                            plr->message = HUSTR_TALKTOSELF3;
                         else if (num_nobrainers < 32)
-                            plr->message = DEH_String(HUSTR_TALKTOSELF4);
+                            plr->message = HUSTR_TALKTOSELF4;
                         else
-                            plr->message = DEH_String(HUSTR_TALKTOSELF5);
+                            plr->message = HUSTR_TALKTOSELF5;
                     }
                 }
             }

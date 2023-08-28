@@ -20,7 +20,6 @@
 #include <stdio.h>
 
 #include "i_system.h"
-#include "deh_main.h"
 #include "doomdef.h"
 #include "p_local.h"
 
@@ -98,6 +97,9 @@ button_t        buttonlist[MAXBUTTONS];
 //
 void P_InitSwitchList(void)
 {
+    //TODO: this function can be refactored if not removed altogether
+    //because we don't differentiate between shareware/registered in mindoom.
+
     int i, slindex, episode;
 
     // Note that this is called "episode" here but it's actually something
@@ -106,11 +108,7 @@ void P_InitSwitchList(void)
     switch (gamemode)
     {
         case registered:
-        case retail:
             episode = 2;
-            break;
-        case commercial:
-            episode = 3;
             break;
         default:
             episode = 1;
@@ -124,9 +122,9 @@ void P_InitSwitchList(void)
 	if (alphSwitchList[i].episode <= episode)
 	{
 	    switchlist[slindex++] =
-                R_TextureNumForName(DEH_String(alphSwitchList[i].name1));
+                R_TextureNumForName(alphSwitchList[i].name1);
 	    switchlist[slindex++] =
-                R_TextureNumForName(DEH_String(alphSwitchList[i].name2));
+                R_TextureNumForName(alphSwitchList[i].name2);
 	}
     }
 

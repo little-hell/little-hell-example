@@ -27,7 +27,6 @@
 
 #include "config.h"
 
-#include "deh_str.h"
 #include "doomtype.h"
 #include "m_argv.h"
 #include "m_config.h"

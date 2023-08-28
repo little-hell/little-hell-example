@@ -24,9 +24,6 @@
 #include "doomkeys.h"
 #include "doomstat.h"
 
-#include "deh_main.h"
-#include "deh_misc.h"
-
 #include "z_zone.h"
 #include "f_finale.h"
 #include "m_argv.h"
@@ -233,21 +230,6 @@ int G_CmdChecksum(ticcmd_t *cmd)
 
 static boolean WeaponSelectable(weapontype_t weapon)
 {
-    // Can't select the super shotgun in Doom 1.
-
-    if (weapon == wp_supershotgun && logical_gamemission == doom)
-    {
-        return false;
-    }
-
-    // These weapons aren't available in shareware.
-
-    if ((weapon == wp_plasma || weapon == wp_bfg) && gamemission == doom &&
-        gamemode == shareware)
-    {
-        return false;
-    }
-
     // Can't select a weapon if we don't own it.
 
     if (!players[consoleplayer].weaponowned[weapon])
@@ -588,7 +570,7 @@ void G_DoLoadLevel(void)
     //  we look for an actual index, instead of simply
     //  setting one.
 
-    skyflatnum = R_FlatNumForName(DEH_String(SKYFLATNAME));
+    skyflatnum = R_FlatNumForName(SKYFLATNAME);
 
     levelstarttic = gametic; // for time calculation
 
@@ -844,7 +826,7 @@ void G_Ticker(void)
                 break;
             case ga_screenshot:
                 V_ScreenShot("DOOM%02i.%s");
-                players[consoleplayer].message = DEH_String("screen shot");
+                players[consoleplayer].message = "screen shot";
                 gameaction = ga_nothing;
                 break;
             case ga_nothing:
@@ -1042,11 +1024,11 @@ void G_PlayerReborn(int player)
 
     p->usedown = p->attackdown = true; // don't do anything immediately
     p->playerstate = PST_LIVE;
-    p->health = deh_initial_health; // Use dehacked value
+    p->health = INITIAL_HEALTH;
     p->readyweapon = p->pendingweapon = wp_pistol;
     p->weaponowned[wp_fist] = true;
     p->weaponowned[wp_pistol] = true;
-    p->ammo[am_clip] = deh_initial_bullets;
+    p->ammo[am_clip] = INITIAL_BULLETS;
 
     for (i = 0; i < NUMAMMO; i++)
         p->maxammo[i] = maxammo[i];
@@ -1259,14 +1241,9 @@ void G_ExitLevel(void)
     gameaction = ga_completed;
 }
 
-// Here's for the german edition.
 void G_SecretExitLevel(void)
 {
-    // IF NO WOLF3D LEVELS, NO SECRET EXIT!
-    if ((gamemode == commercial) && (W_CheckNumForName("map31") < 0))
-        secretexit = false;
-    else
-        secretexit = true;
+    secretexit = true;
     gameaction = ga_completed;
 }
 
@@ -1514,7 +1491,7 @@ void G_DoSaveGame(void)
     gameaction = ga_nothing;
     M_StringCopy(savedescription, "", sizeof(savedescription));
 
-    players[consoleplayer].message = DEH_String(GGSAVED);
+    players[consoleplayer].message = GGSAVED;
 
     // draw the pattern into the back screen
     R_FillBackScreen();
@@ -1578,16 +1555,14 @@ void G_InitNew(skill_t skill, int episode, int map)
         episode = 3;
     }
 
-    if (episode > 1 && gamemode == shareware)
-    {
-        episode = 1;
-    }
-
     if (map < 1)
+    {
         map = 1;
-
-    if ((map > 9) && (gamemode != commercial))
+    }
+    if (map > 9)
+    {
         map = 9;
+    }
 
     M_ClearRandom();
 
@@ -1626,47 +1601,23 @@ void G_InitNew(skill_t skill, int episode, int map)
     gamemap = map;
     gameskill = skill;
 
-    // Set the sky to use.
-    //
-    // Note: This IS broken, but it is how Vanilla Doom behaves.
-    // See http://doomwiki.org/wiki/Sky_never_changes_in_Doom_II.
-    //
-    // Because we set the sky here at the start of a game, not at the
-    // start of a level, the sky texture never changes unless we
-    // restore from a saved game.  This was fixed before the Doom
-    // source release, but this IS the way Vanilla DOS Doom behaves.
-
-    if (gamemode == commercial)
+    switch (gameepisode)
     {
-        skytexturename = DEH_String("SKY3");
-        skytexture = R_TextureNumForName(skytexturename);
-        if (gamemap < 21)
-        {
-            skytexturename = DEH_String(gamemap < 12 ? "SKY1" : "SKY2");
-            skytexture = R_TextureNumForName(skytexturename);
-        }
+        default:
+        case 1:
+            skytexturename = "SKY1";
+            break;
+        case 2:
+            skytexturename = "SKY2";
+            break;
+        case 3:
+            skytexturename = "SKY3";
+            break;
+        case 4: // Special Edition sky
+            skytexturename = "SKY4";
+            break;
     }
-    else
-    {
-        switch (gameepisode)
-        {
-            default:
-            case 1:
-                skytexturename = "SKY1";
-                break;
-            case 2:
-                skytexturename = "SKY2";
-                break;
-            case 3:
-                skytexturename = "SKY3";
-                break;
-            case 4: // Special Edition sky
-                skytexturename = "SKY4";
-                break;
-        }
-        skytexturename = DEH_String(skytexturename);
-        skytexture = R_TextureNumForName(skytexturename);
-    }
+    skytexture = R_TextureNumForName(skytexturename);
 
     G_DoLoadLevel();
 }
@@ -1851,35 +1802,6 @@ void G_DeferedPlayDemo(const char *name)
     gameaction = ga_playdemo;
 }
 
-// Generate a string describing a demo version
-
-static const char *DemoVersionDescription(int version)
-{
-    static char resultbuf[16];
-
-    switch (version)
-    {
-        case 109:
-            return "v1.9";
-        default:
-            break;
-    }
-
-    // Unknown version.  Perhaps this is a pre-v1.4 IWAD?  If the version
-    // byte is in the range 0-4 then it can be a v1.0-v1.2 demo.
-
-    if (version >= 0 && version <= 4)
-    {
-        return "v1.0/v1.1/v1.2";
-    }
-    else
-    {
-        M_snprintf(resultbuf, sizeof(resultbuf), "%i.%i (unknown)",
-                   version / 100, version % 100);
-        return resultbuf;
-    }
-}
-
 void G_DoPlayDemo(void)
 {
     skill_t skill;
@@ -1894,11 +1816,18 @@ void G_DoPlayDemo(void)
 
     demoversion = *demo_p++;
 
+    if (demoversion >= 0 && demoversion <= 4)
+    {
+        olddemo = true;
+        demo_p--;
+    }
+
     longtics = false;
 
     skill = *demo_p++;
     episode = *demo_p++;
     map = *demo_p++;
+
     if (!olddemo)
     {
         deathmatch = *demo_p++;

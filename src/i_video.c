@@ -25,7 +25,6 @@
 
 #include "config.h"
 #include "d_loop.h"
-#include "deh_str.h"
 #include "doomtype.h"
 #include "i_input.h"
 #include "i_joystick.h"
@@ -1432,7 +1431,7 @@ void I_InitGraphics(void)
 
     // Set the palette
 
-    doompal = W_CacheLumpName(DEH_String("PLAYPAL"), PU_CACHE);
+    doompal = W_CacheLumpName("PLAYPAL", PU_CACHE);
     I_SetPalette(doompal);
     SDL_SetPaletteColors(screenbuffer->format->palette, palette, 0, 256);
 

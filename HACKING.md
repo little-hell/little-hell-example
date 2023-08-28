@@ -168,25 +168,6 @@ Unsafe function   |   Safer alternative
 `strdup()`        |  `M_StringDuplicate()`
 `realloc()`       |  `I_Realloc()`
 
-Lots of the code includes calls to DEH_String() to simulate string
-replacement by the Dehacked tool. Be careful when using Dehacked
-replacements of printf format strings. For example, do not do this:
-
-```c
-printf(DEH_String("foo %s"), s);
-sprintf(mybuf, DEH_String("bar %s"), t);
-```
-
-Instead do this:
-
-```c
-DEH_printf("foo %s", s);
-DEH_snprintf(mybuf, sizeof(mybuf), "bar %s", t);
-```
-
-This does the format string replacement safely in a way that checks
-the arguments securely.
-
 ## Portability
 
 Mindoom is designed to be cross-platform and work on different

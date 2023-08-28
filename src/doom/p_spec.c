@@ -26,7 +26,6 @@
 #include "doomdef.h"
 #include "doomstat.h"
 
-#include "deh_main.h"
 #include "i_system.h"
 #include "z_zone.h"
 #include "m_argv.h"
@@ -146,8 +145,8 @@ void P_InitPicAnims(void)
     {
         const char *startname, *endname;
 
-        startname = DEH_String(animdefs[i].startname);
-        endname = DEH_String(animdefs[i].endname);
+        startname = animdefs[i].startname;
+        endname = animdefs[i].endname;
 
         if (animdefs[i].istexture)
         {

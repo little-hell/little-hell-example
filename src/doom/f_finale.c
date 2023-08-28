@@ -22,7 +22,6 @@
 #include <stdlib.h>
 
 // Functions.
-#include "deh_main.h"
 #include "i_system.h"
 #include "i_swap.h"
 #include "z_zone.h"
@@ -37,6 +36,8 @@
 
 #include "doomstat.h"
 #include "r_state.h"
+
+#include "m_misc.h"
 
 typedef enum
 {
@@ -69,7 +70,7 @@ typedef struct
 static textscreen_t textscreens[] = {{doom, 1, 8, "FLOOR4_8", E1TEXT},
                                      {doom, 2, 8, "SFLR6_1", E2TEXT},
                                      {doom, 3, 8, "MFLR8_4", E3TEXT},
-                                     {doom, 4, 8, "MFLR8_3", E4TEXT}};
+                                    };
 
 const char *finaletext;
 const char *finaleflat;
@@ -115,11 +116,6 @@ void F_StartFinale(void)
         }
     }
 
-    // Do dehacked substitutions of strings
-
-    finaletext = DEH_String(finaletext);
-    finaleflat = DEH_String(finaleflat);
-
     finalestage = F_STAGE_TEXT;
     finalecount = 0;
 }
@@ -141,23 +137,6 @@ void F_Ticker(void)
 {
     size_t i;
 
-    // check for skipping
-    if ((gamemode == commercial) && (finalecount > 50))
-    {
-        // go on to the next level
-        for (i = 0; i < MAXPLAYERS; i++)
-            if (players[i].cmd.buttons)
-                break;
-
-        if (i < MAXPLAYERS)
-        {
-            if (gamemap == 30)
-                F_StartCast();
-            else
-                gameaction = ga_worlddone;
-        }
-    }
-
     // advance animation
     finalecount++;
 
@@ -166,9 +145,6 @@ void F_Ticker(void)
         F_CastTicker();
         return;
     }
-
-    if (gamemode == commercial)
-        return;
 
     if (finalestage == F_STAGE_TEXT &&
         finalecount > strlen(finaletext) * TEXTSPEED + TEXTWAIT)
@@ -269,18 +245,11 @@ typedef struct
 
 castinfo_t castorder[] = {{CC_ZOMBIE, MT_POSSESSED},
                           {CC_SHOTGUN, MT_SHOTGUY},
-                          {CC_HEAVY, MT_CHAINGUY},
                           {CC_IMP, MT_TROOP},
                           {CC_DEMON, MT_SERGEANT},
                           {CC_LOST, MT_SKULL},
                           {CC_CACO, MT_HEAD},
-                          {CC_HELL, MT_KNIGHT},
                           {CC_BARON, MT_BRUISER},
-                          {CC_ARACH, MT_BABY},
-                          {CC_PAIN, MT_PAIN},
-                          {CC_REVEN, MT_UNDEAD},
-                          {CC_MANCU, MT_FATSO},
-                          {CC_ARCH, MT_VILE},
                           {CC_SPIDER, MT_SPIDER},
                           {CC_CYBER, MT_CYBORG},
                           {CC_HERO, MT_PLAYER},
@@ -544,9 +513,9 @@ void F_CastDrawer(void)
     patch_t *patch;
 
     // erase the entire screen to a background
-    V_DrawPatch(0, 0, W_CacheLumpName(DEH_String("BOSSBACK"), PU_CACHE));
+    V_DrawPatch(0, 0, W_CacheLumpName("BOSSBACK", PU_CACHE));
 
-    F_CastPrint(DEH_String(castorder[castnum].name));
+    F_CastPrint(castorder[castnum].name);
 
     // draw the current frame in the middle of the screen
     sprdef = &sprites[caststate->sprite];
@@ -606,8 +575,8 @@ void F_BunnyScroll(void)
     int stage;
     static int laststage;
 
-    p1 = W_CacheLumpName(DEH_String("PFUB2"), PU_LEVEL);
-    p2 = W_CacheLumpName(DEH_String("PFUB1"), PU_LEVEL);
+    p1 = W_CacheLumpName("PFUB2", PU_LEVEL);
+    p2 = W_CacheLumpName("PFUB1", PU_LEVEL);
 
     V_MarkRect(0, 0, SCREENWIDTH, SCREENHEIGHT);
 
@@ -630,7 +599,7 @@ void F_BunnyScroll(void)
     if (finalecount < 1180)
     {
         V_DrawPatch((SCREENWIDTH - 13 * 8) / 2, (SCREENHEIGHT - 8 * 8) / 2,
-                    W_CacheLumpName(DEH_String("END0"), PU_CACHE));
+                    W_CacheLumpName("END0", PU_CACHE));
         laststage = 0;
         return;
     }
@@ -644,7 +613,7 @@ void F_BunnyScroll(void)
         laststage = stage;
     }
 
-    DEH_snprintf(name, 10, "END%i", stage);
+    M_snprintf(name, 10, "END%i", stage);
     V_DrawPatch((SCREENWIDTH - 13 * 8) / 2, (SCREENHEIGHT - 8 * 8) / 2,
                 W_CacheLumpName(name, PU_CACHE));
 }
@@ -673,8 +642,6 @@ static void F_ArtScreenDrawer(void)
             default:
                 return;
         }
-
-        lumpname = DEH_String(lumpname);
 
         V_DrawPatch(0, 0, W_CacheLumpName(lumpname, PU_CACHE));
     }

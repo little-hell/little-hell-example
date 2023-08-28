@@ -24,7 +24,6 @@
 
 #include "z_zone.h"
 
-#include "deh_main.h"
 #include "i_swap.h"
 #include "m_argv.h"
 #include "m_bbox.h"
@@ -41,6 +40,7 @@
 
 #include "doomstat.h"
 
+#include "m_misc.h"
 
 void	P_SpawnMapThing (mapthing_t*	mthing);
 
@@ -349,7 +349,6 @@ void P_LoadThings (int lump)
     mapthing_t         *mt;
     mapthing_t          spawnthing;
     int			numthings;
-    boolean		spawn;
 
     data = W_CacheLumpNum (lump,PU_STATIC);
     numthings = W_LumpLength (lump) / sizeof(mapthing_t);
@@ -357,31 +356,7 @@ void P_LoadThings (int lump)
     mt = (mapthing_t *)data;
     for (i=0 ; i<numthings ; i++, mt++)
     {
-	spawn = true;
-
-	// Do not spawn cool, new monsters if !commercial
-	if (gamemode != commercial)
-	{
-	    switch (SHORT(mt->type))
-	    {
-	      case 68:	// Arachnotron
-	      case 64:	// Archvile
-	      case 88:	// Boss Brain
-	      case 89:	// Boss Shooter
-	      case 69:	// Hell Knight
-	      case 67:	// Mancubus
-	      case 71:	// Pain Elemental
-	      case 65:	// Former Human Commando
-	      case 66:	// Revenant
-	      case 84:	// Wolf SS
-		spawn = false;
-		break;
-	    }
-	}
-	if (spawn == false)
-	    break;
-
-	// Do spawn all other stuff. 
+	// Spawn all the stuff. 
 	spawnthing.x = SHORT(mt->x);
 	spawnthing.y = SHORT(mt->y);
 	spawnthing.angle = SHORT(mt->angle);
@@ -801,22 +776,11 @@ P_SetupLevel
     // if working with a devlopment map, reload it
     W_Reload ();
 
-    // find map name
-    if ( gamemode == commercial)
-    {
-	if (map<10)
-	    DEH_snprintf(lumpname, 9, "map0%i", map);
-	else
-	    DEH_snprintf(lumpname, 9, "map%i", map);
-    }
-    else
-    {
-	lumpname[0] = 'E';
-	lumpname[1] = '0' + episode;
-	lumpname[2] = 'M';
-	lumpname[3] = '0' + map;
-	lumpname[4] = 0;
-    }
+    lumpname[0] = 'E';
+    lumpname[1] = '0' + episode;
+    lumpname[2] = 'M';
+    lumpname[3] = '0' + map;
+    lumpname[4] = 0;
 
     lumpnum = W_GetNumForName (lumpname);
 	

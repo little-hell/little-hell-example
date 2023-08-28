@@ -1,11 +1,9 @@
 { pkgs ? import <nixpkgs> { } }:
 pkgs.mkShell {
   nativeBuildInputs = with pkgs.buildPackages; [
-    jack2
+    gdb
     meson
     ninja
-    pulseaudio
-    alsa-lib
     libsndfile
     pcre2
     glib

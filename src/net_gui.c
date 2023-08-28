@@ -258,7 +258,7 @@ static void CloseWindow(TXT_UNCAST_ARG(widget), TXT_UNCAST_ARG(window))
 
 static void CheckSHA1Sums(void)
 {
-    boolean correct_wad, correct_deh;
+    boolean correct_wad;
     txt_window_t *window;
     txt_window_action_t *cont_button;
 
@@ -270,11 +270,7 @@ static void CheckSHA1Sums(void)
     correct_wad = memcmp(net_local_wad_sha1sum,
                          net_client_wait_data.wad_sha1sum, 
                          sizeof(sha1_digest_t)) == 0;
-    correct_deh = memcmp(net_local_deh_sha1sum,
-                         net_client_wait_data.deh_sha1sum, 
-                         sizeof(sha1_digest_t)) == 0;
-
-    if (correct_wad && correct_deh)
+    if (correct_wad)
     {
         return;
     }
@@ -284,13 +280,6 @@ static void CheckSHA1Sums(void)
         printf("Warning: WAD SHA1 does not match server:\n");
         PrintSHA1Digest("Local", net_local_wad_sha1sum);
         PrintSHA1Digest("Server", net_client_wait_data.wad_sha1sum);
-    }
-
-    if (!correct_deh)
-    {
-        printf("Warning: Dehacked SHA1 does not match server:\n");
-        PrintSHA1Digest("Local", net_local_deh_sha1sum);
-        PrintSHA1Digest("Server", net_client_wait_data.deh_sha1sum);
     }
 
     window = TXT_NewWindow("WARNING!");
@@ -308,14 +297,6 @@ static void CheckSHA1Sums(void)
             ("Your WAD directory does not match other players in the game.\n"
              "Check that you have loaded the exact same WAD files as other\n"
              "players.\n"));
-    }
-
-    if (!correct_deh)
-    {
-        TXT_AddWidget(window, TXT_NewLabel
-            ("Your dehacked signature does not match other players in the\n"
-             "game.  Check that you have loaded the same dehacked patches\n"
-             "as other players.\n"));
     }
 
     TXT_AddWidget(window, TXT_NewLabel
