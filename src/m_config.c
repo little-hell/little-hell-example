@@ -1864,31 +1864,6 @@ void M_SaveDefaults(void)
 }
 
 //
-// Save defaults to alternate filenames
-//
-
-void M_SaveDefaultsAlternate(const char *main, const char *extra)
-{
-    const char *orig_main;
-    const char *orig_extra;
-
-    // Temporarily change the filenames
-
-    orig_main = doom_defaults.filename;
-    orig_extra = extra_defaults.filename;
-
-    doom_defaults.filename = main;
-    extra_defaults.filename = extra;
-
-    M_SaveDefaults();
-
-    // Restore normal filenames
-
-    doom_defaults.filename = orig_main;
-    extra_defaults.filename = orig_extra;
-}
-
-//
 // M_LoadDefaults
 //
 
@@ -2119,44 +2094,6 @@ void M_SetConfigDir(const char *dir)
     "For more information check here:\n\n"                                     \
     "  "                                                                       \
     "<https://www.chocolate-doom.org/wiki/index.php/Digital_music_packs>\n\n"
-
-// Set the value of music_pack_path if it is currently empty, and create
-// the directory if necessary.
-void M_SetMusicPackDir(void)
-{
-    const char *current_path;
-    char *prefdir, *music_pack_path, *readme_path;
-
-    current_path = M_GetStringVariable("music_pack_path");
-
-    if (current_path != NULL && strlen(current_path) > 0)
-    {
-        return;
-    }
-
-    prefdir = SDL_GetPrefPath("", PACKAGE_TARNAME);
-    if (prefdir == NULL)
-    {
-        printf("M_SetMusicPackDir: SDL_GetPrefPath failed, music pack "
-               "directory not set\n");
-        return;
-    }
-    music_pack_path = M_StringJoin(prefdir, "music-packs", NULL);
-
-    M_MakeDirectory(prefdir);
-    M_MakeDirectory(music_pack_path);
-    M_SetVariable("music_pack_path", music_pack_path);
-
-    // We write a README file with some basic instructions on how to use
-    // the directory.
-    readme_path =
-        M_StringJoin(music_pack_path, DIR_SEPARATOR_S, "README.txt", NULL);
-    M_WriteFile(readme_path, MUSIC_PACK_README, strlen(MUSIC_PACK_README));
-
-    free(readme_path);
-    free(music_pack_path);
-    SDL_free(prefdir);
-}
 
 //
 // Calculate the path to the directory to use to store save games.
