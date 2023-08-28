@@ -55,7 +55,6 @@ game_source_files = files(
     src_dir / 'i_sound.c',
     src_dir / 'i_timer.c',
     src_dir / 'i_video.c',
-    src_dir / 'i_videohr.c',
     src_dir / 'midifile.c',
     src_dir / 'mus2mid.c',
     src_dir / 'm_bbox.c',
