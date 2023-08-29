@@ -46,8 +46,4 @@ void M_AddLooseFiles(void);
 
 boolean M_ParmExists(const char *check);
 
-// Get name of executable used to run this program:
-
-const char *M_GetExecutableName(void);
-
 #endif

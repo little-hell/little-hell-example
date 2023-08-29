@@ -1094,33 +1094,6 @@ static void ST_loadCallback(const char *lumpname, patch_t **variable)
     *variable = W_CacheLumpName(lumpname, PU_STATIC);
 }
 
-void ST_loadGraphics(void)
-{
-    ST_loadUnloadGraphics(ST_loadCallback);
-}
-
-void ST_loadData(void)
-{
-    lu_palette = W_GetNumForName("PLAYPAL");
-    ST_loadGraphics();
-}
-
-static void ST_unloadCallback(const char *lumpname, patch_t **variable)
-{
-    W_ReleaseLumpName(lumpname);
-    *variable = NULL;
-}
-
-void ST_unloadGraphics(void)
-{
-    ST_loadUnloadGraphics(ST_unloadCallback);
-}
-
-void ST_unloadData(void)
-{
-    ST_unloadGraphics();
-}
-
 void ST_initData(void)
 {
 
@@ -1256,7 +1229,9 @@ void ST_Stop(void)
 
 void ST_Init(void)
 {
-    ST_loadData();
+    lu_palette = W_GetNumForName("PLAYPAL");
+    ST_loadUnloadGraphics(ST_loadCallback);
+
     st_backing_screen = (pixel_t *) Z_Malloc(
         ST_WIDTH * ST_HEIGHT * sizeof(*st_backing_screen), PU_STATIC, 0);
 }

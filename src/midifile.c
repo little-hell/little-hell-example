@@ -718,16 +718,6 @@ void MIDI_RestartIterator(midi_track_iter_t *iter)
     iter->loop_point = 0;
 }
 
-void MIDI_SetLoopPoint(midi_track_iter_t *iter)
-{
-    iter->loop_point = iter->position;
-}
-
-void MIDI_RestartAtLoopPoint(midi_track_iter_t *iter)
-{
-    iter->position = iter->loop_point;
-}
-
 #ifdef TEST
 
 static char *MIDI_EventTypeToString(midi_event_type_t event_type)
@@ -760,6 +750,7 @@ static char *MIDI_EventTypeToString(midi_event_type_t event_type)
     }
 }
 
+//TODO: Track changes should be logged when we implement logging 
 void PrintTrack(midi_track_t *track)
 {
     midi_event_t *event;
