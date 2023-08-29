@@ -133,8 +133,11 @@ game_source_files = files(
     src_dir / doom_source_dir / 'sounds.c',
     src_dir / doom_source_dir / 's_sound.c',
     src_dir / doom_source_dir / 'statdump.c',
-    src_dir / doom_source_dir / 'st_lib.c',
-    src_dir / doom_source_dir / 'st_stuff.c',
+
+    # Code for the HUD
+    src_dir / doom_source_dir / 'hud' / 'widget.c',
+    src_dir / doom_source_dir / 'hud' / 'statusbar.c',
+
     src_dir / doom_source_dir / 'wi_stuff.c'
 )
 

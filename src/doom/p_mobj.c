@@ -26,7 +26,7 @@
 #include "p_local.h"
 #include "sounds.h"
 
-#include "st_stuff.h"
+#include "hud/statusbar.h"
 #include "hu_stuff.h"
 
 #include "s_sound.h"

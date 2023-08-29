@@ -1,38 +1,40 @@
-//
-// Copyright(C) 1993-1996 Id Software, Inc.
-// Copyright(C) 2005-2014 Simon Howard
-//
-// This program is free software; you can redistribute it and/or
-// modify it under the terms of the GNU General Public License
-// as published by the Free Software Foundation; either version 2
-// of the License, or (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// DESCRIPTION:
-//	The status bar widget code.
-//
-
+/*
+ * Copyright(C) 1993-1996 Id Software, Inc.
+ * Copyright(C) 2005-2014 Simon Howard
+ * Copyright(C) 2023 Joshua Murphy 
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * as published by the Free Software Foundation; either version 2
+ * of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * DESCRIPTION:
+ * 	Status bar widget code
+ *
+ * This file was previously named "st_lib.c"
+ */
 
 #include <stdio.h>
 #include <ctype.h>
 
-#include "doomdef.h"
+#include "../doomdef.h"
 
-#include "z_zone.h"
-#include "v_video.h"
+#include "../../z_zone.h"
+#include "../../v_video.h"
 
-#include "i_swap.h"
-#include "i_system.h"
+#include "../../i_swap.h"
+#include "../../i_system.h"
 
-#include "w_wad.h"
+#include "../../w_wad.h"
 
-#include "st_stuff.h"
-#include "st_lib.h"
-#include "r_local.h"
+#include "statusbar.h"
+#include "widget.h"
+#include "../r_local.h"
 
 
 //
