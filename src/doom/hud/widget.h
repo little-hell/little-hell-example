@@ -37,26 +37,27 @@ typedef struct
     int y;
 
     // max # of digits in number
-    int width;
+    int num_digits;
 
     // last number value
     int oldnum;
 
     // pointer to current value
-    int *num;
+    int *value;
 
     // pointer to boolean stating
     //  whether to update number
-    boolean *on;
+    boolean *enabled;
 
     // list of patches for 0-9
-    patch_t **p;
+    patch_t **patches;
 
     // user data
     int data;
-    
-    // percent sign graphic (used for drawing numbers with a percent sign)
-    patch_t *percent_sign_graphic;
+
+    // percent sign graphics patch (used for drawing numbers with a percent sign)
+    // or NULL for regular numbers
+    patch_t *percent_sign_patch;
 
 } widget_number_t;
 
@@ -139,36 +140,25 @@ typedef struct
 void STlib_init(void);
 
 
-widget_number_t *STWidget_CreateNumberWidget(int x, int y, patch_t **pl, int *num,
-                                         boolean *on, int width, patch_t *percent_sign_graphic);
+widget_number_t *STWidget_CreateNumberWidget(
+    int x, int y, int num_digits, int *value, boolean *enabled, patch_t **patches, patch_t *percent_sign_patch);
 
 void STWidget_DrawNumberWidget(widget_number_t *widget, boolean refresh);
 
-void STlib_initNum(widget_number_t *n, int x, int y, patch_t **pl, int *num, boolean *on,
-                   int width);
+void STlib_initNum(
+    widget_number_t *n, int x, int y, patch_t **pl, int *num, boolean *on, int width);
 
 void STlib_updateNum(widget_number_t *n, boolean refresh);
 
-
-// Percent widget routines
-void STlib_initPercent(st_percent_t *p, int x, int y, patch_t **pl, int *num, boolean *on,
-                       patch_t *percent);
-
-
-void STlib_updatePercent(st_percent_t *per, int refresh);
-
-
 // Multiple Icon widget routines
-void STlib_initMultIcon(st_multicon_t *mi, int x, int y, patch_t **il, int *inum,
-                        boolean *on);
+void STlib_initMultIcon(st_multicon_t *mi, int x, int y, patch_t **il, int *inum, boolean *on);
 
 
 void STlib_updateMultIcon(st_multicon_t *mi, boolean refresh);
 
 // Binary Icon widget routines
 
-void STlib_initBinIcon(st_binicon_t *b, int x, int y, patch_t *i, boolean *val,
-                       boolean *on);
+void STlib_initBinIcon(st_binicon_t *b, int x, int y, patch_t *i, boolean *val, boolean *on);
 
 void STlib_updateBinIcon(st_binicon_t *bi, boolean refresh);
 

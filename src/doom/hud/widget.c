@@ -61,30 +61,37 @@ void STlib_init(void)
  * @brief Creates a new status bar widget for displaying a number 
  * @param x The x position of the new widget
  * @param y The y position of the new widget
- * @param pl The patch list for number graphics 
+ * @param patches List of graphics patches to be used as the drawing font 
  * @param num The number to be displayed by the widget
  * @param on Whether the widget is enabled (and thus drawn) 
  * @param width The amount of numbers that can be displayed (i.e width=3 for a 3 digit number like health or ammo.)
- * @param percent_sign_graphic The graphics patch for the percent sign symbol. Use `NULL` for creating number widgets without a percent sign.
+ * @param percent_sign_patch The graphics patch for the percent sign. Use `NULL` for creating number widgets without a percent sign.
  * @return The newly-created widget. 
  * 
  * **Note**: The return value must be freed after use. 
  *
  */
-widget_number_t *STWidget_CreateNumberWidget(int x, int y, patch_t **pl, int *num,
-                                         boolean *on, int width, patch_t *percent_sign_graphic)
+widget_number_t *STWidget_CreateNumberWidget(
+    int x, int y, int num_digits, int *value, boolean *enabled, patch_t **patches, patch_t *percent_sign_patch)
 {
-    log_debug("STWidget_CreateNumberWidget(): Creating a number widget at (%d,%d) of width %dpx, enabled %s", x, y, width, btoa(on));
-    widget_number_t *widget = malloc(sizeof(widget_number_t));
+    log_debug(
+        "STWidget_CreateNumberWidget(): Creating a number widget at (%d,%d) of width %dpx, enabled "
+        "%s",
+        x,
+        y,
+        num_digits,
+        btoa(enabled));
 
+    widget_number_t *widget = malloc(sizeof(widget_number_t));
+    
     widget->x = x;
     widget->y = y;
     widget->oldnum = 0;
-    widget->width = width;
-    widget->num = num;
-    widget->on = on;
-    widget->p = pl;
-    widget->percent_sign_graphic = percent_sign_graphic;
+    widget->num_digits = num_digits;
+    widget->value = value;
+    widget->enabled = enabled;
+    widget->patches = patches;
+    widget->percent_sign_patch = percent_sign_patch;
 
     return widget;
 }
@@ -92,16 +99,15 @@ widget_number_t *STWidget_CreateNumberWidget(int x, int y, patch_t **pl, int *nu
 /**
  * \deprecated Use STWidget_CreateNumberWidget()
  */
-void STlib_initNum(widget_number_t *n, int x, int y, patch_t **pl, int *num, boolean *on,
-                   int width)
+void STlib_initNum(widget_number_t *n, int x, int y, patch_t **pl, int *num, boolean *on, int width)
 {
     n->x = x;
     n->y = y;
     n->oldnum = 0;
-    n->width = width;
-    n->num = num;
-    n->on = on;
-    n->p = pl;
+    n->num_digits = width;
+    n->value= num;
+    n->enabled = on;
+    n->patches = pl;
 }
 
 
@@ -111,34 +117,41 @@ void STlib_initNum(widget_number_t *n, int x, int y, patch_t **pl, int *num, boo
  */
 void STWidget_DrawNumberWidget(widget_number_t *widget, boolean refresh)
 {
+    if (!widget)
+    {
+        log_fatal("STWidget_DrawNumberWidget(): Widget is NULL! Can't draw a NULL widget. Are you trying to draw a widget that doesn't exist?");
+        System_Exit();
+    }
+
     // Don't draw widgets that have been turned off
-    if (!*widget->on)
+    if (!*widget->enabled)
     {
-        return; 
+        log_debug("STWidget_DrawNumberWidget(): Widget %x not enabled, so not drawing", widget);
+        return;
     }
-        
-    // Draw the percentage sign if we've been given a graphic patch for it 
-    if (refresh && widget->percent_sign_graphic != NULL)
+
+    // Draw the percentage sign if we've been given a graphic patch for it
+    if (refresh && widget->percent_sign_patch != NULL)
     {
-        V_DrawPatch(widget->x, widget->y, widget->percent_sign_graphic);
+        V_DrawPatch(widget->x, widget->y, widget->percent_sign_patch);
     }
-        
+
     // A fairly efficient way to draw a number
     //  based on differences from the old number.
     // Note: worth the trouble?
     //
     // TODO: refactor this heavily
 
-    int numdigits = widget->width;
-    int num = *widget->num;
+    int numdigits = widget->num_digits;
+    int num = *widget->value;
 
-    int w = SHORT(widget->p[0]->width);
-    int h = SHORT(widget->p[0]->height);
+    int w = SHORT(widget->patches[0]->width);
+    int h = SHORT(widget->patches[0]->height);
     int x = widget->x;
 
     int neg;
 
-    widget->oldnum = *widget->num;
+    widget->oldnum = *widget->value;
 
     neg = num < 0;
 
@@ -177,14 +190,14 @@ void STWidget_DrawNumberWidget(widget_number_t *widget, boolean refresh)
     // in the special case of 0, you draw 0
     if (!num)
     {
-        V_DrawPatch(x - w, widget->y, widget->p[0]);
+        V_DrawPatch(x - w, widget->y, widget->patches[0]);
     }
 
     // draw the new number
     while (num && numdigits--)
     {
         x -= w;
-        V_DrawPatch(x, widget->y, widget->p[num % 10]);
+        V_DrawPatch(x, widget->y, widget->patches[num % 10]);
         num /= 10;
     }
 
@@ -206,16 +219,16 @@ void STWidget_DrawNumberWidget(widget_number_t *widget, boolean refresh)
 void STlib_drawNum(widget_number_t *n, boolean refresh)
 {
 
-    int numdigits = n->width;
-    int num = *n->num;
+    int numdigits = n->num_digits;
+    int num = *n->value;
 
-    int w = SHORT(n->p[0]->width);
-    int h = SHORT(n->p[0]->height);
+    int w = SHORT(n->patches[0]->width);
+    int h = SHORT(n->patches[0]->height);
     int x = n->x;
 
     int neg;
 
-    n->oldnum = *n->num;
+    n->oldnum = *n->value;
 
     neg = num < 0;
 
@@ -254,14 +267,14 @@ void STlib_drawNum(widget_number_t *n, boolean refresh)
     // in the special case of 0, you draw 0
     if (!num)
     {
-        V_DrawPatch(x - w, n->y, n->p[0]);
+        V_DrawPatch(x - w, n->y, n->patches[0]);
     }
 
     // draw the new number
     while (num && numdigits--)
     {
         x -= w;
-        V_DrawPatch(x, n->y, n->p[num % 10]);
+        V_DrawPatch(x, n->y, n->patches[num % 10]);
         num /= 10;
     }
 
@@ -277,39 +290,14 @@ void STlib_drawNum(widget_number_t *n, boolean refresh)
  */
 void STlib_updateNum(widget_number_t *n, boolean refresh)
 {
-    if (*n->on)
+    if (*n->enabled)
     {
         STlib_drawNum(n, refresh);
     }
 }
 
-/**
-  * \deprecated Use STWidget_CreateNumberWidget()
-  */
-void STlib_initPercent(st_percent_t *p, int x, int y, patch_t **pl, int *num, boolean *on,
-                       patch_t *percent)
-{
-    STlib_initNum(&p->n, x, y, pl, num, on, 3);
-    p->p = percent;
-}
-
-/**
-  * \deprecated Use STWidget_CreateNumberWidget()
-  */
-void STlib_updatePercent(st_percent_t *per, int refresh)
-{
-    if (refresh && *per->n.on)
-    {
-        V_DrawPatch(per->n.x, per->n.y, per->p);
-    }
-
-    STlib_updateNum(&per->n, refresh);
-}
-
-
 // TODO: To be replaced by a new function called STWidget_CreateMultiIconWidget()
-void STlib_initMultIcon(st_multicon_t *i, int x, int y, patch_t **il, int *inum,
-                        boolean *on)
+void STlib_initMultIcon(st_multicon_t *i, int x, int y, patch_t **il, int *inum, boolean *on)
 {
     i->x = x;
     i->y = y;
@@ -349,8 +337,7 @@ void STlib_updateMultIcon(st_multicon_t *mi, boolean refresh)
 }
 
 // TODO: To be replaced by a new function called STWidget_CreateBinaryIconWidget()
-void STlib_initBinIcon(st_binicon_t *b, int x, int y, patch_t *i, boolean *val,
-                       boolean *on)
+void STlib_initBinIcon(st_binicon_t *b, int x, int y, patch_t *i, boolean *val, boolean *on)
 {
     b->x = x;
     b->y = y;

@@ -18,6 +18,7 @@ common_source_files = files(
     src_dir / 'm_argv.c',
     src_dir / 'm_misc.c',
     src_dir / 'z_native.c',
+    src_dir / 'log.c',
   )
 
 # Source files only used by the server binary 
@@ -203,7 +204,6 @@ opl_source_files = files(
 
 textscreen = library('textscreen', textscreen_source_files, include_directories: include_directories(src_dir), dependencies: deps)
 opl = library('opl', opl_source_files, dependencies: deps)
-log = library('log', src_dir / 'log.c', include_directories: include_directories(src_dir), dependencies: deps)
 
 # Build the game binary
 executable('mindoom', 
@@ -213,8 +213,7 @@ executable('mindoom',
     ],
     link_with: [
         textscreen, 
-        opl,
-        log
+        opl
     ], 
     include_directories: [
         include_directories('src'),

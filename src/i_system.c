@@ -25,6 +25,8 @@
 
 #include "SDL.h"
 
+#include "log.h"
+
 #include "config.h"
 
 #include "doomtype.h"
@@ -147,6 +149,40 @@ void I_Quit (void)
 //
 
 static boolean already_quitting = false;
+
+void System_Exit()
+{
+    atexit_listentry_t *entry;
+    boolean exit_gui_popup;
+
+    if (already_quitting)
+    {
+        log_error("Warning: recursive call to I_Error detected.\n");
+        exit(-1);
+    }
+    else
+    {
+        already_quitting = true;
+    }
+
+    // Shutdown. Here might be other errors.
+
+    entry = exit_funcs;
+
+    while (entry != NULL)
+    {
+        if (entry->run_on_error)
+        {
+            entry->func();
+        }
+
+        entry = entry->next;
+    }
+
+    SDL_Quit();
+
+    exit(-1);
+}
 
 void I_Error (const char *error, ...)
 {

@@ -132,16 +132,6 @@
 //       into a buffer,
 //       or into the frame buffer?
 
-// AMMO number pos.
-#define ST_AMMOWIDTH 3
-#define ST_AMMOX     44
-#define ST_AMMOY     171
-
-// HEALTH number pos.
-#define ST_HEALTHWIDTH 3
-#define ST_HEALTHX     90
-#define ST_HEALTHY     171
-
 // Weapon pos.
 #define ST_ARMSX      111
 #define ST_ARMSY      172
@@ -154,11 +144,6 @@
 #define ST_FRAGSX     138
 #define ST_FRAGSY     171
 #define ST_FRAGSWIDTH 2
-
-// ARMOR number pos.
-#define ST_ARMORWIDTH 3
-#define ST_ARMORX     221
-#define ST_ARMORY     171
 
 // Key icon positions.
 #define ST_KEY0WIDTH  8
@@ -361,7 +346,7 @@ static st_multicon_t w_faces;
 static st_multicon_t w_keyboxes[3];
 
 // armor widget
-static st_percent_t w_armor;
+static widget_number_t *widget_armor;
 
 // ammo widgets
 static widget_number_t w_ammo[4];
@@ -398,8 +383,12 @@ cheatseq_t cheat_ammonokey = CHEAT("idfa", 0);
 cheatseq_t cheat_noclip = CHEAT("idspispopd", 0);
 
 cheatseq_t cheat_powerup[7] = {
-    CHEAT("idbeholdv", 0), CHEAT("idbeholds", 0), CHEAT("idbeholdi", 0),
-    CHEAT("idbeholdr", 0), CHEAT("idbeholda", 0), CHEAT("idbeholdl", 0),
+    CHEAT("idbeholdv", 0),
+    CHEAT("idbeholds", 0),
+    CHEAT("idbeholdi", 0),
+    CHEAT("idbeholdr", 0),
+    CHEAT("idbeholda", 0),
+    CHEAT("idbeholdl", 0),
     CHEAT("idbehold", 0),
 };
 
@@ -601,9 +590,13 @@ boolean ST_Responder(event_t *ev)
             else if (cht_CheckCheat(&cheat_mypos, ev->data2))
             {
                 static char buf[ST_MSGWIDTH];
-                M_snprintf(buf, sizeof(buf), "ang=0x%x;x,y=(0x%x,0x%x)",
-                           players[consoleplayer].mo->angle, players[consoleplayer].mo->x,
-                           players[consoleplayer].mo->y);
+                M_snprintf(
+                    buf,
+                    sizeof(buf),
+                    "ang=0x%x;x,y=(0x%x,0x%x)",
+                    players[consoleplayer].mo->angle,
+                    players[consoleplayer].mo->x,
+                    players[consoleplayer].mo->y);
                 plyr->message = buf;
             }
         }
@@ -729,8 +722,8 @@ void ST_updateFaceWidget(void)
             }
             else
             {
-                badguyangle = R_PointToAngle2(plyr->mo->x, plyr->mo->y, plyr->attacker->x,
-                                              plyr->attacker->y);
+                badguyangle =
+                    R_PointToAngle2(plyr->mo->x, plyr->mo->y, plyr->attacker->x, plyr->attacker->y);
 
                 if (badguyangle > plyr->mo->angle)
                 {
@@ -837,21 +830,20 @@ void ST_updateFaceWidget(void)
 void ST_updateWidgets(void)
 {
     static int largeammo = 1994; // means "n/a"
-    int i;
 
     // must redirect the pointer if the ready weapon has changed.
     if (weaponinfo[plyr->readyweapon].ammo == am_noammo)
     {
-        widget_current_ammo_count->num = &largeammo;
+        widget_current_ammo_count->value = &largeammo;
     }
     else
     {
-        widget_current_ammo_count->num = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
+        widget_current_ammo_count->value = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
     }
     widget_current_ammo_count->data = plyr->readyweapon;
 
     // update keycard multiple widgets
-    for (i = 0; i < 3; i++)
+    for (int i = 0; i < 3; i++)
     {
         keyboxes[i] = plyr->cards[i] ? i : -1;
 
@@ -874,7 +866,7 @@ void ST_updateWidgets(void)
     st_fragson = deathmatch && st_statusbaron;
     st_fragscount = 0;
 
-    for (i = 0; i < MAXPLAYERS; i++)
+    for (int i = 0; i < MAXPLAYERS; i++)
     {
         if (i != consoleplayer)
         {
@@ -987,9 +979,9 @@ void ST_drawWidgets(boolean refresh)
         STlib_updateNum(&w_ammo[i], refresh);
         STlib_updateNum(&w_maxammo[i], refresh);
     }
-    
+
     STWidget_DrawNumberWidget(widget_health, refresh);
-    STlib_updatePercent(&w_armor, refresh);
+    STWidget_DrawNumberWidget(widget_armor, refresh);
 
     STlib_updateBinIcon(&w_armsbg, refresh);
 
@@ -1194,10 +1186,14 @@ void StatusBar_CreateCurrentAmmoCountWidget()
 {
     log_trace("StatusBar_CreateCurrentAmmoCountWidget(): Creating ammo counter");
 
-    // ready weapon ammo
+    const int x = 44;
+    const int y = 171;
+    const int num_digits = 3;
+        
+    int *value = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
+    
     widget_current_ammo_count = STWidget_CreateNumberWidget(
-        ST_AMMOX, ST_AMMOY, tallnum, &plyr->ammo[weaponinfo[plyr->readyweapon].ammo],
-        &st_statusbaron, ST_AMMOWIDTH, NULL);
+        x, y, num_digits, value, &st_statusbaron, tallnum, NULL);
 
     // the last weapon type
     widget_current_ammo_count->data = plyr->readyweapon;
@@ -1209,8 +1205,28 @@ void StatusBar_CreateCurrentAmmoCountWidget()
 void StatusBar_CreateHealthWidget()
 {
     log_trace("StatusBar_CreateHealthWidget(): Creating health percentage");
-    widget_health = STWidget_CreateNumberWidget(ST_HEALTHX, ST_HEALTHY, tallnum, &plyr->health,
-                      &st_statusbaron, 3, tallpercent);
+
+    const int num_digits = 3;
+    const int x = 90;
+    const int y = 171;
+
+    widget_health = STWidget_CreateNumberWidget(
+        x, y, num_digits, &plyr->health, &st_statusbaron, tallnum, tallpercent);
+}
+/**
+ * Create the statusbar widget for displaying armor
+ * Original comment: "should be colored later"
+ */
+void StatusBar_CreateArmorWidget()
+{
+    log_trace("StatusBar_CreateArmorWidget(): Creating armor percentage");
+
+    const int num_digits = 3;
+    const int x = 221;
+    const int y = 171;
+
+    widget_armor = STWidget_CreateNumberWidget(
+        x, y, num_digits, &plyr->armorpoints, &st_statusbaron, tallnum, tallpercent);
 }
 
 void ST_createWidgets(void)
@@ -1218,67 +1234,88 @@ void ST_createWidgets(void)
 
     StatusBar_CreateCurrentAmmoCountWidget();
     StatusBar_CreateHealthWidget();
+    StatusBar_CreateWidget();
 
 
     // arms background
-    STlib_initBinIcon(&w_armsbg, ST_ARMSBGX, ST_ARMSBGY, armsbg, &st_notdeathmatch,
-                      &st_statusbaron);
+    STlib_initBinIcon(
+        &w_armsbg, ST_ARMSBGX, ST_ARMSBGY, armsbg, &st_notdeathmatch, &st_statusbaron);
 
     // weapons owned
     for (int i = 0; i < 6; i++)
     {
-        STlib_initMultIcon(&w_arms[i], ST_ARMSX + (i % 3) * ST_ARMSXSPACE,
-                           ST_ARMSY + (i / 3) * ST_ARMSYSPACE, arms[i],
-                           &plyr->weaponowned[i + 1], &st_armson);
+        STlib_initMultIcon(
+            &w_arms[i],
+            ST_ARMSX + (i % 3) * ST_ARMSXSPACE,
+            ST_ARMSY + (i / 3) * ST_ARMSYSPACE,
+            arms[i],
+            &plyr->weaponowned[i + 1],
+            &st_armson);
     }
 
     // frags sum
-    STlib_initNum(&w_frags, ST_FRAGSX, ST_FRAGSY, tallnum, &st_fragscount, &st_fragson,
-                  ST_FRAGSWIDTH);
+    STlib_initNum(
+        &w_frags, ST_FRAGSX, ST_FRAGSY, tallnum, &st_fragscount, &st_fragson, ST_FRAGSWIDTH);
 
     // faces
-    STlib_initMultIcon(&w_faces, ST_FACESX, ST_FACESY, faces, &st_faceindex,
-                       &st_statusbaron);
-
-    // armor percentage - should be colored later
-    STlib_initPercent(&w_armor, ST_ARMORX, ST_ARMORY, tallnum, &plyr->armorpoints,
-                      &st_statusbaron, tallpercent);
+    STlib_initMultIcon(&w_faces, ST_FACESX, ST_FACESY, faces, &st_faceindex, &st_statusbaron);
 
     // keyboxes 0-2
-    STlib_initMultIcon(&w_keyboxes[0], ST_KEY0X, ST_KEY0Y, keys, &keyboxes[0],
-                       &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes[0], ST_KEY0X, ST_KEY0Y, keys, &keyboxes[0], &st_statusbaron);
 
-    STlib_initMultIcon(&w_keyboxes[1], ST_KEY1X, ST_KEY1Y, keys, &keyboxes[1],
-                       &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes[1], ST_KEY1X, ST_KEY1Y, keys, &keyboxes[1], &st_statusbaron);
 
-    STlib_initMultIcon(&w_keyboxes[2], ST_KEY2X, ST_KEY2Y, keys, &keyboxes[2],
-                       &st_statusbaron);
+    STlib_initMultIcon(&w_keyboxes[2], ST_KEY2X, ST_KEY2Y, keys, &keyboxes[2], &st_statusbaron);
 
     // ammo count (all four kinds)
-    STlib_initNum(&w_ammo[0], ST_AMMO0X, ST_AMMO0Y, shortnum, &plyr->ammo[0],
-                  &st_statusbaron, ST_AMMO0WIDTH);
+    STlib_initNum(
+        &w_ammo[0], ST_AMMO0X, ST_AMMO0Y, shortnum, &plyr->ammo[0], &st_statusbaron, ST_AMMO0WIDTH);
 
-    STlib_initNum(&w_ammo[1], ST_AMMO1X, ST_AMMO1Y, shortnum, &plyr->ammo[1],
-                  &st_statusbaron, ST_AMMO1WIDTH);
+    STlib_initNum(
+        &w_ammo[1], ST_AMMO1X, ST_AMMO1Y, shortnum, &plyr->ammo[1], &st_statusbaron, ST_AMMO1WIDTH);
 
-    STlib_initNum(&w_ammo[2], ST_AMMO2X, ST_AMMO2Y, shortnum, &plyr->ammo[2],
-                  &st_statusbaron, ST_AMMO2WIDTH);
+    STlib_initNum(
+        &w_ammo[2], ST_AMMO2X, ST_AMMO2Y, shortnum, &plyr->ammo[2], &st_statusbaron, ST_AMMO2WIDTH);
 
-    STlib_initNum(&w_ammo[3], ST_AMMO3X, ST_AMMO3Y, shortnum, &plyr->ammo[3],
-                  &st_statusbaron, ST_AMMO3WIDTH);
+    STlib_initNum(
+        &w_ammo[3], ST_AMMO3X, ST_AMMO3Y, shortnum, &plyr->ammo[3], &st_statusbaron, ST_AMMO3WIDTH);
 
     // max ammo count (all four kinds)
-    STlib_initNum(&w_maxammo[0], ST_MAXAMMO0X, ST_MAXAMMO0Y, shortnum, &plyr->maxammo[0],
-                  &st_statusbaron, ST_MAXAMMO0WIDTH);
+    STlib_initNum(
+        &w_maxammo[0],
+        ST_MAXAMMO0X,
+        ST_MAXAMMO0Y,
+        shortnum,
+        &plyr->maxammo[0],
+        &st_statusbaron,
+        ST_MAXAMMO0WIDTH);
 
-    STlib_initNum(&w_maxammo[1], ST_MAXAMMO1X, ST_MAXAMMO1Y, shortnum, &plyr->maxammo[1],
-                  &st_statusbaron, ST_MAXAMMO1WIDTH);
+    STlib_initNum(
+        &w_maxammo[1],
+        ST_MAXAMMO1X,
+        ST_MAXAMMO1Y,
+        shortnum,
+        &plyr->maxammo[1],
+        &st_statusbaron,
+        ST_MAXAMMO1WIDTH);
 
-    STlib_initNum(&w_maxammo[2], ST_MAXAMMO2X, ST_MAXAMMO2Y, shortnum, &plyr->maxammo[2],
-                  &st_statusbaron, ST_MAXAMMO2WIDTH);
+    STlib_initNum(
+        &w_maxammo[2],
+        ST_MAXAMMO2X,
+        ST_MAXAMMO2Y,
+        shortnum,
+        &plyr->maxammo[2],
+        &st_statusbaron,
+        ST_MAXAMMO2WIDTH);
 
-    STlib_initNum(&w_maxammo[3], ST_MAXAMMO3X, ST_MAXAMMO3Y, shortnum, &plyr->maxammo[3],
-                  &st_statusbaron, ST_MAXAMMO3WIDTH);
+    STlib_initNum(
+        &w_maxammo[3],
+        ST_MAXAMMO3X,
+        ST_MAXAMMO3Y,
+        shortnum,
+        &plyr->maxammo[3],
+        &st_statusbaron,
+        ST_MAXAMMO3WIDTH);
 }
 
 static boolean st_stopped = true;
@@ -1315,6 +1352,6 @@ void ST_Init(void)
     lu_palette = W_GetNumForName("PLAYPAL");
     ST_loadUnloadGraphics(ST_loadCallback);
 
-    st_backing_screen = (pixel_t *) Z_Malloc(
-        ST_WIDTH * ST_HEIGHT * sizeof(*st_backing_screen), PU_STATIC, 0);
+    st_backing_screen =
+        (pixel_t *) Z_Malloc(ST_WIDTH * ST_HEIGHT * sizeof(*st_backing_screen), PU_STATIC, 0);
 }
