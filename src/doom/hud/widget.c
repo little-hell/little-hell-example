@@ -24,6 +24,8 @@
 
 #include "../doomdef.h"
 
+#include "../../log.h"
+
 #include "../../z_zone.h"
 #include "../../v_video.h"
 
@@ -46,14 +48,49 @@ patch_t *sttminus;
 void STlib_init(void)
 {
     if (W_CheckNumForName("STTMINUS") >= 0)
+    {
         sttminus = (patch_t *) W_CacheLumpName("STTMINUS", PU_STATIC);
+    }
     else
+    {
         sttminus = NULL;
+    }
 }
 
+/**
+ * @brief Creates a new status bar widget for displaying a number 
+ * @param x The x position of the new widget
+ * @param y The y position of the new widget
+ * @param pl  
+ * @param num The number to be displayed by the widget
+ * @param on Whether the widget is enabled (and thus drawn) 
+ * @param width The width of the widget in pixels 
+ * @return The newly-created widget. 
+ * 
+ * **Note**: The return value must be freed after use. 
+ *
+ */
+st_number_widget_t *STWidget_CreateNumberWidget(int x, int y, patch_t **pl, int *num,
+                                         boolean *on, int width)
+{
+    log_debug("Creating a status bar number widget at (%d,%d) of width %dpx, enabled=%s", x, y, width, btoa(on));
+    st_number_widget_t *widget = malloc(sizeof(st_number_widget_t));
 
-// ?
-void STlib_initNum(st_number_t *n, int x, int y, patch_t **pl, int *num, boolean *on,
+    widget->x = x;
+    widget->y = y;
+    widget->oldnum = 0;
+    widget->width = width;
+    widget->num = num;
+    widget->on = on;
+    widget->p = pl;
+
+    return widget;
+}
+
+/**
+ * \deprecated Use STWidget_CreateNumberWidget()
+ */
+void STlib_initNum(st_number_widget_t *n, int x, int y, patch_t **pl, int *num, boolean *on,
                    int width)
 {
     n->x = x;
@@ -66,12 +103,99 @@ void STlib_initNum(st_number_t *n, int x, int y, patch_t **pl, int *num, boolean
 }
 
 
+/**
+ * @brief Draws a number widget to the status bar. 
+ *
+ */
+void STWidget_DrawNumberWidget(st_number_widget_t *widget, boolean refresh)
+{
+    // Don't draw widgets that have been turned off
+    if (!*widget->on)
+    {
+        return; 
+    }
+
+    // A fairly efficient way to draw a number
+    //  based on differences from the old number.
+    // Note: worth the trouble?
+    //
+    // TODO: refactor this heavily
+
+    int numdigits = widget->width;
+    int num = *widget->num;
+
+    int w = SHORT(widget->p[0]->width);
+    int h = SHORT(widget->p[0]->height);
+    int x = widget->x;
+
+    int neg;
+
+    widget->oldnum = *widget->num;
+
+    neg = num < 0;
+
+    if (neg)
+    {
+        if (numdigits == 2 && num < -9)
+        {
+            num = -9;
+        }
+        else if (numdigits == 3 && num < -99)
+        {
+            num = -99;
+        }
+
+        num = -num;
+    }
+
+    // clear the area
+    x = widget->x - numdigits * w;
+
+    if (widget->y - ST_Y < 0)
+    {
+        I_Error("drawNum: widget->y - ST_Y < 0");
+    }
+
+    V_CopyRect(x, widget->y - ST_Y, st_backing_screen, w * numdigits, h, x, widget->y);
+
+    // if non-number, do not draw it
+    if (num == 1994)
+    {
+        return;
+    }
+
+    x = widget->x;
+
+    // in the special case of 0, you draw 0
+    if (!num)
+    {
+        V_DrawPatch(x - w, widget->y, widget->p[0]);
+    }
+
+    // draw the new number
+    while (num && numdigits--)
+    {
+        x -= w;
+        V_DrawPatch(x, widget->y, widget->p[num % 10]);
+        num /= 10;
+    }
+
+    // draw a minus sign if necessary
+    if (neg && sttminus)
+    {
+        V_DrawPatch(x - 8, widget->y, sttminus);
+    }
+}
+
 //
 // A fairly efficient way to draw a number
 //  based on differences from the old number.
 // Note: worth the trouble?
 //
-void STlib_drawNum(st_number_t *n, boolean refresh)
+/**
+ * \deprecated Use STWidget_DrawNumberWidget()
+ */
+void STlib_drawNum(st_number_widget_t *n, boolean refresh)
 {
 
     int numdigits = n->width;
@@ -90,9 +214,13 @@ void STlib_drawNum(st_number_t *n, boolean refresh)
     if (neg)
     {
         if (numdigits == 2 && num < -9)
+        {
             num = -9;
+        }
         else if (numdigits == 3 && num < -99)
+        {
             num = -99;
+        }
 
         num = -num;
     }
@@ -101,19 +229,25 @@ void STlib_drawNum(st_number_t *n, boolean refresh)
     x = n->x - numdigits * w;
 
     if (n->y - ST_Y < 0)
+    {
         I_Error("drawNum: n->y - ST_Y < 0");
+    }
 
     V_CopyRect(x, n->y - ST_Y, st_backing_screen, w * numdigits, h, x, n->y);
 
     // if non-number, do not draw it
     if (num == 1994)
+    {
         return;
+    }
 
     x = n->x;
 
     // in the special case of 0, you draw 0
     if (!num)
+    {
         V_DrawPatch(x - w, n->y, n->p[0]);
+    }
 
     // draw the new number
     while (num && numdigits--)
@@ -125,19 +259,24 @@ void STlib_drawNum(st_number_t *n, boolean refresh)
 
     // draw a minus sign if necessary
     if (neg && sttminus)
+    {
         V_DrawPatch(x - 8, n->y, sttminus);
+    }
 }
 
-
-//
-void STlib_updateNum(st_number_t *n, boolean refresh)
+/**
+ * \deprecated Use STWidget_DrawNumberWidget()
+ */
+void STlib_updateNum(st_number_widget_t *n, boolean refresh)
 {
     if (*n->on)
+    {
         STlib_drawNum(n, refresh);
+    }
 }
 
 
-//
+// TODO: Replace with a new function called STWidget_CreatePercentageWidget()
 void STlib_initPercent(st_percent_t *p, int x, int y, patch_t **pl, int *num, boolean *on,
                        patch_t *percent)
 {
@@ -145,16 +284,19 @@ void STlib_initPercent(st_percent_t *p, int x, int y, patch_t **pl, int *num, bo
     p->p = percent;
 }
 
-
+// TODO: Replace with a new function called STWidget_UpdatePercentageWidget()
 void STlib_updatePercent(st_percent_t *per, int refresh)
 {
     if (refresh && *per->n.on)
+    {
         V_DrawPatch(per->n.x, per->n.y, per->p);
+    }
 
     STlib_updateNum(&per->n, refresh);
 }
 
 
+// TODO: To be replaced by a new function called STWidget_CreateMultiIconWidget()
 void STlib_initMultIcon(st_multicon_t *i, int x, int y, patch_t **il, int *inum,
                         boolean *on)
 {
@@ -167,6 +309,7 @@ void STlib_initMultIcon(st_multicon_t *i, int x, int y, patch_t **il, int *inum,
 }
 
 
+// TODO: To be replaced by a new function called STWidget_UpdateMultiIconWidget()
 void STlib_updateMultIcon(st_multicon_t *mi, boolean refresh)
 {
     int w;
@@ -184,8 +327,9 @@ void STlib_updateMultIcon(st_multicon_t *mi, boolean refresh)
             h = SHORT(mi->p[mi->oldinum]->height);
 
             if (y - ST_Y < 0)
+            {
                 I_Error("updateMultIcon: y - ST_Y < 0");
-
+            }
             V_CopyRect(x, y - ST_Y, st_backing_screen, w, h, x, y);
         }
         V_DrawPatch(mi->x, mi->y, mi->p[*mi->inum]);
@@ -193,7 +337,7 @@ void STlib_updateMultIcon(st_multicon_t *mi, boolean refresh)
     }
 }
 
-
+// TODO: To be replaced by a new function called STWidget_CreateBinaryIconWidget()
 void STlib_initBinIcon(st_binicon_t *b, int x, int y, patch_t *i, boolean *val,
                        boolean *on)
 {
@@ -205,7 +349,7 @@ void STlib_initBinIcon(st_binicon_t *b, int x, int y, patch_t *i, boolean *val,
     b->p = i;
 }
 
-
+// TODO: To be replaced by a new function called STWidget_UpdateBinaryIconWidget()
 void STlib_updateBinIcon(st_binicon_t *bi, boolean refresh)
 {
     int x;
@@ -221,13 +365,17 @@ void STlib_updateBinIcon(st_binicon_t *bi, boolean refresh)
         h = SHORT(bi->p->height);
 
         if (y - ST_Y < 0)
+        {
             I_Error("updateBinIcon: y - ST_Y < 0");
-
+        }
         if (*bi->val)
+        {
             V_DrawPatch(bi->x, bi->y, bi->p);
+        }
         else
+        {
             V_CopyRect(x, y - ST_Y, st_backing_screen, w, h, x, y);
-
+        }
         bi->oldval = *bi->val;
     }
 }

@@ -333,11 +333,15 @@ static patch_t *armsbg;
 // weapon ownership patches
 static patch_t *arms[6][2];
 
-// ready-weapon widget
-static st_number_t w_ready;
+/* This widget is the large ammo counter 
+ * on the bottom left of the screen that
+ * displays the ammo count of the currently
+ * selected weapons.
+ */
+static st_number_widget_t *widget_current_ammo;
 
 // in deathmatch only, summary of frags stats
-static st_number_t w_frags;
+static st_number_widget_t w_frags;
 
 // health widget
 static st_percent_t w_health;
@@ -359,10 +363,10 @@ static st_multicon_t w_keyboxes[3];
 static st_percent_t w_armor;
 
 // ammo widgets
-static st_number_t w_ammo[4];
+static st_number_widget_t w_ammo[4];
 
 // max ammo widgets
-static st_number_t w_maxammo[4];
+static st_number_widget_t w_maxammo[4];
 
 
 // number of frags so far in deathmatch
@@ -419,10 +423,14 @@ void ST_refreshBackground(void)
 
         // draw right side of bar if needed (Doom 1.0)
         if (sbarr)
+        {
             V_DrawPatch(ST_ARMSBGX, 0, sbarr);
+        }
 
         if (netgame)
+        {
             V_DrawPatch(ST_FX, 0, faceback);
+        }
 
         V_RestoreBuffer();
 
@@ -466,13 +474,16 @@ boolean ST_Responder(event_t *ev)
                 if (plyr->cheats & CF_GODMODE)
                 {
                     if (plyr->mo)
+                    {
                         plyr->mo->health = GOD_MODE_HEALTH;
-
+                    }
                     plyr->health = GOD_MODE_HEALTH;
                     plyr->message = STSTR_DQDON;
                 }
                 else
+                {
                     plyr->message = STSTR_DQDOFF;
+                }
             }
             // 'fa' cheat for killer fucking arsenal
             else if (cht_CheckCheat(&cheat_ammonokey, ev->data2))
@@ -481,10 +492,14 @@ boolean ST_Responder(event_t *ev)
                 plyr->armortype = IDFA_ARMOR_CLASS;
 
                 for (i = 0; i < NUMWEAPONS; i++)
+                {
                     plyr->weaponowned[i] = true;
+                }
 
                 for (i = 0; i < NUMAMMO; i++)
+                {
                     plyr->ammo[i] = plyr->maxammo[i];
+                }
 
                 plyr->message = STSTR_FAADDED;
             }
@@ -495,13 +510,19 @@ boolean ST_Responder(event_t *ev)
                 plyr->armortype = IDKFA_ARMOR_CLASS;
 
                 for (i = 0; i < NUMWEAPONS; i++)
+                {
                     plyr->weaponowned[i] = true;
+                }
 
                 for (i = 0; i < NUMAMMO; i++)
+                {
                     plyr->ammo[i] = plyr->maxammo[i];
+                }
 
                 for (i = 0; i < NUMCARDS; i++)
+                {
                     plyr->cards[i] = true;
+                }
 
                 plyr->message = STSTR_KFAADDED;
             }
@@ -518,9 +539,13 @@ boolean ST_Responder(event_t *ev)
                 musnum = mus_e1m1 + (buf[0] - '1') * 9 + (buf[1] - '1');
 
                 if (((buf[0] - '1') * 9 + buf[1] - '1') > 31)
+                {
                     plyr->message = STSTR_NOMUS;
+                }
                 else
+                {
                     S_ChangeMusic(musnum, 1);
+                }
             }
             else if (cht_CheckCheat(&cheat_noclip, ev->data2))
             {
@@ -529,9 +554,13 @@ boolean ST_Responder(event_t *ev)
                 plyr->cheats ^= CF_NOCLIP;
 
                 if (plyr->cheats & CF_NOCLIP)
+                {
                     plyr->message = STSTR_NCON;
+                }
                 else
+                {
                     plyr->message = STSTR_NCOFF;
+                }
             }
             // 'behold?' power-up cheats
             for (i = 0; i < 6; i++)
@@ -539,11 +568,17 @@ boolean ST_Responder(event_t *ev)
                 if (cht_CheckCheat(&cheat_powerup[i], ev->data2))
                 {
                     if (!plyr->powers[i])
+                    {
                         P_GivePower(plyr, i);
+                    }
                     else if (i != pw_strength)
+                    {
                         plyr->powers[i] = 1;
+                    }
                     else
+                    {
                         plyr->powers[i] = 0;
+                    }
 
                     plyr->message = STSTR_BEHOLDX;
                 }
@@ -758,7 +793,9 @@ void ST_updateFaceWidget(void)
         if (plyr->attackdown)
         {
             if (lastattackdown == -1)
+            {
                 lastattackdown = ST_RAMPAGEDELAY;
+            }
             else if (!--lastattackdown)
             {
                 priority = 5;
@@ -768,7 +805,9 @@ void ST_updateFaceWidget(void)
             }
         }
         else
+        {
             lastattackdown = -1;
+        }
     }
 
     if (priority < 5)
@@ -800,27 +839,15 @@ void ST_updateWidgets(void)
     int i;
 
     // must redirect the pointer if the ready weapon has changed.
-    //  if (w_ready.data != plyr->readyweapon)
-    //  {
     if (weaponinfo[plyr->readyweapon].ammo == am_noammo)
-        w_ready.num = &largeammo;
+    {
+        widget_current_ammo->num = &largeammo;
+    }
     else
-        w_ready.num = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
-    //{
-    // static int tic=0;
-    // static int dir=-1;
-    // if (!(tic&15))
-    //   plyr->ammo[weaponinfo[plyr->readyweapon].ammo]+=dir;
-    // if (plyr->ammo[weaponinfo[plyr->readyweapon].ammo] == -100)
-    //   dir = 1;
-    // tic++;
-    // }
-    w_ready.data = plyr->readyweapon;
-
-    // if (*w_ready.on)
-    //  STlib_updateNum(&w_ready, true);
-    // refresh weapon change
-    //  }
+    {
+        widget_current_ammo->num = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
+    }
+    widget_current_ammo->data = plyr->readyweapon;
 
     // update keycard multiple widgets
     for (i = 0; i < 3; i++)
@@ -828,7 +855,9 @@ void ST_updateWidgets(void)
         keyboxes[i] = plyr->cards[i] ? i : -1;
 
         if (plyr->cards[i + 3])
+        {
             keyboxes[i] = i + 3;
+        }
     }
 
     // refresh everything if this is him coming back to life
@@ -847,14 +876,20 @@ void ST_updateWidgets(void)
     for (i = 0; i < MAXPLAYERS; i++)
     {
         if (i != consoleplayer)
+        {
             st_fragscount += plyr->frags[i];
+        }
         else
+        {
             st_fragscount -= plyr->frags[i];
+        }
     }
 
     // get rid of chat window if up because of message
     if (!--st_msgcounter)
+    {
         st_chat = st_oldchat;
+    }
 }
 
 void ST_Ticker(void)
@@ -884,7 +919,9 @@ void ST_doPaletteStuff(void)
         bzc = 12 - (plyr->powers[pw_strength] >> 6);
 
         if (bzc > cnt)
+        {
             cnt = bzc;
+        }
     }
 
     if (cnt)
@@ -892,7 +929,9 @@ void ST_doPaletteStuff(void)
         palette = (cnt + 7) >> 3;
 
         if (palette >= NUMREDPALS)
+        {
             palette = NUMREDPALS - 1;
+        }
 
         palette += STARTREDPALS;
     }
@@ -902,15 +941,21 @@ void ST_doPaletteStuff(void)
         palette = (plyr->bonuscount + 7) >> 3;
 
         if (palette >= NUMBONUSPALS)
+        {
             palette = NUMBONUSPALS - 1;
+        }
 
         palette += STARTBONUSPALS;
     }
 
     else if (plyr->powers[pw_ironfeet] > 4 * 32 || plyr->powers[pw_ironfeet] & 8)
+    {
         palette = RADIATIONPAL;
+    }
     else
+    {
         palette = 0;
+    }
 
     if (palette != st_palette)
     {
@@ -930,7 +975,7 @@ void ST_drawWidgets(boolean refresh)
     // used by w_frags widget
     st_fragson = deathmatch && st_statusbaron;
 
-    STlib_updateNum(&w_ready, refresh);
+    STWidget_DrawNumberWidget(widget_current_ammo, refresh);
 
     for (i = 0; i < 4; i++)
     {
@@ -944,12 +989,16 @@ void ST_drawWidgets(boolean refresh)
     STlib_updateBinIcon(&w_armsbg, refresh);
 
     for (i = 0; i < 6; i++)
+    {
         STlib_updateMultIcon(&w_arms[i], refresh);
+    }
 
     STlib_updateMultIcon(&w_faces, refresh);
 
     for (i = 0; i < 3; i++)
+    {
         STlib_updateMultIcon(&w_keyboxes[i], refresh);
+    }
 
     STlib_updateNum(&w_frags, refresh);
 }
@@ -983,10 +1032,14 @@ void ST_Drawer(boolean fullscreen, boolean refresh)
 
     // If just after ST_Start(), refresh all
     if (st_firsttime)
+    {
         ST_doRefresh();
-    // Otherwise, update as little as possible
+        // Otherwise, update as little as possible
+    }
     else
+    {
         ST_diffDraw();
+    }
 }
 
 typedef void (*load_callback_t)(const char *lumpname, patch_t **variable);
@@ -1116,10 +1169,14 @@ void ST_initData(void)
     st_oldhealth = -1;
 
     for (i = 0; i < NUMWEAPONS; i++)
+    {
         oldweaponsowned[i] = plyr->weaponowned[i];
+    }
 
     for (i = 0; i < 3; i++)
+    {
         keyboxes[i] = -1;
+    }
 
     STlib_init();
 }
@@ -1131,12 +1188,12 @@ void ST_createWidgets(void)
     int i;
 
     // ready weapon ammo
-    STlib_initNum(&w_ready, ST_AMMOX, ST_AMMOY, tallnum,
-                  &plyr->ammo[weaponinfo[plyr->readyweapon].ammo], &st_statusbaron,
-                  ST_AMMOWIDTH);
+    widget_current_ammo = STWidget_CreateNumberWidget(
+        ST_AMMOX, ST_AMMOY, tallnum, &plyr->ammo[weaponinfo[plyr->readyweapon].ammo],
+        &st_statusbaron, ST_AMMOWIDTH);
 
     // the last weapon type
-    w_ready.data = plyr->readyweapon;
+    widget_current_ammo->data = plyr->readyweapon;
 
     // health percentage
     STlib_initPercent(&w_health, ST_HEALTHX, ST_HEALTHY, tallnum, &plyr->health,
@@ -1210,7 +1267,9 @@ void ST_Start(void)
 {
 
     if (!st_stopped)
+    {
         ST_Stop();
+    }
 
     ST_initData();
     ST_createWidgets();
@@ -1220,8 +1279,11 @@ void ST_Start(void)
 void ST_Stop(void)
 {
     if (st_stopped)
+    {
         return;
-
+    }
+    // TOOD: When we replace this function, it should free() all widgets
+    // and perhaps by called via atexit
     I_SetPalette(W_CacheLumpNum(lu_palette, PU_CACHE));
 
     st_stopped = true;

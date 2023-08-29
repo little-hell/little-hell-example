@@ -1,6 +1,6 @@
 project('mindoom', 'c',
        default_options: ['default_library=static', 'buildtype=debug'])
-add_project_arguments(language: 'c')
+add_project_arguments('-DLOG_USE_COLOR', language: 'c')
 
 sdl2 = dependency('SDL2')
 sdl2_net = dependency('SDL2_net')
@@ -203,6 +203,7 @@ opl_source_files = files(
 
 textscreen = library('textscreen', textscreen_source_files, include_directories: include_directories(src_dir), dependencies: deps)
 opl = library('opl', opl_source_files, dependencies: deps)
+log = library('log', src_dir / 'log.c', include_directories: include_directories(src_dir), dependencies: deps)
 
 # Build the game binary
 executable('mindoom', 
@@ -213,6 +214,7 @@ executable('mindoom',
     link_with: [
         textscreen, 
         opl,
+        log
     ], 
     include_directories: [
         include_directories('src'),
