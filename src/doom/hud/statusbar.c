@@ -31,6 +31,7 @@
 #include "../../m_misc.h"
 #include "../m_random.h"
 #include "../../w_wad.h"
+#include "../../log.h"
 
 #include "../doomdef.h"
 #include "../../doomkeys.h"
@@ -338,13 +339,13 @@ static patch_t *arms[6][2];
  * displays the ammo count of the currently
  * selected weapons.
  */
-static st_number_widget_t *widget_current_ammo;
+static widget_number_t *widget_current_ammo_count;
 
 // in deathmatch only, summary of frags stats
-static st_number_widget_t w_frags;
+static widget_number_t w_frags;
 
 // health widget
-static st_percent_t w_health;
+static widget_percent_t *widget_health;
 
 // arms background
 static st_binicon_t w_armsbg;
@@ -363,10 +364,10 @@ static st_multicon_t w_keyboxes[3];
 static st_percent_t w_armor;
 
 // ammo widgets
-static st_number_widget_t w_ammo[4];
+static widget_number_t w_ammo[4];
 
 // max ammo widgets
-static st_number_widget_t w_maxammo[4];
+static widget_number_t w_maxammo[4];
 
 
 // number of frags so far in deathmatch
@@ -841,13 +842,13 @@ void ST_updateWidgets(void)
     // must redirect the pointer if the ready weapon has changed.
     if (weaponinfo[plyr->readyweapon].ammo == am_noammo)
     {
-        widget_current_ammo->num = &largeammo;
+        widget_current_ammo_count->num = &largeammo;
     }
     else
     {
-        widget_current_ammo->num = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
+        widget_current_ammo_count->num = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
     }
-    widget_current_ammo->data = plyr->readyweapon;
+    widget_current_ammo_count->data = plyr->readyweapon;
 
     // update keycard multiple widgets
     for (i = 0; i < 3; i++)
@@ -969,21 +970,25 @@ void ST_drawWidgets(boolean refresh)
 {
     int i;
 
+    // TODO: Why are we passing refresh all the way down to every function
+    // in the STWidget library? There's like one use of it. Can't we just
+    // return early if refresh = false?
+
     // used by w_arms[] widgets
     st_armson = st_statusbaron && !deathmatch;
 
     // used by w_frags widget
     st_fragson = deathmatch && st_statusbaron;
 
-    STWidget_DrawNumberWidget(widget_current_ammo, refresh);
+    STWidget_DrawNumberWidget(widget_current_ammo_count, refresh);
 
     for (i = 0; i < 4; i++)
     {
         STlib_updateNum(&w_ammo[i], refresh);
         STlib_updateNum(&w_maxammo[i], refresh);
     }
-
-    STlib_updatePercent(&w_health, refresh);
+    
+    STWidget_DrawPercentNumberWidget(widget_health, refresh);
     STlib_updatePercent(&w_armor, refresh);
 
     STlib_updateBinIcon(&w_armsbg, refresh);
@@ -1181,30 +1186,46 @@ void ST_initData(void)
     STlib_init();
 }
 
-
-void ST_createWidgets(void)
+/**
+ * Create the statusbar widget for displaying the ammo count
+ * for the currently selected weapon.
+ */
+void StatusBar_CreateCurrentAmmoCountWidget()
 {
-
-    int i;
+    log_trace("StatusBar_CreateCurrentAmmoCountWidget(): Creating ammo counter");
 
     // ready weapon ammo
-    widget_current_ammo = STWidget_CreateNumberWidget(
+    widget_current_ammo_count = STWidget_CreateNumberWidget(
         ST_AMMOX, ST_AMMOY, tallnum, &plyr->ammo[weaponinfo[plyr->readyweapon].ammo],
         &st_statusbaron, ST_AMMOWIDTH);
 
     // the last weapon type
-    widget_current_ammo->data = plyr->readyweapon;
+    widget_current_ammo_count->data = plyr->readyweapon;
+}
 
-    // health percentage
-    STlib_initPercent(&w_health, ST_HEALTHX, ST_HEALTHY, tallnum, &plyr->health,
+/**
+ * Create the statusbar widget for displaying health 
+ */
+void StatusBar_CreateHealthWidget()
+{
+    log_trace("StatusBar_CreateHealthWidget(): Creating health percentage");
+    widget_health = STWidget_CreatePercentNumberWidget(ST_HEALTHX, ST_HEALTHY, tallnum, &plyr->health,
                       &st_statusbaron, tallpercent);
+}
+
+void ST_createWidgets(void)
+{
+
+    StatusBar_CreateCurrentAmmoCountWidget();
+    StatusBar_CreateHealthWidget();
+
 
     // arms background
     STlib_initBinIcon(&w_armsbg, ST_ARMSBGX, ST_ARMSBGY, armsbg, &st_notdeathmatch,
                       &st_statusbaron);
 
     // weapons owned
-    for (i = 0; i < 6; i++)
+    for (int i = 0; i < 6; i++)
     {
         STlib_initMultIcon(&w_arms[i], ST_ARMSX + (i % 3) * ST_ARMSXSPACE,
                            ST_ARMSY + (i / 3) * ST_ARMSYSPACE, arms[i],
