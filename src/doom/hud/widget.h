@@ -54,20 +54,11 @@ typedef struct
 
     // user data
     int data;
+    
+    // percent sign graphic (used for drawing numbers with a percent sign)
+    patch_t *percent_sign_graphic;
 
 } widget_number_t;
-
-// Percent widget ("child" of number widget,
-//  or, more precisely, contains a number widget.)
-typedef struct
-{
-    // number information
-    widget_number_t *number_widget;
-
-    // percent sign graphic
-    patch_t *percent_graphic;
-
-} widget_percent_t;
 
 
 /**
@@ -149,11 +140,9 @@ void STlib_init(void);
 
 
 widget_number_t *STWidget_CreateNumberWidget(int x, int y, patch_t **pl, int *num,
-                                         boolean *on, int width);
-widget_percent_t *STWidget_CreatePercentNumberWidget(int x, int y, patch_t **pl, int *num, boolean *on, patch_t *percent);
+                                         boolean *on, int width, patch_t *percent_sign_graphic);
 
 void STWidget_DrawNumberWidget(widget_number_t *widget, boolean refresh);
-void STWidget_DrawPercentNumberWidget(widget_percent_t *per, int refresh);
 
 void STlib_initNum(widget_number_t *n, int x, int y, patch_t **pl, int *num, boolean *on,
                    int width);

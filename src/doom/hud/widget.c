@@ -61,17 +61,18 @@ void STlib_init(void)
  * @brief Creates a new status bar widget for displaying a number 
  * @param x The x position of the new widget
  * @param y The y position of the new widget
- * @param pl  
+ * @param pl The patch list for number graphics 
  * @param num The number to be displayed by the widget
  * @param on Whether the widget is enabled (and thus drawn) 
  * @param width The amount of numbers that can be displayed (i.e width=3 for a 3 digit number like health or ammo.)
+ * @param percent_sign_graphic The graphics patch for the percent sign symbol. Use `NULL` for creating number widgets without a percent sign.
  * @return The newly-created widget. 
  * 
  * **Note**: The return value must be freed after use. 
  *
  */
 widget_number_t *STWidget_CreateNumberWidget(int x, int y, patch_t **pl, int *num,
-                                         boolean *on, int width)
+                                         boolean *on, int width, patch_t *percent_sign_graphic)
 {
     log_debug("STWidget_CreateNumberWidget(): Creating a number widget at (%d,%d) of width %dpx, enabled %s", x, y, width, btoa(on));
     widget_number_t *widget = malloc(sizeof(widget_number_t));
@@ -83,6 +84,7 @@ widget_number_t *STWidget_CreateNumberWidget(int x, int y, patch_t **pl, int *nu
     widget->num = num;
     widget->on = on;
     widget->p = pl;
+    widget->percent_sign_graphic = percent_sign_graphic;
 
     return widget;
 }
@@ -114,7 +116,13 @@ void STWidget_DrawNumberWidget(widget_number_t *widget, boolean refresh)
     {
         return; 
     }
-
+        
+    // Draw the percentage sign if we've been given a graphic patch for it 
+    if (refresh && widget->percent_sign_graphic != NULL)
+    {
+        V_DrawPatch(widget->x, widget->y, widget->percent_sign_graphic);
+    }
+        
     // A fairly efficient way to draw a number
     //  based on differences from the old number.
     // Note: worth the trouble?
@@ -276,36 +284,7 @@ void STlib_updateNum(widget_number_t *n, boolean refresh)
 }
 
 /**
- * @brief Creates a new status bar widget for displaying a percentage 
- * @param x The x position of the new widget
- * @param y The y position of the new widget
- * @param pl The graphics patches for the number font.
- * @param num The number to be displayed by the widget
- * @param on Whether the widget is enabled (and thus drawn) 
- * @param width The width of the widget in pixels 
- * @return The newly-created widget. 
- * 
- * **Note**: The return value must be freed after use. 
- *
- */
-widget_percent_t *STWidget_CreatePercentNumberWidget(int x, int y, patch_t **pl, int *num, boolean *on, patch_t *percent)
-{
-    log_debug("STWidget_CreatePercentNumberWidget(): Creating a percent widget at (%d,%d)", x, y);
-    
-    // Percent widgets are essentially a struct containing a regular number widget
-    // and a percentage graphic.
-    log_debug("STWidget_CreatePercentNumberWidget(): Creating a child number widget (for percent widget) at (%d,%d)", x, y);
-    widget_number_t *number_widget = STWidget_CreateNumberWidget(x, y, pl, num, on, 3);
-
-    widget_percent_t *percent_number_widget = malloc(sizeof(st_percent_t));
-    percent_number_widget->number_widget = number_widget;
-    percent_number_widget->percent_graphic = percent;
-
-    return percent_number_widget;
-}
-
-/**
-  * \deprecated Use STWidget_CreatePercentNumberWidget()
+  * \deprecated Use STWidget_CreateNumberWidget()
   */
 void STlib_initPercent(st_percent_t *p, int x, int y, patch_t **pl, int *num, boolean *on,
                        patch_t *percent)
@@ -314,23 +293,9 @@ void STlib_initPercent(st_percent_t *p, int x, int y, patch_t **pl, int *num, bo
     p->p = percent;
 }
 
-// TODO: Maybe we should just have one DrawNumberWidget with a percent=true flag
-// and one number_widget struct with a percent member
-void STWidget_DrawPercentNumberWidget(widget_percent_t *widget, int refresh) 
-{
-    // PercentNumber widgets are just a 'child' NumberWidget and a percentage sign graphic
-    // in a struct.
-
-    if (refresh && widget->number_widget->on)
-    {
-        // Draw the percentage graphic
-        V_DrawPatch(widget->number_widget->x, widget->number_widget->y, widget->percent_graphic);
-    }
-    
-    // Draw the number widget
-    STWidget_DrawNumberWidget(widget->number_widget, refresh);
-}
-// TODO: Replace with a new function called STWidget_UpdatePercentageWidget()
+/**
+  * \deprecated Use STWidget_CreateNumberWidget()
+  */
 void STlib_updatePercent(st_percent_t *per, int refresh)
 {
     if (refresh && *per->n.on)

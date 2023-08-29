@@ -345,7 +345,7 @@ static widget_number_t *widget_current_ammo_count;
 static widget_number_t w_frags;
 
 // health widget
-static widget_percent_t *widget_health;
+static widget_number_t *widget_health;
 
 // arms background
 static st_binicon_t w_armsbg;
@@ -988,7 +988,7 @@ void ST_drawWidgets(boolean refresh)
         STlib_updateNum(&w_maxammo[i], refresh);
     }
     
-    STWidget_DrawPercentNumberWidget(widget_health, refresh);
+    STWidget_DrawNumberWidget(widget_health, refresh);
     STlib_updatePercent(&w_armor, refresh);
 
     STlib_updateBinIcon(&w_armsbg, refresh);
@@ -1197,7 +1197,7 @@ void StatusBar_CreateCurrentAmmoCountWidget()
     // ready weapon ammo
     widget_current_ammo_count = STWidget_CreateNumberWidget(
         ST_AMMOX, ST_AMMOY, tallnum, &plyr->ammo[weaponinfo[plyr->readyweapon].ammo],
-        &st_statusbaron, ST_AMMOWIDTH);
+        &st_statusbaron, ST_AMMOWIDTH, NULL);
 
     // the last weapon type
     widget_current_ammo_count->data = plyr->readyweapon;
@@ -1209,8 +1209,8 @@ void StatusBar_CreateCurrentAmmoCountWidget()
 void StatusBar_CreateHealthWidget()
 {
     log_trace("StatusBar_CreateHealthWidget(): Creating health percentage");
-    widget_health = STWidget_CreatePercentNumberWidget(ST_HEALTHX, ST_HEALTHY, tallnum, &plyr->health,
-                      &st_statusbaron, tallpercent);
+    widget_health = STWidget_CreateNumberWidget(ST_HEALTHX, ST_HEALTHY, tallnum, &plyr->health,
+                      &st_statusbaron, 3, tallpercent);
 }
 
 void ST_createWidgets(void)
