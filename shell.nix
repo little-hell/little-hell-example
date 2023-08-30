@@ -9,6 +9,8 @@ pkgs.clangStdenv.mkDerivation {
     clang-tools
     cloc
     cppcheck
+    ctags
+    doxygen
     gcc
     gdb
     gdbgui

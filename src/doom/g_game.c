@@ -45,7 +45,7 @@
 
 #include "wi_stuff.h"
 #include "hu_stuff.h"
-#include "st_stuff.h"
+#include "hud/statusbar.h"
 #include "am_map.h"
 #include "statdump.h"
 

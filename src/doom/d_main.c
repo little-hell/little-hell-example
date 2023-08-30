@@ -63,7 +63,7 @@
 
 #include "hu_stuff.h"
 #include "wi_stuff.h"
-#include "st_stuff.h"
+#include "hud/statusbar.h"
 #include "am_map.h"
 #include "net_client.h"
 #include "net_dedicated.h"

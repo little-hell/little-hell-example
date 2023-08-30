@@ -15,6 +15,9 @@
 
 #define LOG_VERSION "0.1.0"
 
+// Macro to allow us to print booleans easily
+#define btoa(x) ((x)?"true":"false")
+
 typedef struct {
   va_list ap;
   const char *fmt;
