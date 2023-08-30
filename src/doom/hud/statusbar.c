@@ -220,10 +220,6 @@
 #define ST_DETHX 109
 #define ST_DETHY 191
 
-//Incoming messages window location
-//UNUSED
-// #define ST_MSGTEXTX	   (viewwindowx)
-// #define ST_MSGTEXTY	   (viewwindowy+viewheight-18)
 #define ST_MSGTEXTX 0
 #define ST_MSGTEXTY 0
 // Dimensions given in characters.
@@ -324,13 +320,18 @@ static patch_t *arms[6][2];
  * displays the ammo count of the currently
  * selected weapons.
  */
-static widget_number_t *widget_current_ammo_count;
+static widget_number_t *widget_ammo_current_counter;
 
 // in deathmatch only, summary of frags stats
 static widget_number_t w_frags;
 
 // health widget
 static widget_number_t *widget_health;
+
+static widget_fraction_t *widget_ammo_bullet_counter;
+static widget_fraction_t *widget_ammo_shell_counter;
+static widget_fraction_t *widget_ammo_rocket_counter;
+static widget_fraction_t *widget_ammo_cell_counter;
 
 // arms background
 static st_binicon_t w_armsbg;
@@ -834,13 +835,13 @@ void ST_updateWidgets(void)
     // must redirect the pointer if the ready weapon has changed.
     if (weaponinfo[plyr->readyweapon].ammo == am_noammo)
     {
-        widget_current_ammo_count->value = &largeammo;
+        widget_ammo_current_counter->value = &largeammo;
     }
     else
     {
-        widget_current_ammo_count->value = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
+        widget_ammo_current_counter->value = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
     }
-    widget_current_ammo_count->data = plyr->readyweapon;
+    widget_ammo_current_counter->data = plyr->readyweapon;
 
     // update keycard multiple widgets
     for (int i = 0; i < 3; i++)
@@ -972,13 +973,14 @@ void ST_drawWidgets(boolean refresh)
     // used by w_frags widget
     st_fragson = deathmatch && st_statusbaron;
 
-    STWidget_DrawNumberWidget(widget_current_ammo_count, refresh);
+    STWidget_DrawNumberWidget(widget_ammo_current_counter, refresh);
 
-    for (i = 0; i < 4; i++)
-    {
-        STlib_updateNum(&w_ammo[i], refresh);
-        STlib_updateNum(&w_maxammo[i], refresh);
-    }
+    // Draw the ammo counters
+    // TODO: Move to separate Draw function
+    STWidget_DrawFractionWidget(widget_ammo_bullet_counter, refresh);
+    STWidget_DrawFractionWidget(widget_ammo_shell_counter, refresh);
+    STWidget_DrawFractionWidget(widget_ammo_rocket_counter, refresh);
+    STWidget_DrawFractionWidget(widget_ammo_cell_counter, refresh);
 
     STWidget_DrawNumberWidget(widget_health, refresh);
     STWidget_DrawNumberWidget(widget_armor, refresh);
@@ -1189,14 +1191,29 @@ void StatusBar_CreateCurrentAmmoCountWidget()
     const int x = 44;
     const int y = 171;
     const int num_digits = 3;
-        
+
     int *value = &plyr->ammo[weaponinfo[plyr->readyweapon].ammo];
-    
-    widget_current_ammo_count = STWidget_CreateNumberWidget(
-        x, y, num_digits, value, &st_statusbaron, tallnum, NULL);
+
+    widget_ammo_current_counter =
+        STWidget_CreateNumberWidget(x, y, num_digits, value, &st_statusbaron, tallnum, NULL);
 
     // the last weapon type
-    widget_current_ammo_count->data = plyr->readyweapon;
+    widget_ammo_current_counter->data = plyr->readyweapon;
+}
+
+void StatusBar_CreateAmmoCounterWidgets()
+{
+    widget_ammo_bullet_counter = STWidget_CreateFractionWidget(
+        ST_AMMO0X, ST_AMMO0Y, &plyr->ammo[0], &plyr->maxammo[0], &st_statusbaron, shortnum);
+
+    widget_ammo_shell_counter = STWidget_CreateFractionWidget(
+        ST_AMMO1X, ST_AMMO1Y, &plyr->ammo[1], &plyr->maxammo[1], &st_statusbaron, shortnum);
+
+    widget_ammo_rocket_counter = STWidget_CreateFractionWidget(
+        ST_AMMO2X, ST_AMMO2Y, &plyr->ammo[2], &plyr->maxammo[2], &st_statusbaron, shortnum);
+
+    widget_ammo_cell_counter = STWidget_CreateFractionWidget(
+        ST_AMMO3X, ST_AMMO3Y, &plyr->ammo[3], &plyr->maxammo[3], &st_statusbaron, shortnum);
 }
 
 /**
@@ -1234,7 +1251,8 @@ void ST_createWidgets(void)
 
     StatusBar_CreateCurrentAmmoCountWidget();
     StatusBar_CreateHealthWidget();
-    StatusBar_CreateWidget();
+    StatusBar_CreateArmorWidget();
+    StatusBar_CreateAmmoCounterWidgets();
 
 
     // arms background
@@ -1267,55 +1285,6 @@ void ST_createWidgets(void)
 
     STlib_initMultIcon(&w_keyboxes[2], ST_KEY2X, ST_KEY2Y, keys, &keyboxes[2], &st_statusbaron);
 
-    // ammo count (all four kinds)
-    STlib_initNum(
-        &w_ammo[0], ST_AMMO0X, ST_AMMO0Y, shortnum, &plyr->ammo[0], &st_statusbaron, ST_AMMO0WIDTH);
-
-    STlib_initNum(
-        &w_ammo[1], ST_AMMO1X, ST_AMMO1Y, shortnum, &plyr->ammo[1], &st_statusbaron, ST_AMMO1WIDTH);
-
-    STlib_initNum(
-        &w_ammo[2], ST_AMMO2X, ST_AMMO2Y, shortnum, &plyr->ammo[2], &st_statusbaron, ST_AMMO2WIDTH);
-
-    STlib_initNum(
-        &w_ammo[3], ST_AMMO3X, ST_AMMO3Y, shortnum, &plyr->ammo[3], &st_statusbaron, ST_AMMO3WIDTH);
-
-    // max ammo count (all four kinds)
-    STlib_initNum(
-        &w_maxammo[0],
-        ST_MAXAMMO0X,
-        ST_MAXAMMO0Y,
-        shortnum,
-        &plyr->maxammo[0],
-        &st_statusbaron,
-        ST_MAXAMMO0WIDTH);
-
-    STlib_initNum(
-        &w_maxammo[1],
-        ST_MAXAMMO1X,
-        ST_MAXAMMO1Y,
-        shortnum,
-        &plyr->maxammo[1],
-        &st_statusbaron,
-        ST_MAXAMMO1WIDTH);
-
-    STlib_initNum(
-        &w_maxammo[2],
-        ST_MAXAMMO2X,
-        ST_MAXAMMO2Y,
-        shortnum,
-        &plyr->maxammo[2],
-        &st_statusbaron,
-        ST_MAXAMMO2WIDTH);
-
-    STlib_initNum(
-        &w_maxammo[3],
-        ST_MAXAMMO3X,
-        ST_MAXAMMO3Y,
-        shortnum,
-        &plyr->maxammo[3],
-        &st_statusbaron,
-        ST_MAXAMMO3WIDTH);
 }
 
 static boolean st_stopped = true;

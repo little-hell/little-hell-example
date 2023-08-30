@@ -72,7 +72,13 @@ void STlib_init(void)
  *
  */
 widget_number_t *STWidget_CreateNumberWidget(
-    int x, int y, int num_digits, int *value, boolean *enabled, patch_t **patches, patch_t *percent_sign_patch)
+    int x,
+    int y,
+    int num_digits,
+    int *value,
+    boolean *enabled,
+    patch_t **patches,
+    patch_t *percent_sign_patch)
 {
     log_debug(
         "STWidget_CreateNumberWidget(): Creating a number widget at (%d,%d) of width %dpx, enabled "
@@ -83,7 +89,7 @@ widget_number_t *STWidget_CreateNumberWidget(
         btoa(enabled));
 
     widget_number_t *widget = malloc(sizeof(widget_number_t));
-    
+
     widget->x = x;
     widget->y = y;
     widget->oldnum = 0;
@@ -105,11 +111,60 @@ void STlib_initNum(widget_number_t *n, int x, int y, patch_t **pl, int *num, boo
     n->y = y;
     n->oldnum = 0;
     n->num_digits = width;
-    n->value= num;
+    n->value = num;
     n->enabled = on;
     n->patches = pl;
 }
 
+/**
+ * Draws a fractional number to the status bar, useful for the small ammo counters.
+ *
+ * Four of these are used in DOOM, one each for "BULL", "SHELL", "RCKT", and "CELL". In DOOM, the
+ * "/" character used by the fractional ammo counter is actually baked into the background status 
+ * bar texture. This means that a FractionWidget actually only consists of two regular 
+ * NumberWidgets, spaced apart by a fixed distance, using the correct spacing to give 
+ * the appearance of "x / y" on screen. Because we're actually creating two widgets under 
+ * the hood, this can be considered a "composite" widget.
+*
+ * @param x The x position of the widget on screen
+ * @param y The y position of the widget on screen
+ * @param numerator The numerator (first half) of the fraction 
+ * @param denominator The denominator (second half) of the fraction 
+ * @param enabled Whether or not the widget is enabled (and thus drawn). 
+ * @param patches A list of patches containing a texture for each number.
+ *
+ * @return The newly-created FractionWidget
+ */
+widget_fraction_t *STWidget_CreateFractionWidget(
+    int x, int y, int *numerator_value, int *denominator_value, boolean *enabled, patch_t **patches)
+{
+    log_debug(
+        "STWidget_CreateFractionWidget(): Creating a fraction widget at (%d,%d), enabled "
+        "%s",
+        x,
+        y,
+        btoa(enabled));
+
+    // Numbers on either side of the fraction are a maximum of 3 digits wide.
+    int num_digits = 3;
+    // Fixed spacing of 26 pixels between the components of the fraction.
+    int spacing = 26;
+
+    widget_fraction_t *widget = malloc(sizeof(widget_fraction_t));
+
+    widget->numerator =
+        STWidget_CreateNumberWidget(x, y, num_digits, numerator_value, enabled, patches, NULL);
+    widget->denominator = STWidget_CreateNumberWidget(
+        x + spacing, y, num_digits, denominator_value, enabled, patches, NULL);
+
+    return widget;
+}
+
+void STWidget_DrawFractionWidget(widget_fraction_t *widget, boolean refresh)
+{
+    STWidget_DrawNumberWidget(widget->numerator, refresh);
+    STWidget_DrawNumberWidget(widget->denominator, refresh);
+}
 
 /**
  * @brief Draws a number widget to the status bar. 
@@ -119,7 +174,8 @@ void STWidget_DrawNumberWidget(widget_number_t *widget, boolean refresh)
 {
     if (!widget)
     {
-        log_fatal("STWidget_DrawNumberWidget(): Widget is NULL! Can't draw a NULL widget. Are you trying to draw a widget that doesn't exist?");
+        log_fatal("STWidget_DrawNumberWidget(): Widget is NULL! Can't draw a NULL widget. Are you "
+                  "trying to draw a widget that doesn't exist?");
         System_Exit();
     }
 

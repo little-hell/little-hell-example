@@ -61,6 +61,12 @@ typedef struct
 
 } widget_number_t;
 
+typedef struct
+{
+    widget_number_t *numerator;
+    widget_number_t *denominator;
+} widget_fraction_t;
+
 
 /**
  * \deprecated Use widget_percent_t
@@ -141,9 +147,23 @@ void STlib_init(void);
 
 
 widget_number_t *STWidget_CreateNumberWidget(
-    int x, int y, int num_digits, int *value, boolean *enabled, patch_t **patches, patch_t *percent_sign_patch);
+    int x,
+    int y,
+    int num_digits,
+    int *value,
+    boolean *enabled,
+    patch_t **patches,
+    patch_t *percent_sign_patch);
+widget_fraction_t *STWidget_CreateFractionWidget(
+    int x,
+    int y,
+    int *numerator_value,
+    int *denominator_value,
+    boolean *enabled,
+    patch_t **patches);
 
 void STWidget_DrawNumberWidget(widget_number_t *widget, boolean refresh);
+void STWidget_DrawFractionWidget(widget_fraction_t *widget, boolean refresh);
 
 void STlib_initNum(
     widget_number_t *n, int x, int y, patch_t **pl, int *num, boolean *on, int width);
