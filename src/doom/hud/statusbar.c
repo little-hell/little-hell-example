@@ -82,13 +82,6 @@
 // For Responder
 #define ST_TOGGLECHAT KEY_ENTER
 
-// Location of status bar
-#define ST_X  0
-#define ST_X2 104
-
-#define ST_FX 143
-#define ST_FY 169
-
 // Should be set to patch width
 //  for tall numbers later on
 #define ST_TALLNUMWIDTH (tallnum[0]->width)
@@ -157,37 +150,6 @@
 #define ST_KEY2X      239
 #define ST_KEY2Y      191
 
-// Ammunition counter.
-#define ST_AMMO0WIDTH  3
-#define ST_AMMO0HEIGHT 6
-#define ST_AMMO0X      288
-#define ST_AMMO0Y      173
-#define ST_AMMO1WIDTH  ST_AMMO0WIDTH
-#define ST_AMMO1X      288
-#define ST_AMMO1Y      179
-#define ST_AMMO2WIDTH  ST_AMMO0WIDTH
-#define ST_AMMO2X      288
-#define ST_AMMO2Y      191
-#define ST_AMMO3WIDTH  ST_AMMO0WIDTH
-#define ST_AMMO3X      288
-#define ST_AMMO3Y      185
-
-// Indicate maximum ammunition.
-// Only needed because backpack exists.
-#define ST_MAXAMMO0WIDTH  3
-#define ST_MAXAMMO0HEIGHT 5
-#define ST_MAXAMMO0X      314
-#define ST_MAXAMMO0Y      173
-#define ST_MAXAMMO1WIDTH  ST_MAXAMMO0WIDTH
-#define ST_MAXAMMO1X      314
-#define ST_MAXAMMO1Y      179
-#define ST_MAXAMMO2WIDTH  ST_MAXAMMO0WIDTH
-#define ST_MAXAMMO2X      314
-#define ST_MAXAMMO2Y      191
-#define ST_MAXAMMO3WIDTH  ST_MAXAMMO0WIDTH
-#define ST_MAXAMMO3X      314
-#define ST_MAXAMMO3Y      185
-
 // pistol
 #define ST_WEAPON0X 110
 #define ST_WEAPON0Y 172
@@ -242,6 +204,8 @@
 
 // graphics are drawn to a backing screen and blitted to the real screen
 pixel_t *st_backing_screen;
+
+status_bar_t *status_bar;
 
 // main player in game
 static player_t *plyr;
@@ -403,29 +367,64 @@ cheatseq_t cheat_mypos = CHEAT("idmypos", 0);
 //
 void ST_Stop(void);
 
-void ST_refreshBackground(void)
+// TODO: return st_backing_screen
+void *StatusBar_CreateBackground()
 {
+    log_debug("StatusBar_CreateBackground(): Creating status bar background");
+    // TODO: reduce the scope of st_backing_screen.
+    st_backing_screen =
+        (pixel_t *) Z_Malloc(ST_WIDTH * ST_HEIGHT * sizeof(*st_backing_screen), PU_STATIC, 0);
+}
 
+
+status_bar_t *StatusBar_CreateStatusBar(void)
+{
+    log_debug("StatusBar_CreateStatusBar(): Creating status bar");
+    status_bar_t *status_bar = Z_Malloc(sizeof(status_bar_t), PU_STATIC, 0);
+    status_bar->height = 32;
+    status_bar->width = SCREENWIDTH;
+    status_bar->x = 0;
+    status_bar->y = SCREENHEIGHT - status_bar->height;
+
+    // TODO:
+    // status_bar->backing_screen = StatusBar_CreateBackground()
+    StatusBar_CreateBackground();
+
+    return status_bar;
+}
+
+void StatusBar_DrawBackground(status_bar_t *status_bar)
+{
+    int x = status_bar->x;
+    int y = status_bar->y;
+    int width = status_bar->width;
+    int height = status_bar->height;
+
+    // TODO: return early
     if (st_statusbaron)
     {
         V_UseBuffer(st_backing_screen);
 
-        V_DrawPatch(ST_X, 0, sbar);
+        V_DrawPatch(x, 0, sbar);
 
+        // TOOD: remove (we don't care about DOOM 1.0)
         // draw right side of bar if needed (Doom 1.0)
         if (sbarr)
         {
             V_DrawPatch(ST_ARMSBGX, 0, sbarr);
         }
 
+        // TODO: Make the frag counter it's own widget and or function
         if (netgame)
         {
-            V_DrawPatch(ST_FX, 0, faceback);
+            const int frag_widget_x = 143;
+            const int frag_widget_y = 169;
+            V_DrawPatch(frag_widget_x, frag_widget_y, faceback);
         }
 
         V_RestoreBuffer();
 
-        V_CopyRect(ST_X, 0, st_backing_screen, ST_WIDTH, ST_HEIGHT, ST_X, ST_Y);
+        V_CopyRect(x, 0, st_backing_screen, width, height, x, y);
     }
 }
 
@@ -1000,6 +999,13 @@ void ST_drawWidgets(boolean refresh)
 
     STlib_updateNum(&w_frags, refresh);
 }
+//TODO:
+void StatusBar_DrawStatusBar(status_bar_t *status_bar)
+{
+    StatusBar_DrawBackground(status_bar);
+    //StatusBar_DrawWidgets();
+}
+
 
 void ST_doRefresh(void)
 {
@@ -1007,7 +1013,7 @@ void ST_doRefresh(void)
     st_firsttime = false;
 
     // draw status bar background to off-screen buff
-    ST_refreshBackground();
+    StatusBar_DrawStatusBar(status_bar);
 
     // and refresh all widgets
     ST_drawWidgets(true);
@@ -1202,17 +1208,23 @@ void StatusBar_CreateCurrentAmmoCountWidget()
 
 void StatusBar_CreateAmmoCounterWidgets()
 {
+    const int x = 288;
+
+    // The ammo counter for "BULL"
     widget_ammo_bullet_counter = STWidget_CreateFractionWidget(
-        ST_AMMO0X, ST_AMMO0Y, &plyr->ammo[0], &plyr->maxammo[0], &st_statusbaron, shortnum);
+        x, 173, &plyr->ammo[0], &plyr->maxammo[0], &st_statusbaron, shortnum);
 
+    // The ammo counter for "SHELL"
     widget_ammo_shell_counter = STWidget_CreateFractionWidget(
-        ST_AMMO1X, ST_AMMO1Y, &plyr->ammo[1], &plyr->maxammo[1], &st_statusbaron, shortnum);
+        x, 179, &plyr->ammo[1], &plyr->maxammo[1], &st_statusbaron, shortnum);
 
+    // The ammo counter for "RCKT"
     widget_ammo_rocket_counter = STWidget_CreateFractionWidget(
-        ST_AMMO2X, ST_AMMO2Y, &plyr->ammo[2], &plyr->maxammo[2], &st_statusbaron, shortnum);
+        x, 191, &plyr->ammo[2], &plyr->maxammo[2], &st_statusbaron, shortnum);
 
+    // The ammo counter for "CELL"
     widget_ammo_cell_counter = STWidget_CreateFractionWidget(
-        ST_AMMO3X, ST_AMMO3Y, &plyr->ammo[3], &plyr->maxammo[3], &st_statusbaron, shortnum);
+        x, 185, &plyr->ammo[3], &plyr->maxammo[3], &st_statusbaron, shortnum);
 }
 
 /**
@@ -1297,6 +1309,7 @@ void ST_Start(void)
     }
 
     ST_initData();
+    status_bar = StatusBar_CreateStatusBar();
     ST_createWidgets();
     st_stopped = false;
 }
@@ -1318,7 +1331,4 @@ void ST_Init(void)
 {
     lu_palette = W_GetNumForName("PLAYPAL");
     ST_loadUnloadGraphics(ST_loadCallback);
-
-    st_backing_screen =
-        (pixel_t *) Z_Malloc(ST_WIDTH * ST_HEIGHT * sizeof(*st_backing_screen), PU_STATIC, 0);
 }

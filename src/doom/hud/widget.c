@@ -61,10 +61,10 @@ void STlib_init(void)
  * @brief Creates a new status bar widget for displaying a number 
  * @param x The x position of the new widget
  * @param y The y position of the new widget
+ * @param numdigits The amount of numbers that can be displayed (i.e width=3 for a 3 digit number like health or ammo.)
+ * @param value The number to be displayed by the widget
+ * @param enabled Whether the widget is enabled (and thus drawn) 
  * @param patches List of graphics patches to be used as the drawing font 
- * @param num The number to be displayed by the widget
- * @param on Whether the widget is enabled (and thus drawn) 
- * @param width The amount of numbers that can be displayed (i.e width=3 for a 3 digit number like health or ammo.)
  * @param percent_sign_patch The graphics patch for the percent sign. Use `NULL` for creating number widgets without a percent sign.
  * @return The newly-created widget. 
  * 
@@ -117,7 +117,7 @@ void STlib_initNum(widget_number_t *n, int x, int y, patch_t **pl, int *num, boo
 }
 
 /**
- * Draws a fractional number to the status bar, useful for the small ammo counters.
+ * Creates a new fractional number widget for the status bar, useful for the small ammo counters.
  *
  * Four of these are used in DOOM, one each for "BULL", "SHELL", "RCKT", and "CELL". In DOOM, the
  * "/" character used by the fractional ammo counter is actually baked into the background status 

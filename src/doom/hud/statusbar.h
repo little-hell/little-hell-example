@@ -52,6 +52,16 @@ void ST_Start(void);
 // Called by startup code.
 void ST_Init(void);
 
+typedef struct
+{
+    int height;
+    int width;
+    int x;
+    int y;
+    pixel_t *backing_screen;
+
+} status_bar_t;
+
 
 // States for status bar code.
 typedef enum
