@@ -831,7 +831,6 @@ void ST_updateFaceWidget(void)
 void ST_updateWidgets(void)
 {
     static int largeammo = 1994; // means "n/a"
-
     // must redirect the pointer if the ready weapon has changed.
     if (weaponinfo[plyr->readyweapon].ammo == am_noammo)
     {
@@ -1284,7 +1283,6 @@ void ST_createWidgets(void)
     STlib_initMultIcon(&w_keyboxes[1], ST_KEY1X, ST_KEY1Y, keys, &keyboxes[1], &st_statusbaron);
 
     STlib_initMultIcon(&w_keyboxes[2], ST_KEY2X, ST_KEY2Y, keys, &keyboxes[2], &st_statusbaron);
-
 }
 
 static boolean st_stopped = true;

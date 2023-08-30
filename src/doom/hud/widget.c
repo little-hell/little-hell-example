@@ -88,7 +88,7 @@ widget_number_t *STWidget_CreateNumberWidget(
         num_digits,
         btoa(enabled));
 
-    widget_number_t *widget = malloc(sizeof(widget_number_t));
+    widget_number_t *widget = Z_Malloc(sizeof(widget_number_t), PU_LEVEL, 0);
 
     widget->x = x;
     widget->y = y;
@@ -150,7 +150,7 @@ widget_fraction_t *STWidget_CreateFractionWidget(
     // Fixed spacing of 26 pixels between the components of the fraction.
     int spacing = 26;
 
-    widget_fraction_t *widget = malloc(sizeof(widget_fraction_t));
+    widget_fraction_t *widget = Z_Malloc(sizeof(widget_fraction_t), PU_LEVEL, 0);
 
     widget->numerator =
         STWidget_CreateNumberWidget(x, y, num_digits, numerator_value, enabled, patches, NULL);
@@ -180,7 +180,7 @@ void STWidget_DrawNumberWidget(widget_number_t *widget, boolean refresh)
     }
 
     // Don't draw widgets that have been turned off
-    if (!*widget->enabled)
+    if (!widget->enabled)
     {
         log_debug("STWidget_DrawNumberWidget(): Widget %x not enabled, so not drawing", widget);
         return;

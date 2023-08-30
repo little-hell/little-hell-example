@@ -1,5 +1,5 @@
 project('mindoom', 'c',
-       default_options: ['default_library=static', 'buildtype=debug'])
+       default_options: ['default_library=static', 'buildtype=debugoptimized'])
 add_project_arguments('-DLOG_USE_COLOR', language: 'c')
 
 sdl2 = dependency('SDL2')
