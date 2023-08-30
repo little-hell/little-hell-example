@@ -8,7 +8,7 @@ tags
 .dsg
 
 # Doxygen output
-docs/
+docs/doxygen/
 
 # CMake-specific ignores
 /.vs
