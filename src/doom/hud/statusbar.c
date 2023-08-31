@@ -367,7 +367,8 @@ cheatseq_t cheat_mypos = CHEAT("idmypos", 0);
 //
 void ST_Stop(void);
 
-// TODO: return st_backing_screen
+// TODO:
+// pixel_t *StatusBar_CreateBackingScreen()
 void *StatusBar_CreateBackground()
 {
     log_debug("StatusBar_CreateBackground(): Creating status bar background");
@@ -386,14 +387,15 @@ status_bar_t *StatusBar_CreateStatusBar(void)
     status_bar->x = 0;
     status_bar->y = SCREENHEIGHT - status_bar->height;
 
-    // TODO:
-    // status_bar->backing_screen = StatusBar_CreateBackground()
+    //TODO: Replace
     StatusBar_CreateBackground();
+    // With:
+    //status_bar->screen = StatusBar_CreateBackingScreen()
 
     return status_bar;
 }
 
-void StatusBar_DrawBackground(status_bar_t *status_bar)
+void StatusBar_DrawBackground(status_bar_t *status_bar, pixel_t *screen)
 {
     int x = status_bar->x;
     int y = status_bar->y;
@@ -403,7 +405,8 @@ void StatusBar_DrawBackground(status_bar_t *status_bar)
     // TODO: return early
     if (st_statusbaron)
     {
-        V_UseBuffer(st_backing_screen);
+        //TODO: status_bar->screen
+        V_UseBuffer(screen);
 
         V_DrawPatch(x, 0, sbar);
 
@@ -424,7 +427,8 @@ void StatusBar_DrawBackground(status_bar_t *status_bar)
 
         V_RestoreBuffer();
 
-        V_CopyRect(x, 0, st_backing_screen, width, height, x, y);
+        //TODO: status_bar->screen
+        V_CopyRect(x, 0, screen, width, height, x, y);
     }
 }
 
@@ -971,17 +975,17 @@ void ST_drawWidgets(boolean refresh)
     // used by w_frags widget
     st_fragson = deathmatch && st_statusbaron;
 
-    STWidget_DrawNumberWidget(widget_ammo_current_counter, refresh);
+    STWidget_DrawNumberWidget(widget_ammo_current_counter, st_backing_screen, refresh);
 
     // Draw the ammo counters
     // TODO: Move to separate Draw function
-    STWidget_DrawFractionWidget(widget_ammo_bullet_counter, refresh);
-    STWidget_DrawFractionWidget(widget_ammo_shell_counter, refresh);
-    STWidget_DrawFractionWidget(widget_ammo_rocket_counter, refresh);
-    STWidget_DrawFractionWidget(widget_ammo_cell_counter, refresh);
+    STWidget_DrawFractionWidget(widget_ammo_bullet_counter, st_backing_screen, refresh);
+    STWidget_DrawFractionWidget(widget_ammo_shell_counter, st_backing_screen, refresh);
+    STWidget_DrawFractionWidget(widget_ammo_rocket_counter, st_backing_screen, refresh);
+    STWidget_DrawFractionWidget(widget_ammo_cell_counter, st_backing_screen, refresh);
 
-    STWidget_DrawNumberWidget(widget_health, refresh);
-    STWidget_DrawNumberWidget(widget_armor, refresh);
+    STWidget_DrawNumberWidget(widget_health, st_backing_screen, refresh);
+    STWidget_DrawNumberWidget(widget_armor, st_backing_screen, refresh);
 
     STlib_updateBinIcon(&w_armsbg, refresh);
 
@@ -1000,9 +1004,9 @@ void ST_drawWidgets(boolean refresh)
     STlib_updateNum(&w_frags, refresh);
 }
 //TODO:
-void StatusBar_DrawStatusBar(status_bar_t *status_bar)
+void StatusBar_DrawStatusBar(status_bar_t *status_bar, pixel_t *screen)
 {
-    StatusBar_DrawBackground(status_bar);
+    StatusBar_DrawBackground(status_bar, screen);
     //StatusBar_DrawWidgets();
 }
 
@@ -1013,7 +1017,7 @@ void ST_doRefresh(void)
     st_firsttime = false;
 
     // draw status bar background to off-screen buff
-    StatusBar_DrawStatusBar(status_bar);
+    StatusBar_DrawStatusBar(status_bar, st_backing_screen);
 
     // and refresh all widgets
     ST_drawWidgets(true);

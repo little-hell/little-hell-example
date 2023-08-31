@@ -162,8 +162,8 @@ widget_fraction_t *STWidget_CreateFractionWidget(
     boolean *enabled,
     patch_t **patches);
 
-void STWidget_DrawNumberWidget(widget_number_t *widget, boolean refresh);
-void STWidget_DrawFractionWidget(widget_fraction_t *widget, boolean refresh);
+void STWidget_DrawNumberWidget(widget_number_t *widget, pixel_t *screen, boolean refresh);
+void STWidget_DrawFractionWidget(widget_fraction_t *widget, pixel_t *screen, boolean refresh);
 
 void STlib_initNum(
     widget_number_t *n, int x, int y, patch_t **pl, int *num, boolean *on, int width);

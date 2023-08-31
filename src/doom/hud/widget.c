@@ -160,17 +160,17 @@ widget_fraction_t *STWidget_CreateFractionWidget(
     return widget;
 }
 
-void STWidget_DrawFractionWidget(widget_fraction_t *widget, boolean refresh)
+void STWidget_DrawFractionWidget(widget_fraction_t *widget, pixel_t *screen, boolean refresh)
 {
-    STWidget_DrawNumberWidget(widget->numerator, refresh);
-    STWidget_DrawNumberWidget(widget->denominator, refresh);
+    STWidget_DrawNumberWidget(widget->numerator, screen, refresh);
+    STWidget_DrawNumberWidget(widget->denominator, screen, refresh);
 }
 
 /**
  * @brief Draws a number widget to the status bar. 
  *
  */
-void STWidget_DrawNumberWidget(widget_number_t *widget, boolean refresh)
+void STWidget_DrawNumberWidget(widget_number_t *widget, pixel_t *screen, boolean refresh)
 {
     if (!widget)
     {
@@ -233,7 +233,7 @@ void STWidget_DrawNumberWidget(widget_number_t *widget, boolean refresh)
         I_Error("drawNum: widget->y - ST_Y < 0");
     }
 
-    V_CopyRect(x, widget->y - ST_Y, st_backing_screen, w * numdigits, h, x, widget->y);
+    V_CopyRect(x, widget->y - ST_Y, screen, w * numdigits, h, x, widget->y);
 
     // if non-number, do not draw it
     if (num == 1994)
