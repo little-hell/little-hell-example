@@ -287,7 +287,7 @@ static patch_t *arms[6][2];
 static widget_number_t *widget_ammo_current_counter;
 
 // in deathmatch only, summary of frags stats
-static widget_number_t w_frags;
+static widget_number_t *widget_frag_counter;
 
 // health widget
 static widget_number_t *widget_health;
@@ -865,7 +865,7 @@ void ST_updateWidgets(void)
     // used by w_arms[] widgets
     st_armson = st_statusbaron && !deathmatch;
 
-    // used by w_frags widget
+    // used by widget_frag_counter widget
     st_fragson = deathmatch && st_statusbaron;
     st_fragscount = 0;
 
@@ -972,7 +972,7 @@ void ST_drawWidgets(boolean refresh)
     // used by w_arms[] widgets
     st_armson = st_statusbaron && !deathmatch;
 
-    // used by w_frags widget
+    // used by widget_frag_counter widget
     st_fragson = deathmatch && st_statusbaron;
 
     STWidget_DrawNumberWidget(widget_ammo_current_counter, st_backing_screen, refresh);
@@ -986,6 +986,7 @@ void ST_drawWidgets(boolean refresh)
 
     STWidget_DrawNumberWidget(widget_health, st_backing_screen, refresh);
     STWidget_DrawNumberWidget(widget_armor, st_backing_screen, refresh);
+    //STWidget_DrawNumberWidget(widget_frag_counter, st_backing_screen, refresh);
 
     STlib_updateBinIcon(&w_armsbg, refresh);
 
@@ -1001,7 +1002,6 @@ void ST_drawWidgets(boolean refresh)
         STlib_updateMultIcon(&w_keyboxes[i], refresh);
     }
 
-    STlib_updateNum(&w_frags, refresh);
 }
 //TODO:
 void StatusBar_DrawStatusBar(status_bar_t *status_bar, pixel_t *screen)
@@ -1261,6 +1261,21 @@ void StatusBar_CreateArmorWidget()
         x, y, num_digits, &plyr->armorpoints, &st_statusbaron, tallnum, tallpercent);
 }
 
+/**
+ * Create the statusbar widget for showing frag counts. 
+ */
+void StatusBar_CreateFragCounterWidget()
+{
+    log_trace("StatusBar_CreateFragCounterWidget(): Creating frag counter widget");
+
+    const int num_digits = 2;
+    const int x = 138;
+    const int y = 171;
+
+    widget_frag_counter = STWidget_CreateNumberWidget(
+        x, y, num_digits, &st_fragscount, &st_fragson, tallnum, NULL);
+}
+
 void ST_createWidgets(void)
 {
 
@@ -1268,6 +1283,7 @@ void ST_createWidgets(void)
     StatusBar_CreateHealthWidget();
     StatusBar_CreateArmorWidget();
     StatusBar_CreateAmmoCounterWidgets();
+    //StatusBar_CreateFragCounterWidget();
 
 
     // arms background
@@ -1285,10 +1301,6 @@ void ST_createWidgets(void)
             &plyr->weaponowned[i + 1],
             &st_armson);
     }
-
-    // frags sum
-    STlib_initNum(
-        &w_frags, ST_FRAGSX, ST_FRAGSY, tallnum, &st_fragscount, &st_fragson, ST_FRAGSWIDTH);
 
     // faces
     STlib_initMultIcon(&w_faces, ST_FACESX, ST_FACESY, faces, &st_faceindex, &st_statusbaron);
