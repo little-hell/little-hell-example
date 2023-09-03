@@ -26,6 +26,7 @@
 
 typedef enum
 {
+    //TODO: remove
     doom,    // Doom 1
     heretic, // Heretic
     hexen,   // Hexen
@@ -36,6 +37,7 @@ typedef enum
 // in: eg. shareware vs. registered.  So doom1.wad and doom.wad are the
 // same mission, but a different mode.
 
+// TODO: remove
 typedef enum
 {
     registered,  // Doom registered
@@ -44,6 +46,7 @@ typedef enum
 
 // What version are we emulating?
 
+// TODO: remove
 typedef enum
 {
     exe_doom_1_9, // Doom 1.9: "

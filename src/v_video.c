@@ -156,7 +156,7 @@ void V_CopyRect(int srcx, int srcy, pixel_t *source,
     if (!V_CheckCopyRect(srcx, srcy, destx, desty, width, height))
     {
         log_fatal("V_CopyRect(): Could not copy rectangle %x", source);
-        System_Exit();
+        system_exit();
     }
 
     V_MarkRect(destx, desty, width, height); 
