@@ -16,6 +16,7 @@ The little hell engine uses the game code for DOOM 1 as its test bed. Developmen
 
 
 ## Progress
+- [ ] Remove support for backing screens which draw the HUD before blitting it to the real screen (`V_CopyRect()`)
 - [ ] Create a new API called `Drawable` for easy management of all 2D elements such as status bars, HUDs, etc.
 - [ ] Create a working demo game showcasing the engine.
 - [x] Use the Meson build system, and a Nix shell for frictionless dependency management.
