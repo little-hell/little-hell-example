@@ -1,5 +1,5 @@
 project('mindoom', 'c',
-       default_options: ['default_library=static', 'buildtype=debugoptimized'])
+       default_options: ['default_library=static', 'buildtype=debug'])
 add_project_arguments('-DLOG_USE_COLOR', language: 'c')
 
 sdl2 = dependency('SDL2')
@@ -38,6 +38,12 @@ dedicated_server_source_files = files(
     src_dir / 'net_structrw.c',
   )
 
+# Source files for the game engine
+engine_src_dir = src_dir / 'engine'
+engine_source_files = files (
+    engine_src_dir / 'graphics' / 'widget.c',
+    engine_src_dir / 'graphics' / 'drawable.c',
+)
 
 # Source files only used by the game binary 
 doom_source_dir = 'doom'
@@ -135,8 +141,7 @@ game_source_files = files(
     src_dir / doom_source_dir / 's_sound.c',
     src_dir / doom_source_dir / 'statdump.c',
 
-    # Code for the HUD
-    src_dir / doom_source_dir / 'hud' / 'widget.c',
+    # Code for the status bar 
     src_dir / doom_source_dir / 'hud' / 'statusbar.c',
 
     src_dir / doom_source_dir / 'wi_stuff.c'
@@ -210,6 +215,7 @@ executable('mindoom',
     sources: [
         common_source_files, 
         game_source_files,
+        engine_source_files
     ],
     link_with: [
         textscreen, 

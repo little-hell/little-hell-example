@@ -26,6 +26,8 @@
 
 #include "i_system.h"
 
+#include "log.h"
+
 #include "doomtype.h"
 
 #include "i_input.h"
@@ -66,7 +68,80 @@ void V_MarkRect(int x, int y, int width, int height)
         M_AddToBox (dirtybox, x + width-1, y + height-1); 
     }
 } 
- 
+
+boolean V_CheckCopyRectMinimums(int srcx, int srcy, int destx, int desty)
+{
+    boolean valid_rect = true;
+
+    char negative_value_error[] = "V_CheckCopyRectMinimums(): Can't copy rectangle because its %s coordinates %s is negative: %d";
+    
+    if (srcx < 0)
+    {
+        log_fatal(negative_value_error, "source" "x", srcx);
+        valid_rect = false;
+    }
+    if (srcy < 0)
+    {
+        log_fatal(negative_value_error, "source" "y", srcy);
+        valid_rect = false;
+    }
+
+    if (destx < 0)
+    {
+        log_fatal(negative_value_error, "destination" "x", destx);
+        valid_rect = false;
+    }
+    
+    if (destx < 0)
+    {
+        log_fatal(negative_value_error, "destination" "y", desty);
+        valid_rect = false; 
+    }
+    
+    return valid_rect;
+}
+
+boolean V_CheckCopyRectMaximums(int srcx, int srcy, int destx, int desty, int width, int height)
+{
+    boolean valid_rect = true;
+
+    char error[] = "V_CheckCopyRectMaximums(): Can't copy rectangle because its %s dimensions (%dpx x %dpx) exceed the screen dimensions (%dpx x %dpx)";
+
+    int max_src_x = srcx + width;
+    int max_src_y = srcy + height;
+
+    if (max_src_x > SCREENWIDTH || max_src_y > SCREENHEIGHT)
+    {
+        log_fatal(error, "source", max_src_x, max_src_y, SCREENWIDTH, SCREENHEIGHT);
+        valid_rect = false;
+    }
+    
+    int max_dest_x = srcx + width;
+    int max_dest_y = srcy + height;
+    
+    if (max_dest_x > SCREENWIDTH || max_dest_y > SCREENHEIGHT)
+    {
+        log_fatal(error, "destination", max_dest_x, max_dest_y, SCREENWIDTH, SCREENHEIGHT);
+        valid_rect = false;
+    }
+
+    return valid_rect;
+}
+
+boolean V_CheckCopyRect(int srcx, int srcy, int destx, int desty, int width, int height)
+{
+    if (!V_CheckCopyRectMinimums(srcx, srcy, destx, desty))
+    {
+        return false; 
+    }
+    
+    if (!V_CheckCopyRectMaximums(srcx, srcy, destx, desty, width, height))
+    {
+        return false; 
+    }
+
+    return true;
+}
 
 //
 // V_CopyRect 
@@ -77,20 +152,12 @@ void V_CopyRect(int srcx, int srcy, pixel_t *source,
 { 
     pixel_t *src;
     pixel_t *dest;
- 
-#ifdef RANGECHECK 
-    if (srcx < 0
-     || srcx + width > SCREENWIDTH
-     || srcy < 0
-     || srcy + height > SCREENHEIGHT 
-     || destx < 0
-     || destx + width > SCREENWIDTH
-     || desty < 0
-     || desty + height > SCREENHEIGHT)
+
+    if (!V_CheckCopyRect(srcx, srcy, destx, desty, width, height))
     {
-        I_Error ("Bad V_CopyRect");
+        log_fatal("V_CopyRect(): Could not copy rectangle %x", source);
+        system_exit();
     }
-#endif 
 
     V_MarkRect(destx, desty, width, height); 
  

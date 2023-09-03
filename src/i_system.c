@@ -150,7 +150,7 @@ void I_Quit (void)
 
 static boolean already_quitting = false;
 
-void System_Exit()
+void system_exit()
 {
     atexit_listentry_t *entry;
     boolean exit_gui_popup;

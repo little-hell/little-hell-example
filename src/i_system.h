@@ -50,7 +50,7 @@ void I_Quit (void) NORETURN;
 void I_Error (const char *error, ...) NORETURN PRINTF_ATTR(1, 2);
 
 // Perform the same cleanup as I_Error but not responsible for printing
-void System_Exit();
+void system_exit();
 
 void *I_Realloc(void *ptr, size_t size);
 

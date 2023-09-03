@@ -26,12 +26,13 @@
 #include "d_event.h"
 #include "m_cheat.h"
 
+#include "../../engine/graphics/drawable.h"
+
 // Size of statusbar.
 // Now sensitive for scaling.
 #define ST_HEIGHT 32
 #define ST_WIDTH  SCREENWIDTH
 #define ST_Y      (SCREENHEIGHT - ST_HEIGHT)
-
 
 //
 // STATUS BAR
@@ -52,7 +53,27 @@ void ST_Start(void);
 // Called by startup code.
 void ST_Init(void);
 
+/** Data structure representing the current state of the status bar **/
+typedef struct {
+    /** Whether the status bar has been loaded for the first time. **/
+    boolean first_load;
+    /** Counter for the number of messages shown **/
+    int message_counter;
+    /** Whether the cursor is enabled. TOOD: used for what? **/
+    boolean cursor_on;
+} StatusBarState;
 
+/** Data structure representing the status bar **/
+typedef struct
+{
+    /** Drawable for the status bar**/
+    Drawable *drawable;
+    /** State of the status bar**/
+    StatusBarState state;
+
+} StatusBar;
+
+//TODO: unused?
 // States for status bar code.
 typedef enum
 {
