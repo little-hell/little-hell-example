@@ -1,65 +1,34 @@
-# mindoom
+# The little hell engine
 
-Mindoom is the [MINIX](https://en.wikipedia.org/wiki/Minix) of Doom ports. It's a hyper-minimalist fork of Chocolate Doom that is probably more fun to experiment with than to play as a video game. Mindoom aims to:
-- Have the smallest, easiest to study version of the Doom codebase, by throwing backwards compatibility to the wind (if necessary).
-- Peel back 30+ years of source port additions and scope creep until we can finally study what's happening under the hood (the bug fixes along the way are ok though!)
-- Make exploring the core principles of the Doom engine as zen-like as possible.
-- Integrate an embedded scripting language (such as Lua or Guile) to allow experimentation with the engine in a higher-level language.
-- Mindoom doesn't support Windows (a platform antithetic to the spirit of open-source software and the goals of this project).
+The little hell engine (or just "little hell") is a project that aims to re-imagine the idTech 1 for the modern day. 
 
-One could argue that this completely guts and kills the soul of DOOM. And you probably wouldn't even be wrong, but this is for science and John Carmack released Doom under the GPL.
+## Goals
 
+Starting with a true to the original source port of DOOM (Chocolate DOOM) as its foundation, the little hell engine aims to: 
 
-## Contents
-- [Motivation](#motivation)
-    - [Minimalism in the build system](#minimalism-in-the-build-system)
-    - [Minimalism in platform support, packing, and distribution](#minimalism-in-platform-support-packaging-and-distribution)
-    - [Minimalism in sound emulation support](#minimalism-in-sound-emulation-support)
-    - [Minimalism in features and legacy support](#minimalism-in-features-and-legacy-support)
-    - [Minimalism quantified](#minimalism-quantified)
-- [Development](#development)
-    - [Contributing](#contributing)
-    - [Building](#building)
-        - [Building on Linux or macOS with Nix (recommended)](#building-on-linux-or-macos-with-nix-recommended)
-        - [Building without Nix (Linux, macOS, OpenBSD, FreeBSD, etc)](#building-without-nix-linux-macos-openbsd-freebsd-etc)
-        - [Building on Windows](#building-on-windows)
-- [Release Roadmap](#release-roadmap)
-- [TODO](#todo)
-- [Compability Overview](#compatability-overview)
+- Foundationally shift from being a source port to being a standalone game engine
+- Renovate the idTech1 codebase and bring it into the 21st century using modern C best practices, with a cozy, high-level API
+- Maintain the 'soul' of idTech1, without the baggage of legacy code and support for hardware that is older than I am.
+- Facilitate the creation of new [boomer shooters](https://en.wiktionary.org/wiki/boomer_shooter) and other retro-style games built on the same roots of DOOM.
 
 
-## Motivation
+The little hell engine uses the game code for DOOM 1 as its test bed. Development of the engine is done in tandem with the development of our own version of DOOM I (v1.9 Registered Version) running on the little hell engine. When we begin to add new functionality to the engine (as opposed to just rewriting large quantities of it), attention will switch to creating a demo game designed to showcase and utilize all of the engine functionality.
 
-### Minimalism in the build system
-Mindoom does away with having dozens of nested `CMakeLists.txt` or `Makefile.am` files. You get a _single_ `meson.build` file, and that's all you need. There's also a Nix shell (`shell.nix`) in the project root. With a single command you can have all the project dependencies managed and an isolated development environment to work and build in.
 
+## Progress
+- [ ] Create a new API called `Drawable` for easy management of all 2D elements such as status bars, HUDs, etc.
+- [ ] Create a working demo game showcasing the engine.
 - [x] Use the Meson build system, and a Nix shell for frictionless dependency management.
 - [x] Removal of CMake and GNU Autotools
-
-### Minimalism in platform support, packaging and distribution
-`mindoom` simply does not care about Windows. We're killing it. We also don't care about packaging and distribution. The project is about exploring the code, binary distributions are useless to us. This means: 
-- [x] Removal of code that provides platform support for Windows
+- [x] Removal of code that provides platform support for Windows (to be re-added at a later date)
 - [x] Removal all packaging code for Win32, macOS, and Linux
-      
-It's a project built around exploration of an _open-source_ codebase - build the code yourself on an _open-source_ platform.
-
-### Minimalism in sound emulation support
-`mindoom` is not interested in emulating half a dozen different sound cards from the 90's. We drop support for everything except for `OPL`, because it sounds good and plays nice, except we don't support _any_ physical OPL hardware on _any_ OS, it's just software emulation.
-
 - [x] Remove emulation for GUS, PAS, PC Speaker, MIDI via Fluidsynth/Timidity/Windows, and music packs.
-- [x] Retain OPL emulation in software only. Nice and simple. 
-
-### Minimalism in features and legacy support
-A vast majority of the wonderful features added to source ports are extraneous to our goal of understanding the Doom engine. To that end, an awful lot has been removed:
-
+- [x] Retain OPL emulation in software only. Nice and simple.
 - [x] Remove DOOM II, Plutonia/TNT, Ultimate Doom, Final Doom, Strife, Heretic, and Hexen support
-- [x] Remove emulation of bugs and quirks of Doom v1.2, v1.666, etc - we do Doom v1.9 (Registered) only. 
-- [x] No DeHackEd, no wad-merging like DeuTex. Just the vanilla stuff.
+- [x] Remove deliberate emulation of bugs and quirks of Doom v1.2, v1.666, etc. Doom v1.9 is the basis of the little hell engine. 
+- [x] No DeHackEd, no wad-merging like DeuTex.
 - [x] Remove the `setup` application. Edit the `.cfg` by hand. Minimalism, baby.
 
-The only features it _adds_ are to change the default controls to utilize the `WASD` key cluster, with `E` for interaction. Because anything else would not be Zen.
-
-### Minimalism quantified
 
 Lines of code aren't a metric of code quality, but they sure are a metric of code quantity.
 
@@ -81,26 +50,7 @@ Lines of code aren't a metric of code quality, but they sure are a metric of cod
 | TNSDL              | 1     | 1     | 0       | 11     | TNSDL              |       |       |         |       |
 | Sum                | 626   | 45186 | 49487   | 230396 | Sum                | 307   | 18527 | 16914   | 70267 |
 
-## Development
-
-
-
-### Contributing
-
-Contributions are _absolutely_ appreciated and will be received with open arms so long as they mesh with the goals of the project.
-If your PR involves cleaning something up, it probably aligns with the goals of `mindoom` and we'd be thrilled to have it. 
-See [HACKING.MD](https://github.com/ranguli/mindoom/blob/master/HACKING.md) for coding conventions and what not.
-
-### Building
-
-While you're free to build `mindoom` however you like, the 'mindoom way' is to use the Meson build system inside a
-Nix shell environment when you're on macOS or Linux. This takes all of the pain out of trying to wrangle 
-dependencies header files. It's _really_ great and I recommend you try it. 
-
-
-#### Building on Linux or macOS with Nix (recommended)
-
-The only dependency _you_ need is `git`, and Nix. All the dependencies that _Doom_ needs are taken care of. 
+## Building
 
 ```bash
 git clone https://github.com/ranguli/mindoom
@@ -109,31 +59,6 @@ nix-shell shell.nix
 meson build
 ninja -C build
 ```
-
-#### Building without Nix (Linux, macOS, OpenBSD, FreeBSD, etc)
-Nix doesn't support our other BSD friends. That's a shame, but no worries, it's a big world out there. 
-You may also just not want to use Nix, which is fine too.
-
-You'll just need to source the following from your package manager:
-- `meson` (which needs `python`)
-- `SDL2`
-- `SDL2_net`
-- `SDL2_mixer`
-
-On a Debian-based system (Ubuntu, PopOS, Mint, etc) that might look something like:
-```
-sudo apt install git python3 meson libsdl2-dev libsdl2-net-dev libsdl2-mixer-dev
-```
-
-Or on Arch-based system:
-```
-sudo pacman -S sdl2 sdl2_net sdl2_mixer
-```
-
-Then your build steps are exactly the same as the steps above, minus the `nix` command.
-
-#### Building on Windows
-Don't.
 
 ## Release Roadmap
 - v0.0.7: The refactor, comment, and log release
@@ -164,146 +89,3 @@ Don't.
    - [x] Remove codebases for Strife, Hexen, and Heretic
    - [x] Remove packaging and distribution code
    - [x] Misc. repository cleanup
-
-## TODO:
-
-- Github actions
-- Embedded scripting of some kind with a well-documented API
-- A simpler configuration system? Text files are fine, but surely we can clean it up someway.
-- Only support PNG screenshots (no PCX)
-- Remove DOS emulation of null Read Access Violation (system.c:300)
-- (Gradually) replace bespoke file I/O with posix ones
-- Remove gamma correction feature
-- 
-## Compatability Overview
-
-Over the years a lot of configuration options have been added to various source ports of Doom as they add support for different things. Here is an (incomplete) table that overviews what options remain in mindoom:
-
-| Configuration Value        | Removed?    |
-|----------------------------|-------------|
-| video_driver               |             |
-| window_position            |             |
-| fullscreen                 |             |
-| video_display              |             |
-| aspect_ratio_correct       |             |
-| integer_scaling            |             |
-| vga_porch_flash            |To be removed|
-| window_width               |             |
-| window_height              |             |
-| fullscreen_width           |             |
-| fullscreen_height          |             |
-| force_software_renderer    |             |
-| max_scaling_buffer_pixels  |             |
-| startup_delay              |             |
-| show_endoom                |             |
-| show_diskicon              |             |
-| png_screenshots            |To be removed|
-| snd_samplerate             |             |
-| snd_cachesize              |             |
-| snd_maxslicetime_ms        |             |
-| snd_pitchshift             |             |
-| snd_musiccmd               |Removed      |
-| snd_dmxoption              |Removed      |
-| opl_io_port                |Removed      |
-| use_libsamplerate          |             |
-| libsamplerate_scale        |             |
-| music_pack_path            |Removed      |
-| timidity_cfg_path          |Removed      |
-| gus_patch_path             |Removed      |
-| gus_ram_kb                 |Removed      |
-| vanilla_savegame_limit     |             |
-| vanilla_demo_limit         |             |
-| vanilla_keyboard_mapping   |             |
-| player_name                |             |
-| grabmouse                  |             |
-| novert                     |             |
-| mouse_acceleration         |             |
-| mouse_threshold            |             |
-| mouseb_strafeleft          |             |
-| mouseb_straferight         |             |
-| mouseb_use                 |             |
-| mouseb_backward            |             |
-| mouseb_prevweapon          |             |
-| mouseb_nextweapon          |             |
-| dclick_use                 |             |
-| joystick_guid              |             |
-| joystick_index             |             |
-| joystick_x_axis            |             |
-| joystick_x_invert          |             |
-| joystick_y_axis            |             |
-| joystick_y_invert          |             |
-| joystick_strafe_axis       |             |
-| joystick_strafe_invert     |             |
-| joystick_look_axis         |             |
-| joystick_look_invert       |             |
-| joystick_physical_button0  |             |
-| joystick_physical_button1  |             |
-| joystick_physical_button2  |             |
-| joystick_physical_button3  |             |
-| joystick_physical_button4  |             |
-| joystick_physical_button5  |             |
-| joystick_physical_button6  |             |
-| joystick_physical_button7  |             |
-| joystick_physical_button8  |             |
-| joystick_physical_button9  |             |
-| joystick_physical_button10 |             |
-| joyb_strafeleft            |             |
-| joyb_straferight           |             |
-| joyb_menu_activate         |             |
-| joyb_toggle_automap        |             |
-| joyb_prevweapon            |             |
-| joyb_nextweapon            |             |
-| key_pause                  |             |
-| key_menu_activate          |             |
-| key_menu_up                |             |
-| key_menu_down              |             |
-| key_menu_left              |             |
-| key_menu_right             |             |
-| key_menu_back              |             |
-| key_menu_forward           |             |
-| key_menu_confirm           |             |
-| key_menu_abort             |             |
-| key_menu_help              |             |
-| key_menu_save              |             |
-| key_menu_load              |             |
-| key_menu_volume            |             |
-| key_menu_detail            |             |
-| key_menu_qsave             |             |
-| key_menu_endgame           |             |
-| key_menu_messages          |             |
-| key_menu_qload             |             |
-| key_menu_quit              |             |
-| key_menu_gamma             |             |
-| key_spy                    |             |
-| key_menu_incscreen         |             |
-| key_menu_decscreen         |             |
-| key_menu_screenshot        |             |
-| key_map_toggle             |             |
-| key_map_north              |             |
-| key_map_south              |             |
-| key_map_east               |             |
-| key_map_west               |             |
-| key_map_zoomin             |             |
-| key_map_zoomout            |             |
-| key_map_maxzoom            |             |
-| key_map_follow             |             |
-| key_map_grid               |             |
-| key_map_mark               |             |
-| key_map_clearmark          |             |
-| key_weapon1                |             |
-| key_weapon2                |             |
-| key_weapon3                |             |
-| key_weapon4                |             |
-| key_weapon5                |             |
-| key_weapon6                |             |
-| key_weapon7                |             |
-| key_weapon8                |             |
-| key_prevweapon             |             |
-| key_nextweapon             |             |
-| key_message_refresh        |             |
-| key_demo_quit              |             |
-| key_multi_msg              |             |
-| key_multi_msgplayer1       |             |
-| key_multi_msgplayer2       |             |
-| key_multi_msgplayer3       |             |
-| key_multi_msgplayer4       |             |
