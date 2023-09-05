@@ -40,8 +40,7 @@ dedicated_server_source_files = files(
 
 
 # Source files only used by the game binary 
-doom_source_dir = 'doom'
-game_source_files = files(
+engine_source_files = files(
     src_dir / 'd_event.c',
     src_dir / 'doomtype.h',
     src_dir / 'd_iwad.c',
@@ -87,7 +86,10 @@ game_source_files = files(
     src_dir / 'w_file.c',
     src_dir / 'w_file_stdc.c',
     src_dir / 'w_file_posix.c',
+  )
 
+doom_source_dir = 'doom'
+game_source_files = files(
     src_dir / doom_source_dir / 'am_map.c',
     src_dir / doom_source_dir / 'd_items.c',
     src_dir / doom_source_dir / 'd_main.c',
@@ -134,11 +136,8 @@ game_source_files = files(
     src_dir / doom_source_dir / 'sounds.c',
     src_dir / doom_source_dir / 's_sound.c',
     src_dir / doom_source_dir / 'statdump.c',
-
-    # Code for the HUD
     src_dir / doom_source_dir / 'hud' / 'widget.c',
     src_dir / doom_source_dir / 'hud' / 'statusbar.c',
-
     src_dir / doom_source_dir / 'wi_stuff.c'
 )
 
@@ -205,6 +204,8 @@ opl_source_files = files(
 textscreen = library('textscreen', textscreen_source_files, include_directories: include_directories(src_dir), dependencies: deps)
 opl = library('opl', opl_source_files, dependencies: deps)
 
+littlehell = library('littlehell', engine_source_files, include_directories: [include_directories(src_dir), include_directories(opl_source_dir), include_directories(textscreen_source_dir)], dependencies: [sdl2, sdl2_net, sdl2_mixer], link_with: [textscreen, opl])
+
 # Build the game binary
 executable('mindoom', 
     sources: [
@@ -212,11 +213,11 @@ executable('mindoom',
         game_source_files,
     ],
     link_with: [
-        textscreen, 
-        opl
+        littlehell
     ], 
     include_directories: [
         include_directories('src'),
+        include_directories('src/doom'),
         include_directories(textscreen_source_dir),
         include_directories(opl_source_dir), 
     ],
@@ -224,8 +225,8 @@ executable('mindoom',
 )
 
 # Build the server binary
-executable('mindoom-server', common_source_files, dedicated_server_source_files, dependencies:
-  deps)
+#executable('mindoom-server', common_source_files, dedicated_server_source_files, dependencies:
+#  deps)
 
 run_target('clang-tidy',
   command : 'scripts/clang-tidy.sh')
