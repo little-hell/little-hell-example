@@ -21,7 +21,9 @@
 
 #include "doomtype.h"
 #include "d_mode.h"
-#include "i_system.h"
+#include "littlehell/system.h"
+#include "littlehell/meta.h"
+#include "libs/log/log.h"
 #include "i_timer.h"
 #include "m_argv.h"
 #include "m_misc.h"
@@ -597,7 +599,7 @@ static void NET_SV_ParseSYN(net_packet_t *packet, net_client_t *client,
             NET_SV_SendReject(
                 addr,
                 "You are using an old client version that is not supported by "
-                "this server. This server is running " PACKAGE_STRING ".");
+                "this server. This server is running " LH_PACKAGE_STRING ".");
             return;
 
         default:
@@ -624,7 +626,7 @@ static void NET_SV_ParseSYN(net_packet_t *packet, net_client_t *client,
         char reject_msg[256];
 
         M_snprintf(reject_msg, sizeof(reject_msg),
-                   "Version mismatch: server version is: " PACKAGE_STRING "; "
+                   "Version mismatch: server version is: " LH_PACKAGE_STRING "; "
                    "client is: %s. No common compatible protocol could be "
                    "negotiated.",
                    client_version);
@@ -760,7 +762,7 @@ static void NET_SV_ParseSYN(net_packet_t *packet, net_client_t *client,
     // Send a reply back to the client, indicating a successful connection
     // and specifying the protocol that will be used for communications.
     reply = NET_Conn_NewReliable(&client->connection, NET_PACKET_TYPE_SYN);
-    NET_WriteString(reply, PACKAGE_STRING);
+    NET_WriteString(reply, LH_PACKAGE_STRING);
     NET_WriteProtocol(reply, protocol);
 }
 
@@ -1265,7 +1267,8 @@ static void NET_SV_SendTics(net_client_t *client, unsigned int start,
 
         if (i != cmd->seq)
         {
-            I_Error("Wanted to send %i, but %i is in its place", i, cmd->seq);
+            log_fatal("Wanted to send %i, but %i is in its place", i, cmd->seq);
+			system_exit();
         }
 
         // Add command
@@ -1339,7 +1342,7 @@ void NET_SV_SendQueryResponse(net_addr_t *addr)
 
     // Version
 
-    querydata.version = PACKAGE_STRING;
+    querydata.version = LH_PACKAGE_STRING;
 
     // Server state
 

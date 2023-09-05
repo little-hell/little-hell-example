@@ -23,7 +23,7 @@
 #include "d_loop.h"
 #include "d_ticcmd.h"
 
-#include "i_system.h"
+#include "littlehell/system.h"
 #include "i_timer.h"
 #include "i_video.h"
 
@@ -506,7 +506,7 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
         NET_ReleaseAddress(addr);
 
         // Wait for launch message received from server.
-	
+
 	//TODO: Networking is going to be broken because this function requires the textscreen library?
         //NET_WaitForLaunch();
 

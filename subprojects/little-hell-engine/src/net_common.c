@@ -21,7 +21,7 @@
 
 #include "doomtype.h"
 #include "d_mode.h"
-#include "i_system.h"
+#include "littlehell/system.h"
 #include "i_timer.h"
 #include "m_argv.h"
 #include "m_misc.h"

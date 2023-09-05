@@ -28,7 +28,7 @@
 #include "doomtype.h"
 
 #include "i_swap.h"
-#include "i_system.h"
+#include "littlehell/system.h"
 #include "i_video.h"
 #include "m_misc.h"
 #include "v_video.h"

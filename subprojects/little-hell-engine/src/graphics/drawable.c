@@ -21,7 +21,7 @@
 // Zone memory allocator
 #include "../../z_zone.h"
 // System functions (exit)
-#include "../../i_system.h"
+#include "../../littlehell/littlehell/system.h"
 // Drawing code
 #include "../../v_video.h"
 // Endian-safe conversions

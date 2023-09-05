@@ -20,7 +20,7 @@
 #include <stdio.h>
 
 #include "doomtype.h"
-#include "i_system.h"
+#include "littlehell/system.h"
 #include "m_argv.h"
 #include "m_misc.h"
 #include "net_defs.h"
@@ -111,15 +111,15 @@ static net_addr_t *NET_SDL_FindAddress(IPaddress *addr)
         // in the new block of memory
 
         empty_entry = addr_table_size;
-        
-        // allocate a new array twice the size, init to 0 and copy 
+
+        // allocate a new array twice the size, init to 0 and copy
         // the existing table in.  replace the old table.
 
         new_addr_table_size = addr_table_size * 2;
         new_addr_table = Z_Malloc(sizeof(addrpair_t *) * new_addr_table_size,
                                   PU_STATIC, 0);
         memset(new_addr_table, 0, sizeof(addrpair_t *) * new_addr_table_size);
-        memcpy(new_addr_table, addr_table, 
+        memcpy(new_addr_table, addr_table,
                sizeof(addrpair_t *) * addr_table_size);
         Z_Free(addr_table);
         addr_table = new_addr_table;
@@ -127,7 +127,7 @@ static net_addr_t *NET_SDL_FindAddress(IPaddress *addr)
     }
 
     // Add a new entry
-    
+
     new_entry = Z_Malloc(sizeof(addrpair_t), PU_STATIC, 0);
 
     new_entry->sdl_addr = *addr;
@@ -143,7 +143,7 @@ static net_addr_t *NET_SDL_FindAddress(IPaddress *addr)
 static void NET_SDL_FreeAddress(net_addr_t *addr)
 {
     int i;
-    
+
     for (i=0; i<addr_table_size; ++i)
     {
         if (addr == &addr_table[i]->net_addr)
@@ -168,7 +168,7 @@ static boolean NET_SDL_InitClient(void)
     // @category net
     // @arg <n>
     //
-    // Use the specified UDP port for communications, instead of 
+    // Use the specified UDP port for communications, instead of
     // the default (2342).
     //
 
@@ -184,7 +184,7 @@ static boolean NET_SDL_InitClient(void)
     {
         I_Error("NET_SDL_InitClient: Unable to open a socket!");
     }
-    
+
     recvpacket = SDLNet_AllocPacket(1500);
 
 #ifdef DROP_PACKETS
@@ -230,7 +230,7 @@ static void NET_SDL_SendPacket(net_addr_t *addr, net_packet_t *packet)
 {
     UDPpacket sdl_packet;
     IPaddress ip;
-   
+
     if (addr == &net_broadcast_addr)
     {
         SDLNet_ResolveHost(&ip, NULL, port);
@@ -350,7 +350,7 @@ net_addr_t *NET_SDL_ResolveAddress(const char *address)
     {
 	addr_port = port;
     }
-    
+
     result = SDLNet_ResolveHost(&ip, addr_hostname, addr_port);
 
     free(addr_hostname);

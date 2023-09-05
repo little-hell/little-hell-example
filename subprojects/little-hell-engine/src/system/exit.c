@@ -17,7 +17,7 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "system.h"
+#include "littlehell/littlehell/system.h"
 
 const char* ExitCodeStrings[EXIT_CODE_COUNT] = {
     "EXIT_SUCCESS",

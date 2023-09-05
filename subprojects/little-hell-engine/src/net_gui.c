@@ -15,7 +15,7 @@
 //
 //  * The client waiting screen when we are waiting for the server to
 //    start the game.
-//   
+//
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -23,7 +23,7 @@
 
 #include "doomkeys.h"
 
-#include "i_system.h"
+#include "system.h"
 #include "i_timer.h"
 #include "i_video.h"
 #include "m_argv.h"
@@ -267,7 +267,7 @@ static void CheckSHA1Sums(void)
     }
 
     correct_wad = memcmp(net_local_wad_sha1sum,
-                         net_client_wait_data.wad_sha1sum, 
+                         net_client_wait_data.wad_sha1sum,
                          sizeof(sha1_digest_t)) == 0;
     if (correct_wad)
     {
@@ -350,7 +350,7 @@ void NET_WaitForLaunch(void)
     }
 
     TXT_SetColor(TXT_COLOR_BLUE, 0x04, 0x14, 0x40); // Romero's "funky blue" color
-    
+
     I_InitWindowIcon();
 
     ParseCommandLineArgs();

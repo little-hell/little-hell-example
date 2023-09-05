@@ -30,7 +30,7 @@
 
 #include "doomtype.h"
 #include "doomkeys.h"
-#include "i_system.h"
+#include "littlehell/system.h"
 #include "m_argv.h"
 #include "m_config.h"
 #include "m_misc.h"

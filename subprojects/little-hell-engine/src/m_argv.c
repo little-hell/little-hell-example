@@ -25,7 +25,7 @@
 
 #include "doomtype.h"
 #include "d_iwad.h"
-#include "i_system.h"
+#include "littlehell/system.h"
 #include "m_misc.h"
 #include "m_argv.h"  // haleyjd 20110212: warning fix
 

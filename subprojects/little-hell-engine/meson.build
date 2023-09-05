@@ -9,8 +9,9 @@ sdl2_mixer = dependency('SDL2_mixer')
 deps = [sdl2, sdl2_net, sdl2_mixer]
 
 src_dir = 'src'
+system_src_dir = 'system'
 
-# Source files only used by the game binary 
+# Source files only used by the game binary
 engine_source_files = files(
     src_dir / 'd_event.c',
     src_dir / 'doomtype.h',
@@ -19,17 +20,21 @@ engine_source_files = files(
     src_dir / 'd_loop.c',
     src_dir / 'i_glob.c',
     src_dir / 'i_input.c',
+
+    # System module source files
+    src_dir / system_src_dir / 'system.c',
+    #src_dir / system_src_dir / 'exit.c',
+    #src_dir / system_src_dir / 'sleep.c',
+
     src_dir / 'i_joystick.c',
     src_dir / 'i_oplmusic.c',
     src_dir / 'i_sdlsound.c',
     src_dir / 'i_sound.c',
-    src_dir / 'i_system.c',
     src_dir / 'i_timer.c',
     src_dir / 'i_video.c',
     src_dir / 'midifile.c',
     src_dir / 'mus2mid.c',
     src_dir / 'm_argv.c',
-    src_dir / 'log.c',
     src_dir / 'm_bbox.c',
     src_dir / 'm_cheat.c',
     src_dir / 'm_config.c',
@@ -63,8 +68,12 @@ engine_source_files = files(
   )
 
 
+# Compile 3rd-party libraries inside the repository
+
+libs_src_dir = 'libs'
+
 # Source files for the OPL emulation library
-opl_source_dir=  'libs' / 'opl'
+opl_source_dir =  libs_src_dir / 'opl'
 opl_source_files = files(
     opl_source_dir / 'opl3.c',
     opl_source_dir / 'opl.c',
@@ -75,12 +84,22 @@ opl_source_files = files(
 
 opl = library('opl', opl_source_files, dependencies: deps)
 
-littlehell_lib = library('liblittlehell', engine_source_files, include_directories: include_directories(opl_source_dir), dependencies: [sdl2, sdl2_net, sdl2_mixer], link_with: opl)
+# rxi/log.c logging library
+log_source_dir = libs_src_dir / 'log'
+log_source_files = files (
+    log_source_dir / 'log.c'
+)
+
+log = library('log', log_source_files)
+
+littlehell_include_dir = 'include/'
+
+littlehell_lib = library('littlehell', engine_source_files, include_directories: [include_directories(libs_src_dir), include_directories(littlehell_include_dir), include_directories(src_dir)], dependencies: [sdl2, sdl2_net, sdl2_mixer], link_with: [opl, log])
 
 # When declaring the dependency, also specify the include directories.
 
 if meson.is_subproject()
-  littlehell_dep = declare_dependency(link_with: littlehell_lib, dependencies: [sdl2, sdl2_net, sdl2_mixer], include_directories: include_directories(src_dir))
+  littlehell_dep = declare_dependency(link_with: littlehell_lib, dependencies: [sdl2, sdl2_net, sdl2_mixer], include_directories: [include_directories(src_dir), include_directories(littlehell_include_dir)])
 endif
 
 run_target('clang-tidy',

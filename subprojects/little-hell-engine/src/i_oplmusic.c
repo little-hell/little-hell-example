@@ -30,7 +30,7 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
-#include "opl.h"
+#include "libs/opl/opl.h"
 #include "midifile.h"
 
 // #define OPL_MIDI_DEBUG

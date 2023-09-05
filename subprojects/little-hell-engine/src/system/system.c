@@ -32,9 +32,6 @@
 
 #include "SDL.h"
 
-#include "config.h"
-
-#include "deh_str.h"
 #include "doomtype.h"
 #include "m_argv.h"
 #include "m_config.h"
@@ -44,7 +41,7 @@
 #include "i_timer.h"
 #include "i_video.h"
 
-#include "i_system.h"
+#include "littlehell/system.h"
 
 #include "w_wad.h"
 #include "z_zone.h"
@@ -129,51 +126,13 @@ byte *I_ZoneBase (int *size)
 
     zonemem = AutoAllocMemory(size, default_ram, min_ram);
 
-    printf("zone memory: %p, %x allocated for zone\n", 
+    printf("zone memory: %p, %x allocated for zone\n",
            zonemem, *size);
 
     return zonemem;
 }
 
-void I_PrintBanner(const char *msg)
-{
-    int i;
-    int spaces = 35 - (strlen(msg) / 2);
-
-    for (i=0; i<spaces; ++i)
-        putchar(' ');
-
-    puts(msg);
-}
-
-void I_PrintDivider(void)
-{
-    int i;
-
-    for (i=0; i<75; ++i)
-    {
-        putchar('=');
-    }
-
-    putchar('\n');
-}
-
-void I_PrintStartupBanner(const char *gamedescription)
-{
-    I_PrintDivider();
-    I_PrintBanner(gamedescription);
-    I_PrintDivider();
-    
-    printf(
-    " " PACKAGE_NAME " is free software, covered by the GNU General Public\n"
-    " License.  There is NO warranty; not even for MERCHANTABILITY or FITNESS\n"
-    " FOR A PARTICULAR PURPOSE. You are welcome to change and distribute\n"
-    " copies under certain conditions. See the source for more information.\n");
-
-    I_PrintDivider();
-}
-
-// 
+//
 // I_ConsoleStdout
 //
 // Returns true if stdout is a real console, false if it is a file

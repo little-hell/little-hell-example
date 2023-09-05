@@ -13,14 +13,14 @@
 //
 //
 // Dedicated server code.
-// 
+//
 
 #include <stdio.h>
 #include <stdlib.h>
 
 #include "doomtype.h"
 
-#include "i_system.h"
+#include "littlehell/system.h"
 #include "i_timer.h"
 
 #include "m_argv.h"
@@ -29,7 +29,7 @@
 #include "net_sdl.h"
 #include "net_server.h"
 
-// 
+//
 // People can become confused about how dedicated servers work.  Game
 // options are specified to the controlling player who is the first to
 // join a game.  Bomb out with an error message if game options are

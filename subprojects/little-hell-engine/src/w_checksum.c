@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "i_system.h"
+#include "littlehell/system.h"
 #include "m_misc.h"
 #include "sha1.h"
 #include "w_checksum.h"

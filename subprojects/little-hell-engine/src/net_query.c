@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "i_system.h"
+#include "littlehell/system.h"
 #include "i_timer.h"
 #include "m_misc.h"
 

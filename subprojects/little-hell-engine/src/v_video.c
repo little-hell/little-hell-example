@@ -24,7 +24,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "i_system.h"
+#include "littlehell/system.h"
 
 #include "doomtype.h"
 
@@ -49,39 +49,39 @@
 
 static pixel_t *dest_screen = NULL;
 
-int dirtybox[4]; 
+int dirtybox[4];
 
 //
-// V_MarkRect 
-// 
-void V_MarkRect(int x, int y, int width, int height) 
-{ 
-    // If we are temporarily using an alternate screen, do not 
+// V_MarkRect
+//
+void V_MarkRect(int x, int y, int width, int height)
+{
+    // If we are temporarily using an alternate screen, do not
     // affect the update box.
 
     if (dest_screen == I_VideoBuffer)
     {
-        M_AddToBox (dirtybox, x, y); 
-        M_AddToBox (dirtybox, x + width-1, y + height-1); 
+        M_AddToBox (dirtybox, x, y);
+        M_AddToBox (dirtybox, x + width-1, y + height-1);
     }
-} 
- 
+}
+
 
 //
-// V_CopyRect 
-// 
+// V_CopyRect
+//
 void V_CopyRect(int srcx, int srcy, pixel_t *source,
                 int width, int height,
                 int destx, int desty)
-{ 
+{
     pixel_t *src;
     pixel_t *dest;
- 
-#ifdef RANGECHECK 
+
+#ifdef RANGECHECK
     if (srcx < 0
      || srcx + width > SCREENWIDTH
      || srcy < 0
-     || srcy + height > SCREENHEIGHT 
+     || srcy + height > SCREENHEIGHT
      || destx < 0
      || destx + width > SCREENWIDTH
      || desty < 0
@@ -89,28 +89,28 @@ void V_CopyRect(int srcx, int srcy, pixel_t *source,
     {
         I_Error ("Bad V_CopyRect");
     }
-#endif 
+#endif
 
-    V_MarkRect(destx, desty, width, height); 
- 
-    src = source + SCREENWIDTH * srcy + srcx; 
-    dest = dest_screen + SCREENWIDTH * desty + destx; 
+    V_MarkRect(destx, desty, width, height);
 
-    for ( ; height>0 ; height--) 
-    { 
+    src = source + SCREENWIDTH * srcy + srcx;
+    dest = dest_screen + SCREENWIDTH * desty + destx;
+
+    for ( ; height>0 ; height--)
+    {
         memcpy(dest, src, width * sizeof(*dest));
-        src += SCREENWIDTH; 
-        dest += SCREENWIDTH; 
-    } 
-} 
- 
+        src += SCREENWIDTH;
+        dest += SCREENWIDTH;
+    }
+}
+
 //
 // V_DrawPatch
-// Masks a column based masked pic to the screen. 
+// Masks a column based masked pic to the screen.
 //
 
 void V_DrawPatch(int x, int y, patch_t *patch)
-{ 
+{
     int count;
     int col;
     column_t *column;
@@ -170,17 +170,17 @@ void V_DrawPatch(int x, int y, patch_t *patch)
 void V_DrawPatchFlipped(int x, int y, patch_t *patch)
 {
     int count;
-    int col; 
-    column_t *column; 
+    int col;
+    column_t *column;
     pixel_t *desttop;
     pixel_t *dest;
-    byte *source; 
-    int w; 
- 
-    y -= SHORT(patch->topoffset); 
-    x -= SHORT(patch->leftoffset); 
+    byte *source;
+    int w;
 
-#ifdef RANGECHECK 
+    y -= SHORT(patch->topoffset);
+    x -= SHORT(patch->leftoffset);
+
+#ifdef RANGECHECK
     if (x < 0
      || x + SHORT(patch->width) > SCREENWIDTH
      || y < 0
@@ -222,13 +222,13 @@ void V_DrawPatchFlipped(int x, int y, patch_t *patch)
 
 //
 // V_DrawPatchDirect
-// Draws directly to the screen on the pc. 
+// Draws directly to the screen on the pc.
 //
 
 void V_DrawPatchDirect(int x, int y, patch_t *patch)
 {
-    V_DrawPatch(x, y, patch); 
-} 
+    V_DrawPatch(x, y, patch);
+}
 
 //
 // V_DrawBlock
@@ -236,10 +236,10 @@ void V_DrawPatchDirect(int x, int y, patch_t *patch)
 //
 
 void V_DrawBlock(int x, int y, int width, int height, pixel_t *src)
-{ 
+{
     pixel_t *dest;
- 
-#ifdef RANGECHECK 
+
+#ifdef RANGECHECK
     if (x < 0
      || x + width >SCREENWIDTH
      || y < 0
@@ -247,19 +247,19 @@ void V_DrawBlock(int x, int y, int width, int height, pixel_t *src)
     {
 	I_Error ("Bad V_DrawBlock");
     }
-#endif 
- 
-    V_MarkRect (x, y, width, height); 
- 
-    dest = dest_screen + y * SCREENWIDTH + x; 
+#endif
 
-    while (height--) 
-    { 
+    V_MarkRect (x, y, width, height);
+
+    dest = dest_screen + y * SCREENWIDTH + x;
+
+    while (height--)
+    {
 	memcpy (dest, src, width * sizeof(*dest));
-	src += width; 
-	dest += SCREENWIDTH; 
-    } 
-} 
+	src += width;
+	dest += SCREENWIDTH;
+    }
+}
 
 void V_DrawFilledBox(int x, int y, int w, int h, int c)
 {
@@ -318,9 +318,9 @@ void V_DrawBox(int x, int y, int w, int h, int c)
 
 //
 // V_Init
-// 
-void V_Init (void) 
-{ 
+//
+void V_Init (void)
+{
     // no-op!
     // There used to be separate screens that could be drawn to; these are
     // now handled in the upper layers.
@@ -355,17 +355,17 @@ typedef PACKED_STRUCT (
     unsigned short	ymin;
     unsigned short	xmax;
     unsigned short	ymax;
-    
+
     unsigned short	hres;
     unsigned short	vres;
 
     unsigned char	palette[48];
-    
+
     char		reserved;
     char		color_planes;
     unsigned short	bytes_per_line;
     unsigned short	palette_type;
-    
+
     char		filler[58];
     unsigned char	data;		// unbounded
 }) pcx_t;
@@ -383,7 +383,7 @@ void WritePCXfile(char *filename, pixel_t *data,
     int		length;
     pcx_t*	pcx;
     byte*	pack;
-	
+
     pcx = Z_Malloc (width*height*2+1000, PU_STATIC, NULL);
 
     pcx->manufacturer = 0x0a;		// PCX id
@@ -405,7 +405,7 @@ void WritePCXfile(char *filename, pixel_t *data,
 
     // pack the image
     pack = &pcx->data;
-	
+
     for (i=0 ; i<width*height ; i++)
     {
 	if ( (*data & 0xc0) != 0xc0)
@@ -416,12 +416,12 @@ void WritePCXfile(char *filename, pixel_t *data,
 	    *pack++ = *data++;
 	}
     }
-    
+
     // write the palette
     *pack++ = 0x0c;	// palette ID byte
     for (i=0 ; i<768 ; i++)
 	*pack++ = *palette++;
-    
+
     // write output file
     length = pack - (byte *)pcx;
     M_WriteFile (filename, pcx, length);
@@ -556,7 +556,7 @@ void V_ScreenShot(const char *format)
     int i;
     char lbmname[16]; // haleyjd 20110213: BUG FIX - 12 is too small!
     const char *ext;
-    
+
     // find a file name to save it to
 
 #ifdef HAVE_LIBPNG

@@ -15,13 +15,11 @@
 // DESCRIPTION:
 //	Simple basic typedefs, isolated here to make it easier
 //	 separating modules.
-//    
+//
 
 
 #ifndef __DOOMTYPE__
 #define __DOOMTYPE__
-
-#include "config.h"
 
 #if defined(_MSC_VER) && !defined(__cplusplus)
 #define inline __inline
@@ -49,7 +47,7 @@
 
 
 //
-// The packed attribute forces structures to be packed into the minimum 
+// The packed attribute forces structures to be packed into the minimum
 // space necessary.  If this is not done, the compiler may align structure
 // fields differently to optimize memory access, inflating the overall
 // structure size.  It is important to use the packed attribute on certain
@@ -94,9 +92,9 @@
 // should add conditional statements that define the C99 types.
 
 // What is really wanted here is stdint.h; however, some old versions
-// of Solaris don't have stdint.h and only have inttypes.h (the 
-// pre-standardisation version).  inttypes.h is also in the C99 
-// standard and defined to include stdint.h, so include this. 
+// of Solaris don't have stdint.h and only have inttypes.h (the
+// pre-standardisation version).  inttypes.h is also in the C99
+// standard and defined to include stdint.h, so include this.
 
 #include <inttypes.h>
 
@@ -108,9 +106,9 @@ typedef bool boolean;
 
 #else
 
-typedef enum 
+typedef enum
 {
-    false, 
+    false,
     true
 } boolean;
 

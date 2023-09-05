@@ -17,8 +17,8 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef SYSTEM_H 
-#define SYSTEM_H 
+#ifndef SYSTEM_H
+#define SYSTEM_H
 
 #include "d_ticcmd.h"
 #include "d_event.h"
@@ -44,7 +44,7 @@ void system_exit();
  *  @param func The callback function to execute
  *  @param run_on_error Whether this function should be executed if the system exists on an error.
  */
-void system_on_exit(on_exit_func_t func, boolean run_on_error)
+void system_on_exit(on_exit_func_t func, boolean run_on_error);
 
 // Called by DoomMain.
 void I_Init (void);

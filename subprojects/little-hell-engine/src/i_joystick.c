@@ -27,7 +27,7 @@
 #include "doomtype.h"
 #include "d_event.h"
 #include "i_joystick.h"
-#include "i_system.h"
+#include "littlehell/system.h"
 
 #include "m_config.h"
 #include "m_misc.h"

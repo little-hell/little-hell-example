@@ -18,7 +18,7 @@
 
 #include <stdio.h>
 
-#include "i_system.h"
+#include "littlehell/system.h"
 #include "net_defs.h"
 #include "net_io.h"
 #include "z_zone.h"
@@ -49,7 +49,7 @@ void NET_AddModule(net_context_t *context, net_module_t *module)
     {
         I_Error("NET_AddModule: No more modules for context");
     }
-    
+
     context->modules[context->num_modules] = module;
     ++context->num_modules;
 }
@@ -88,14 +88,14 @@ void NET_SendBroadcast(net_context_t *context, net_packet_t *packet)
     }
 }
 
-boolean NET_RecvPacket(net_context_t *context, 
-                       net_addr_t **addr, 
+boolean NET_RecvPacket(net_context_t *context,
+                       net_addr_t **addr,
                        net_packet_t **packet)
 {
     int i;
-    
+
     // check all modules for new packets
-    
+
     for (i=0; i<context->num_modules; ++i)
     {
         if (context->modules[i]->RecvPacket(addr, packet))
