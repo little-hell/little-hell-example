@@ -1,21 +1,4 @@
-# Source files used by both the client binary and the server binary
-#common_source_files = files(
-#    src_dir / 'littlehell' / 'doomkeys.h',
-#    src_dir / 'littlehell' / 'doomtype.h',
-#    src_dir / 'littlehell' / 'i_main.c',
-#    src_dir / 'littlehell' / 'i_system.c',
-#    src_dir / 'littlehell' / 'm_argv.c',
-#    src_dir / 'littlehell' / 'm_misc.c',
-#    src_dir / 'littlehell' / 'z_native.c',
-#    src_dir / 'littlehell' / 'log.c',
-#  )
-
-# Source files only used by the server binary 
-dedicated_server_source_files = files(
-    'net_dedicated.c',
-  )
-
-doom_source_dir = 'doom'
+# This where you include all the source files for your game.
 game_source_files = files(
     'am_map.c',
     'd_items.c',
@@ -27,6 +10,7 @@ game_source_files = files(
     'f_finale.c',
     'f_wipe.c',
     'g_game.c',
+    'i_main.c',
     'hu_lib.c',
     'hu_stuff.c',
     'info.c',
@@ -69,22 +53,19 @@ game_source_files = files(
 )
 
 # Build the game binary
-executable('mindoom', 
+executable('my-little-hell-example-game', 
     sources: [
         game_source_files,
     ],
+    # Provided by the little-hell-engine Meson subproject, and found by the top-level meson.build
     dependencies: littlehell_dep 
 )
 
-# Build the server binary
-#executable('mindoom-server', common_source_files, dedicated_server_source_files, dependencies: deps)
-
 run_target('clang-tidy',
-  command : '../scripts/clang-tidy.sh')
+  command : 'scripts/clang-tidy.sh')
 
 run_target('clang-format',
-  command : '../scripts/clang-format.sh')
+  command : 'scripts/clang-format.sh')
 
 run_target('cppcheck',
-  command : '../scripts/cppcheck.sh')
-
+  command : 'scripts/cppcheck.sh')
