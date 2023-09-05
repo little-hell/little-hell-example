@@ -506,8 +506,9 @@ boolean D_InitNetGame(net_connect_data_t *connect_data)
         NET_ReleaseAddress(addr);
 
         // Wait for launch message received from server.
-
-        NET_WaitForLaunch();
+	
+	//TODO: Networking is going to be broken because this function requires the textscreen library?
+        //NET_WaitForLaunch();
 
         result = true;
     }
