@@ -25,16 +25,16 @@
 #include <stdio.h>
 #include <ctype.h>
 
-#include "../../i_system.h"
-#include "../../i_video.h"
-#include "../../z_zone.h"
-#include "../../m_misc.h"
+#include "i_system.h"
+#include "i_video.h"
+#include "z_zone.h"
+#include "m_misc.h"
 #include "../m_random.h"
-#include "../../w_wad.h"
-#include "../../log.h"
+#include "w_wad.h"
+#include "log.h"
 
 #include "../doomdef.h"
-#include "../../doomkeys.h"
+#include "doomkeys.h"
 
 #include "../g_game.h"
 
@@ -47,12 +47,12 @@
 #include "../p_inter.h"
 
 #include "../am_map.h"
-#include "../../m_cheat.h"
+#include "m_cheat.h"
 
 #include "../s_sound.h"
 
 // Needs access to LFB.
-#include "../../v_video.h"
+#include "v_video.h"
 
 // State.
 #include "../doomstat.h"

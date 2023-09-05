@@ -606,7 +606,7 @@ static void D_Endoom(void)
 
     endoom = W_CacheLumpName("ENDOOM", PU_STATIC);
 
-    I_Endoom(endoom);
+    //I_Endoom(endoom);
 }
 
 static void G_CheckDemoStatusAtExit(void)

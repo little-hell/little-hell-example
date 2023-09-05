@@ -24,15 +24,15 @@
 
 #include "../doomdef.h"
 
-#include "../../log.h"
+#include "log.h"
 
-#include "../../z_zone.h"
-#include "../../v_video.h"
+#include "z_zone.h"
+#include "v_video.h"
 
-#include "../../i_swap.h"
-#include "../../i_system.h"
+#include "i_swap.h"
+#include "i_system.h"
 
-#include "../../w_wad.h"
+#include "w_wad.h"
 
 #include "statusbar.h"
 #include "widget.h"
