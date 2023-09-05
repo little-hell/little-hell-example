@@ -38,6 +38,7 @@ engine_source_files = files(
     src_dir / 'm_fixed.c',
     src_dir / 'net_client.c',
     src_dir / 'net_common.c',
+    src_dir / 'net_dedicated.c',
     src_dir / 'net_defs.h',
     src_dir / 'net_io.c',
     src_dir / 'net_loop.c',
