@@ -27,8 +27,6 @@
 
 #include "log.h"
 
-#include "config.h"
-
 #include "doomtype.h"
 #include "m_argv.h"
 #include "m_config.h"

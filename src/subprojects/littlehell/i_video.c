@@ -23,7 +23,6 @@
 #include "SDL.h"
 #include "SDL_opengl.h"
 
-#include "config.h"
 #include "d_loop.h"
 #include "doomtype.h"
 #include "i_input.h"

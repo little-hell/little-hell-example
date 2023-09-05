@@ -25,7 +25,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "config.h"
 #include "doomdef.h"
 #include "doom_icon.h"
 #include "doomstat.h"
@@ -641,8 +640,9 @@ void D_DoomMain(void)
 
     if (M_CheckParm("-dedicated") > 0)
     {
-        printf("Dedicated server mode.\n");
-        NET_DedicatedServer();
+        printf("Use the server binary!.\n");
+        //NET_DedicatedServer();
+	exit(0);
 
         // Never returns
     }

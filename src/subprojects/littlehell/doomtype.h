@@ -21,8 +21,6 @@
 #ifndef __DOOMTYPE__
 #define __DOOMTYPE__
 
-#include "config.h"
-
 #include <strings.h>
 
 

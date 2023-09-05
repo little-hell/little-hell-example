@@ -21,7 +21,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "config.h"
 #include "doomkeys.h"
 
 #include "i_system.h"

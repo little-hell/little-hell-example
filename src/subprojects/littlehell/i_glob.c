@@ -22,7 +22,6 @@
 
 #include "i_glob.h"
 #include "m_misc.h"
-#include "config.h"
 
 #if defined(HAVE_DIRENT_H)
 #include <dirent.h>

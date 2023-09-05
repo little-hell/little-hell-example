@@ -18,7 +18,6 @@
 
 #include <stdlib.h>
 
-#include "config.h"
 #include "d_iwad.h"
 #include "i_glob.h"
 #include "i_system.h"

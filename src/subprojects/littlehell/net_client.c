@@ -19,7 +19,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "config.h"
 #include "doomtype.h"
 #include "d_loop.h"
 #include "i_system.h"

@@ -37,7 +37,6 @@
 #include "w_wad.h"
 #include "z_zone.h"
 
-#include "config.h"
 #ifdef HAVE_LIBPNG
 #include <png.h>
 #endif
