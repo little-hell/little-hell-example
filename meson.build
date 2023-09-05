@@ -140,7 +140,7 @@ game_source_files = files(
 )
 
 # Source files for the OPL emulation library
-opl_source_dir= 'opl'
+opl_source_dir= src_dir / 'engine' / 'libs' / 'opl'
 opl_source_files = files(
     opl_source_dir / 'opl3.c',
     opl_source_dir / 'opl.c',
